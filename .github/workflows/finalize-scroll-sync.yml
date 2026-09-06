@@ -1,0 +1,41 @@
+name: Finalize Scroll Sync
+
+on:
+  push:
+    branches:
+      - europe-trip-2026
+
+permissions:
+  contents: write
+
+jobs:
+  refine:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+          fetch-depth: 0
+      - name: Patch index.html
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          needle = '      enableHorizontalDrag("#countryScroll");\n'
+          insert = '''      enableHorizontalDrag("#countryScroll");\n      const dayScroller = $("#dayScroller");\n      const countryScroll = $("#countryScroll");\n      if (dayScroller && countryScroll && !dayScroller.dataset.syncReady) {\n        dayScroller.dataset.syncReady = "1";\n        countryScroll.dataset.syncReady = "1";\n        let syncingScroll = false;\n        dayScroller.addEventListener("scroll", () => {\n          if (syncingScroll) return;\n          syncingScroll = true;\n          countryScroll.scrollLeft = dayScroller.scrollLeft;\n          requestAnimationFrame(() => { syncingScroll = false; });\n        }, {passive:true});\n        countryScroll.addEventListener("scroll", () => {\n          if (syncingScroll) return;\n          syncingScroll = true;\n          dayScroller.scrollLeft = countryScroll.scrollLeft;\n          requestAnimationFrame(() => { syncingScroll = false; });\n        }, {passive:true});\n      }\n'''
+          if needle not in s: raise SystemExit('sync insertion point not found')
+          s = s.replace(needle, insert, 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+          git diff --check
+          git add index.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --cached --quiet; then
+            echo "No changes needed."
+          else
+            git commit -m "Synchronize country timeline with day scroller"
+            git push origin HEAD:europe-trip-2026
+          fi
