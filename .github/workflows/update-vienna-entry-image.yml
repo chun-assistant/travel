@@ -1,4 +1,4 @@
-name: Update Vienna Entry Guide Image
+name: Rebuild travel site from original UI
 on:
   push:
     branches:
@@ -6,49 +6,21 @@ on:
 permissions:
   contents: write
 jobs:
-  update:
+  rebuild:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: europe-trip-2026
           fetch-depth: 0
-
-      - name: Download Vienna PNG
+      - name: Rebuild split pages
+        run: python3 rebuild_pages.py
+      - name: Commit rebuilt site and remove helper workflow
         run: |
-          mkdir -p assets
-          curl -L --fail --retry 3 \
-            https://raw.githubusercontent.com/yangchinghsuan955-web/europe-trip-2026/main/assets/vienna-entry-3x4.svg.png \
-            -o assets/vienna-entry-3x4.svg.png
-
-      - name: Normalize Vienna image reference
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          import re
-          p = Path('index.html')
-          s = p.read_text(encoding='utf-8')
-          old = s
-          s = s.replace('assets/vienna-entry-3x4.svg.png.png', 'assets/vienna-entry-3x4.svg.png')
-          s = s.replace('assets/vienna-entry-3x4.svg"', 'assets/vienna-entry-3x4.svg.png"')
-          pattern = r'(<img\s+src=")data:image/webp;base64,[^"]+("\s+alt="維也納機場入境全攻略流程圖與注意事項")'
-          s, _ = re.subn(pattern, r'\1assets/vienna-entry-3x4.svg.png\2', s, count=1)
-          if s != old:
-              p.write_text(s, encoding='utf-8')
-              print('Vienna entry image reference normalized to PNG.')
-          else:
-              print('Vienna entry image reference already uses PNG.')
-          PY
-
-      - name: Commit website and image
-        run: |
-          git add index.html assets/vienna-entry-3x4.svg.png
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --cached --quiet; then
-            echo "No website change needed."
-          else
-            git commit -m "Normalize Vienna PNG reference"
-            git push origin HEAD:europe-trip-2026
-          fi
+          git add -A
+          git rm -f rebuild_pages.py .github/workflows/update-vienna-entry-image.yml || true
+          git commit -m "Restore original UI and split feature pages"
+          git push origin europe-trip-2026
