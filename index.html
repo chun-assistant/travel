@@ -114,7 +114,7 @@
     .section-head p { margin: 3px 0 0; color: var(--muted); font-size: 13px; }
     .small-action { border: 0; background: transparent; color: var(--blue); font-weight: 700; min-height: 44px; padding: 0 5px; cursor: pointer; }
 
-    .notice-stack { display: grid; gap: 9px; margin: 0 0 14px; }
+    .notice-stack { display: none !important; }
     .notice {
       display: grid; grid-template-columns: 36px 1fr; gap: 11px; align-items: start;
       padding: 13px; border-radius: 16px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 6px 20px rgba(26,67,79,.06);
@@ -132,7 +132,9 @@
     .day-chip, .filter-chip, .segment {
       flex: 0 0 auto; border: 1px solid var(--line); background: rgba(255,255,255,.8); border-radius: 999px; min-height: 40px; padding: 7px 13px; font-weight: 700; font-size: 13px; cursor: pointer;
     }
-    .day-chip { text-align: left; min-width: 126px; }
+    .day-chip { text-align: left; min-width: 126px; border-color: color-mix(in srgb, var(--day-color, var(--line)) 38%, var(--line)); background: color-mix(in srgb, var(--day-color, #fff) 13%, #fff); color: color-mix(in srgb, var(--day-color, var(--ink)) 88%, var(--ink)); }
+    .day-chip.active { color: #fff; background: var(--day-color, var(--navy)); border-color: var(--day-color, var(--navy)); box-shadow: 0 8px 18px color-mix(in srgb, var(--day-color, var(--navy)) 25%, transparent); }
+    .day-chip.active small, .day-chip.active .day-place { color: rgba(255,255,255,.82); }
     .day-chip small { display: block; font-size: 10px; color: var(--muted); font-weight: 600; }
     .day-chip .day-place { max-width: 110px; margin-top: 2px; overflow: hidden; color: var(--ink); font-size: 11px; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
     .day-chip.active, .filter-chip.active, .segment.active { color: #fff; background: var(--navy); border-color: var(--navy); box-shadow: 0 8px 18px rgba(16,45,62,.18); }
@@ -637,7 +639,15 @@
     }
 
     function renderDayScroller() {
-      $("#dayScroller").innerHTML = APP_DATA.overview.map(d => `<button class="day-chip ${d.day===state.day?"active":""}" data-day="${d.day}"><b>Day ${d.day}</b><small>${escapeHtml(dateLabel(d.date))}</small><small class="day-place">${escapeHtml(d.city)}</small></button>`).join("");
+      $("#dayScroller").innerHTML = APP_DATA.overview.map(d => {
+        const dayStage = d.day >= 2 && d.day <= 3 ? COUNTRY_STAGES[0]
+          : d.day >= 4 && d.day <= 8 ? COUNTRY_STAGES[1]
+          : d.day >= 9 && d.day <= 14 ? COUNTRY_STAGES[2]
+          : d.day >= 15 && d.day <= 17 ? COUNTRY_STAGES[3]
+          : null;
+        const dayColor = dayStage?.color || "#dbe6e3";
+        return `<button class="day-chip ${d.day===state.day?"active":""}" data-day="${d.day}" style="--day-color:${dayColor}"><b>Day ${d.day}</b><small>${escapeHtml(dateLabel(d.date))}</small><small class="day-place">${escapeHtml(d.city)}</small></button>`;
+      }).join("");
       $$(".day-chip").forEach(btn => btn.addEventListener("click", () => { state.day=Number(btn.dataset.day); save("aurora-day",state.day); renderDayView(); setTimeout(()=>btn.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}),20); }));
     }
 
