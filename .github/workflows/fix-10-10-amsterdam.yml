@@ -1,12 +1,9 @@
 name: Fix 10-10 Amsterdam transport
-
 on:
   push:
     branches: [europe-trip-2026]
-
 permissions:
   contents: write
-
 jobs:
   fix:
     runs-on: ubuntu-latest
