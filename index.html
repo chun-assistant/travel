@@ -346,7 +346,7 @@
       <section class="tab-panel active" id="tab-days" aria-labelledby="nav-days">
         <div class="section-head"><div><h2>每日行程</h2><p>照時間走，也保留舒適彈性</p></div><button class="small-action" id="jumpToday">跳至當日</button></div>
         <div class="notice-stack" id="globalNotices"></div>
-        <div class="country-overview"><div class="country-overview-head"><b>國家路線</b><small>跨境日會同時列入前後兩國</small></div><div class="country-scroll"><div class="country-track" id="countryTrack"></div></div></div>
+        <div class="country-overview"><div class="country-overview-head"><b>國家路線</b><small>跨境日會同時列入前後兩國</small></div><div class="country-scroll" id="countryScroll"><div class="country-track" id="countryTrack"></div></div></div>
         <div class="day-scroller" id="dayScroller" aria-label="選擇日期"></div>
         <div id="daySummary"></div>
         <div class="search-wrap">
@@ -670,18 +670,31 @@
         dayScroller.dataset.syncReady = "1";
         countryScroll.dataset.syncReady = "1";
         let syncingScroll = false;
+        const syncScroll = (source, target) => {
+          if (syncingScroll) return;
+          const sourceMax = Math.max(1, source.scrollWidth - source.clientWidth);
+          const targetMax = Math.max(0, target.scrollWidth - target.clientWidth);
+          const progress = Math.max(0, Math.min(1, source.scrollLeft / sourceMax));
+          syncingScroll = true;
+          target.scrollLeft = progress * targetMax;
+          requestAnimationFrame(() => { syncingScroll = false; });
+        };
+        const syncCountryActive = () => {
+          const dayCount = APP_DATA.overview.length;
+          const step = 126 + 8;
+          const day = Math.max(1, Math.min(dayCount, Math.round(dayScroller.scrollLeft / step) + 1));
+          $$(".country-stage", countryScroll).forEach(btn => {
+            const startDay = Number(btn.style.getPropertyValue("--stage-start"));
+            const endDay = Number(btn.style.getPropertyValue("--stage-end")) - 1;
+            btn.classList.toggle("active", day >= startDay && day <= endDay);
+          });
+        };
         dayScroller.addEventListener("scroll", () => {
-          if (syncingScroll) return;
-          syncingScroll = true;
-          countryScroll.scrollLeft = dayScroller.scrollLeft;
-          requestAnimationFrame(() => { syncingScroll = false; });
+          syncScroll(dayScroller, countryScroll);
+          syncCountryActive();
         }, {passive:true});
-        countryScroll.addEventListener("scroll", () => {
-          if (syncingScroll) return;
-          syncingScroll = true;
-          dayScroller.scrollLeft = countryScroll.scrollLeft;
-          requestAnimationFrame(() => { syncingScroll = false; });
-        }, {passive:true});
+        countryScroll.addEventListener("scroll", () => syncScroll(countryScroll, dayScroller), {passive:true});
+        syncCountryActive();
       }
       const d = APP_DATA.overview.find(x => x.day === state.day);
       if (!d) return;
