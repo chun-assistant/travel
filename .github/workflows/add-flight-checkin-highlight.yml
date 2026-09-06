@@ -1,0 +1,34 @@
+name: Add flight check-in highlights
+on:
+  push:
+    branches: [europe-trip-2026]
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch common.js
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('assets/common.js')
+          s=p.read_text(encoding='utf-8')
+          marker='/* FLIGHT_CHECKIN_HIGHLIGHT */'
+          if marker in s:
+              raise SystemExit(0)
+          old='    init();\n'
+          new='''    init();\n\n    /* FLIGHT_CHECKIN_HIGHLIGHT */\n    (function(){\n      const checkins = [\n        {date:"2026-09-24", label:"✈ 航班報到 · CI0063／AY1472"},\n        {date:"2026-10-02", label:"✈ 航班報到 · WF993"},\n        {date:"2026-10-07", label:"✈ 航班報到 · SAS"},\n        {date:"2026-10-08", label:"✈ 航班報到 · CI0074"}\n      ];\n      function add(){\n        const chips = document.querySelectorAll('#dayScroller .day-chip');\n        if(!chips.length) return;\n        chips.forEach(chip=>{\n          const day = Number(chip.dataset.day);\n          const map = {1:"2026-09-24",9:"2026-10-02",14:"2026-10-07",15:"2026-10-08"};\n          const date = map[day];\n          const item = checkins.find(x=>x.date===date);\n          if(!item || chip.querySelector('.flight-checkin-badge')) return;\n          chip.insertAdjacentHTML('beforeend','<span class="flight-checkin-badge">'+item.label+'</span>');\n          chip.classList.add('has-flight-checkin');\n        });\n      }\n      const host=document.getElementById('dayScroller');\n      if(host) new MutationObserver(add).observe(host,{childList:true});\n      add();\n    })();\n'''
+          if old not in s:
+              raise SystemExit('init marker not found')
+          p.write_text(s.replace(old,new,1),encoding='utf-8')
+          PY
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/common.js
+          git diff --cached --quiet && exit 0
+          git commit -m "Highlight flight online check-in days"
+          git push
