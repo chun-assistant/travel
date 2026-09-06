@@ -1,0 +1,90 @@
+name: Refine Europe Trip UI
+on:
+  push:
+    paths:
+      - .github/workflows/refine-europe-trip-ui.yml
+    branches:
+      - europe-trip-2026
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+          fetch-depth: 0
+      - name: Patch UI
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          old='''      $("#dayScroller").innerHTML = APP_DATA.overview.map(d => `<button class="day-chip ${d.day===state.day?"active":""}" data-day="${d.day}"><b>Day ${d.day}</b><small>${escapeHtml(dateLabel(d.date))}</small><small class="day-place">${escapeHtml(d.city)}</small></button>`).join("");
+      $$(".day-chip").forEach(btn => btn.addEventListener("click", () => { state.day=Number(btn.dataset.day); save("aurora-day",state.day); renderDayView(); setTimeout(()=>btn.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}),20); }));'''
+          new='''      $("#dayScroller").innerHTML = APP_DATA.overview.map(d => `<button class="day-chip ${d.day===state.day?"active":""}" data-day="${d.day}"><b>Day ${d.day}</b><small>${escapeHtml(dateLabel(d.date))}</small><small class="day-place">${escapeHtml(d.city)}</small></button>`).join("");
+      $$(".day-chip").forEach(btn => btn.addEventListener("click", () => { state.day=Number(btn.dataset.day); save("aurora-day",state.day); renderDayView(); setTimeout(()=>$(".day-chip.active")?.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}),20); }));'''
+          if old not in s: raise SystemExit('day block not found')
+          s=s.replace(old,new)
+          old='''    function enableHorizontalDrag(selector) {
+      const el = $(selector);
+      if (!el || el.dataset.dragReady) return;
+      el.dataset.dragReady = "1";
+      let dragging = false, startX = 0, startScroll = 0;
+      el.addEventListener("pointerdown", e => { if (e.button !== 0) return; dragging = true; startX = e.clientX; startScroll = el.scrollLeft; el.classList.add("dragging"); el.setPointerCapture?.(e.pointerId); });
+      el.addEventListener("pointermove", e => { if (dragging) el.scrollLeft = startScroll - (e.clientX - startX); });
+      const stop = () => { dragging = false; el.classList.remove("dragging"); };
+      el.addEventListener("pointerup", stop);
+      el.addEventListener("pointercancel", stop);
+      el.addEventListener("wheel", e => { if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { el.scrollLeft += e.deltaY; e.preventDefault(); } }, {passive:false});
+    }'''
+          new='''    function enableHorizontalDrag(selector) {
+      const el = $(selector);
+      if (!el || el.dataset.dragReady) return;
+      el.dataset.dragReady = "1";
+      let pressed = false, dragging = false, startX = 0, startScroll = 0;
+      el.addEventListener("pointerdown", e => {
+        if (e.button !== 0) return;
+        pressed = true; dragging = false; startX = e.clientX; startScroll = el.scrollLeft;
+        el.classList.remove("dragging");
+      });
+      el.addEventListener("pointermove", e => {
+        if (!pressed) return;
+        const dx = e.clientX - startX;
+        if (!dragging && Math.abs(dx) < 6) return;
+        dragging = true;
+        el.classList.add("dragging");
+        if (el.setPointerCapture && !el.hasPointerCapture?.(e.pointerId)) el.setPointerCapture(e.pointerId);
+        el.scrollLeft = startScroll - dx;
+      });
+      const stop = () => { pressed = false; el.classList.remove("dragging"); };
+      el.addEventListener("pointerup", stop);
+      el.addEventListener("pointercancel", stop);
+      el.addEventListener("click", e => {
+        if (dragging) { e.preventDefault(); e.stopPropagation(); dragging = false; }
+      }, true);
+      el.addEventListener("wheel", e => { if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { el.scrollLeft += e.deltaY; e.preventDefault(); } }, {passive:false});
+    }'''
+          if old not in s: raise SystemExit('drag block not found')
+          s=s.replace(old,new)
+          old='''    function renderCountryTrack() {
+      $("#countryTrack").innerHTML = COUNTRY_STAGES.map(stage=>{ const code={"奧地利":"AT","芬蘭":"FI","挪威":"NO","荷蘭":"NL"}[stage.country]||stage.country; return `<button class="country-stage ${state.day>=stage.start&&state.day<=stage.end?"active":""}" data-day="${stage.start}" style="--stage-color:${stage.color};--stage-start:${stage.start};--stage-end:${stage.end+1}" aria-label="前往${escapeHtml(stage.country)}行程 Day ${stage.start}"><span class="country-dot">${stage.flag}</span><b>${code}</b><small>Day ${stage.start}–${stage.end}</small></button>`; }).join("");
+      $$(".country-stage",$("#countryTrack")).forEach(btn=>btn.addEventListener("click",()=>{state.day=Number(btn.dataset.day);save("aurora-day",state.day);renderDayView();setTimeout(()=>$(".day-chip.active")?.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}),20);}));
+    }'''
+          new='''    function renderCountryTrack() {
+      const names={"奧地利":"奧地利 (Austria)","芬蘭":"芬蘭 (Finland)","挪威":"挪威 (Norway)","荷蘭":"荷蘭 (Netherlands)"};
+      $("#countryTrack").innerHTML = COUNTRY_STAGES.map(stage=>{ const name=names[stage.country]||stage.country; return `<button class="country-stage ${state.day>=stage.start&&state.day<=stage.end?"active":""}" data-day="${stage.start}" style="--stage-color:${stage.color};--stage-start:${stage.start};--stage-end:${stage.end+1}" aria-label="前往${escapeHtml(name)}行程 Day ${stage.start}"><span class="country-dot">${stage.flag}</span><b>${escapeHtml(name)}</b><small>Day ${stage.start}–${stage.end}</small></button>`; }).join("");
+      $$(".country-stage",$("#countryTrack")).forEach(btn=>btn.addEventListener("click",()=>{state.day=Number(btn.dataset.day);save("aurora-day",state.day);renderDayView();setTimeout(()=>$(".day-chip.active")?.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}),20);}));
+    }'''
+          if old not in s: raise SystemExit('country block not found')
+          s=s.replace(old,new)
+          s=s.replace('font-size: 10px; line-height: 1; letter-spacing: .03em;', 'font-size: 9px; line-height: 1.05; letter-spacing: 0; white-space: nowrap;')
+          p.write_text(s)
+          PY
+      - name: Commit patch
+        run: |
+          git add index.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --cached --quiet; then echo "No changes"; else git commit -m "Fix timeline sync, country labels and day links"; git push origin HEAD:europe-trip-2026; fi
