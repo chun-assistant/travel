@@ -1,15 +1,5 @@
 @import url("./common-base.css");
 
-.bottom-nav .nav-btn { display:grid!important; grid-template-rows:22px auto; align-content:center!important; justify-items:center!important; gap:3px; min-height:58px!important; font-size:0!important; line-height:1!important; text-align:center!important; text-decoration:none!important; }
-.bottom-nav .nav-btn svg { display:none!important; }
-.bottom-nav .nav-btn::before { content:""; display:block; width:22px; height:22px; background:currentColor; -webkit-mask-position:center; -webkit-mask-repeat:no-repeat; -webkit-mask-size:contain; mask-position:center; mask-repeat:no-repeat; mask-size:contain; }
-.bottom-nav .nav-btn::after { display:block; font-size:10px; line-height:1.15; font-weight:750; white-space:nowrap; }
-.bottom-nav .nav-btn:nth-child(1)::after{content:"每日行程";}
-.bottom-nav .nav-btn:nth-child(2)::after{content:"交通";}
-.bottom-nav .nav-btn:nth-child(3)::after{content:"住宿";}
-.bottom-nav .nav-btn:nth-child(4)::after{content:"行前與工具";}
-.bottom-nav .nav-btn:nth-child(5)::after{content:"餐食與購物";}
-
 /* Flight online check-in highlight — overlay only, never changes day-chip height. */
 .day-chip[data-day="1"],.day-chip[data-day="9"],.day-chip[data-day="14"],.day-chip[data-day="15"]{position:relative;box-shadow:0 0 0 2px rgba(197,90,83,.28),0 6px 16px rgba(197,90,83,.10)}
 .day-chip[data-day="1"]::after,.day-chip[data-day="9"]::after,.day-chip[data-day="14"]::after,.day-chip[data-day="15"]::after{content:"";position:absolute;top:6px;right:6px;z-index:3;display:block;padding:2px 5px;border-radius:999px;color:var(--red);background:var(--red-soft);border:1px solid rgba(197,90,83,.28);font-size:8px;line-height:1.1;font-weight:850;white-space:nowrap;pointer-events:none}
