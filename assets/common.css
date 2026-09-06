@@ -1,14 +1,72 @@
 @import url("./common-base.css");
 
-/* Global navigation label override: budget page is now Food & Shopping. */
-#nav-budget {
+/* Unified bottom navigation across all split pages.
+   Keep one visual language regardless of each page's legacy inline SVG/text. */
+.bottom-nav .nav-btn {
+  display: grid !important;
+  grid-template-rows: 22px auto;
+  align-content: center !important;
+  justify-items: center !important;
+  gap: 3px;
+  min-height: 58px !important;
   font-size: 0 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  text-decoration: none !important;
 }
-#nav-budget::after {
-  content: "餐食與購物";
+.bottom-nav .nav-btn svg { display: none !important; }
+.bottom-nav .nav-btn::before {
+  content: "";
   display: block;
-  font-size: 11px;
+  width: 22px;
+  height: 22px;
+  background: currentColor;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+.bottom-nav .nav-btn::after {
+  display: block;
+  font-size: 10px;
   line-height: 1.15;
   font-weight: 750;
   white-space: nowrap;
 }
+
+/* 1. 每日行程 */
+.bottom-nav .nav-btn:nth-child(1)::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M8 3v4M16 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M8 3v4M16 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01'/%3E%3C/svg%3E");
+}
+.bottom-nav .nav-btn:nth-child(1)::after { content: "每日行程"; }
+
+/* 2. 交通 */
+.bottom-nav .nav-btn:nth-child(2)::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 17h14M6 17l-1 3M18 17l1 3M6 4h12l2 10H4L6 4Z'/%3E%3Ccircle cx='8' cy='14' r='1'/%3E%3Ccircle cx='16' cy='14' r='1'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 17h14M6 17l-1 3M18 17l1 3M6 4h12l2 10H4L6 4Z'/%3E%3Ccircle cx='8' cy='14' r='1'/%3E%3Ccircle cx='16' cy='14' r='1'/%3E%3C/svg%3E");
+}
+.bottom-nav .nav-btn:nth-child(2)::after { content: "交通"; }
+
+/* 3. 住宿 */
+.bottom-nav .nav-btn:nth-child(3)::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 20V7l9-4 9 4v13M7 20v-5h10v5M8 9h.01M12 9h.01M16 9h.01M8 12h.01M12 12h.01M16 12h.01'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 20V7l9-4 9 4v13M7 20v-5h10v5M8 9h.01M12 9h.01M16 9h.01M8 12h.01M12 12h.01M16 12h.01'/%3E%3C/svg%3E");
+}
+.bottom-nav .nav-btn:nth-child(3)::after { content: "住宿"; }
+
+/* 4. 行前與工具 */
+.bottom-nav .nav-btn:nth-child(4)::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='6' width='14' height='15' rx='2'/%3E%3Cpath d='M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M9 10v7M15 10v7'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='6' width='14' height='15' rx='2'/%3E%3Cpath d='M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M9 10v7M15 10v7'/%3E%3C/svg%3E");
+}
+.bottom-nav .nav-btn:nth-child(4)::after { content: "行前與工具"; }
+
+/* 5. 餐食與購物 */
+.bottom-nav .nav-btn:nth-child(5)::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M3 10h18M7 15h3M16 15h2'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M3 10h18M7 15h3M16 15h2'/%3E%3C/svg%3E");
+}
+.bottom-nav .nav-btn:nth-child(5)::after { content: "餐食與購物"; }
