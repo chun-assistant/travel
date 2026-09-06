@@ -1,0 +1,66 @@
+name: Split travel site into editable pages
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - europe-trip-2026
+permissions:
+  contents: write
+jobs:
+  split:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+          fetch-depth: 0
+      - name: Split
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re, html
+          root=Path('.')
+          src=root/'index.html'
+          text=src.read_text(encoding='utf-8')
+          (root/'index-full.html').write_text(text,encoding='utf-8')
+          panels={}
+          for m in re.finditer(r'<[^>]*class=["\'][^"\']*\btab-panel\b[^"\']*["\'][^>]*id=["\']([^"\']+)["\'][^>]*>',text,re.I): panels[m.group(1)]=1
+          if not panels:
+            for m in re.finditer(r'<[^>]*id=["\']([^"\']+)["\'][^>]*class=["\'][^"\']*\btab-panel\b[^"\']*["\'][^>]*>',text,re.I): panels[m.group(1)]=1
+          nav=[]
+          for m in re.finditer(r'<(?:a|button)\b([^>]*?)>(.*?)</(?:a|button)>',text,re.I|re.S):
+            dm=re.search(r'data-tab=["\']([^"\']+)["\']',m.group(1),re.I)
+            if dm: nav.append((dm.group(1),html.unescape(re.sub(r'<[^>]+>|\s+',' ',m.group(2))).strip()))
+          targets={'daily.html':('每日行程','daily','itinerary','行程'),'transport.html':('交通','transport'),'stay.html':('住宿','stay','hotel','lodging'),'prep-tools.html':('行前','工具','prep','tools'),'budget.html':('預算','budget','費用','花費')}
+          selected={}
+          for fn,ks in targets.items():
+            best=None
+            for pid in panels:
+              lab=next((x[1] for x in nav if x[0]==pid),'')
+              hay=(pid+' '+lab).lower(); sc=sum(1 for k in ks if k.lower() in hay)
+              if sc and (best is None or sc>best[0]): best=(sc,pid)
+            if best: selected[fn]=best[1]
+          fb={'daily.html':['sub-itinerary','sub-daily','itinerary'],'transport.html':['sub-transport','transport'],'stay.html':['sub-stay','stay','lodging'],'prep-tools.html':['sub-entry','sub-tools','prep','tools'],'budget.html':['sub-budget','budget']}
+          for fn,ids in fb.items():
+            if fn not in selected:
+              for x in ids:
+                if x in panels: selected[fn]=x; break
+          if len(selected)!=5: raise SystemExit(f'Could not map all sections: {selected}; panels={list(panels)}')
+          titles={'daily.html':'每日行程｜2026 歐洲極光之旅','transport.html':'交通｜2026 歐洲極光之旅','stay.html':'住宿｜2026 歐洲極光之旅','prep-tools.html':'行前與工具｜2026 歐洲極光之旅','budget.html':'預算｜2026 歐洲極光之旅'}
+          for fn,pid in selected.items():
+            page=text.replace('</head>',f'<style>.tab-panel{{display:none!important}}#{pid}{{display:block!important}}</style></head>',1)
+            page=re.sub(r'<title>.*?</title>',f'<title>{titles[fn]}</title>',page,count=1,flags=re.I|re.S)
+            (root/fn).write_text(page,encoding='utf-8')
+          cards=[('daily.html','📅','每日行程','Day 1–18 的每日安排、景點與活動'),('transport.html','✈️','交通','航班、火車、城市間移動與交通票券'),('stay.html','🏨','住宿','維也納、芬蘭、挪威、阿姆斯特丹住宿'),('prep-tools.html','🧳','行前與工具','入境、EES、退稅、清單與實用工具'),('budget.html','💰','預算','旅費、支出分類與預算整理')]
+          ch=''.join(f'<a class="card" href="{u}"><b>{i}</b><span><strong>{t}</strong><small>{d}</small></span><em>→</em></a>' for u,i,t,d in cards)
+          idx=f'''<!doctype html><html lang="zh-Hant-TW"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>2026 歐洲極光之旅</title><style>body{{margin:0;background:#f3f7f5;color:#20313a;font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif}}main{{max-width:760px;margin:auto;padding:28px 18px}}header{{padding:28px 22px;border-radius:26px;color:white;background:linear-gradient(135deg,#17364d,#296f7a 55%,#5e9c79)}}h1{{margin:0 0 8px;font-size:clamp(28px,7vw,44px)}}header p{{margin:0;opacity:.82}}.grid{{display:grid;gap:12px;margin-top:18px}}.card{{display:grid;grid-template-columns:48px 1fr 24px;gap:12px;align-items:center;padding:16px;border:1px solid #dbe6e3;border-radius:18px;background:white;text-decoration:none;color:inherit;box-shadow:0 7px 20px rgba(26,67,79,.06)}}.card>b{{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:#e3f3fa;font-size:22px}}.card strong{{display:block;font-size:18px}}.card small{{display:block;margin-top:3px;color:#667b84;font-size:13px}}.card em{{font-style:normal;color:#3b8eb5;font-size:22px}}</style></head><body><main><header><h1>2026 歐洲極光之旅</h1><p>拆成獨立分頁，大家可以同時修改不同區塊。</p></header><section class="grid">{ch}</section></main></body></html>'''
+          (root/'index.html').write_text(idx,encoding='utf-8')
+          print(selected)
+          PY
+      - name: Commit
+        run: |
+          git add index.html index-full.html daily.html transport.html stay.html prep-tools.html budget.html
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Split travel site into editable sections' || exit 0
+          git push origin HEAD:europe-trip-2026
