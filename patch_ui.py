@@ -13,6 +13,10 @@ s = s.replace(
     'grid-template-columns: repeat(19, 126px); column-gap: 8px; width: calc(19 * 126px + 18 * 8px + 4px); min-width: calc(19 * 126px + 18 * 8px + 4px);',
 )
 s = s.replace(
+    'grid-column: var(--stage-start) / var(--stage-end); width: auto; min-width: 0;',
+    'grid-column: var(--stage-start) / var(--stage-end); grid-row: 1; width: auto; min-width: 0;',
+)
+s = s.replace(
     'const code={"奧地利":"AT","芬蘭":"FI","挪威":"NO","荷蘭":"NL"}[stage.country]||stage.country;',
     'const code={"奧地利":"奧地利 (Austria)","芬蘭":"芬蘭 (Finland)","挪威":"挪威 (Norway)","荷蘭":"荷蘭 (Netherlands)"}[stage.country]||stage.country;',
 )
