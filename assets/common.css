@@ -304,3 +304,33 @@
       .event-card, .info-card, .check-item, .practical-card, .budget-day { break-inside: avoid; box-shadow: none; }
       main { padding: 12px; }
     }
+
+
+    /* FLIGHT_CHECKIN_STYLE */
+    .day-chip.has-flight-checkin {
+      position: relative;
+      padding-bottom: 30px;
+    }
+    .day-chip.has-flight-checkin .flight-checkin-badge {
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      bottom: 6px;
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      padding: 3px 6px;
+      border-radius: 999px;
+      color: var(--red);
+      background: var(--red-soft);
+      border: 1px solid rgba(197,90,83,.28);
+      font-size: 9px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    .day-chip.has-flight-checkin.active .flight-checkin-badge {
+      color: #fff;
+      background: rgba(197,90,83,.82);
+      border-color: rgba(255,255,255,.28);
+    }
