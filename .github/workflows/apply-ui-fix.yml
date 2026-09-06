@@ -19,6 +19,8 @@ jobs:
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text()
+          s = s.replace('<div class="country-overview"><div class="country-overview-head">', '<div class="country-overview"><div class="country-overview-head">')
+          s = s.replace('<div class="country-scroll"><div class="country-track" id="countryTrack"></div></div>', '<div class="country-scroll" id="countryScroll"><div class="country-track" id="countryTrack"></div></div>')
           s = s.replace(
             'grid-template-columns: repeat(18, 126px); column-gap: 8px; width: calc(18 * 126px + 17 * 8px + 4px); min-width: calc(18 * 126px + 17 * 8px + 4px);',
             'grid-template-columns: repeat(19, 126px); column-gap: 8px; width: calc(19 * 126px + 18 * 8px + 4px); min-width: calc(19 * 126px + 18 * 8px + 4px);'
@@ -35,7 +37,6 @@ jobs:
           end = s.find(end_marker, start)
           if start < 0 or end < 0:
               raise SystemExit('timeline sync block not found')
-
           block = '''      if (dayScroller && countryScroll && !dayScroller.dataset.syncReady) {
         dayScroller.dataset.syncReady = "1";
         countryScroll.dataset.syncReady = "1";
@@ -78,6 +79,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes"
           else
-            git commit -m "Sync country timeline with day scroll"
+            git commit -m "Fix country timeline scroll sync"
             git push origin HEAD:europe-trip-2026
           fi
