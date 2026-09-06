@@ -60,6 +60,29 @@
 #eventTimeline>.event-card.kind-transit:nth-child(4) .more .detail-note span:nth-child(2){font-size:0!important}
 #eventTimeline>.event-card.kind-transit:nth-child(4) .more .detail-note span:nth-child(2)::after{content:"REX 7方案08:55離開Stephansplatz，08:59抵達飯店；IC方案09:07離開Stephansplatz，09:11抵達飯店。步行約350公尺。";font-size:13px}
 
-/* Day 2 hotel luggage/rest: both rail options arrive at the hotel at 08:59 / 09:11, so rest starts at 09:11. */
+/* Day 2 hotel luggage/rest */
 #eventTimeline>.event-card:nth-child(5) .event-time{font-size:0!important}
 #eventTimeline>.event-card:nth-child(5) .event-time::after{content:"◷ 09:11–09:40";font-size:14px}
+
+/* Day 17 / 10-10: replace the incorrect VIE/van transport with the actual Amsterdam hotel → Sloterdijk → Schiphol train route. */
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .event-time{font-size:0!important}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .event-time::after{content:"◷ 06:45–07:05";font-size:14px}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) h4{font-size:0!important}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) h4::after{content:"Amsterdam ID Aparthotel→Schiphol Airport";font-size:17px;line-height:1.35;font-weight:800;color:var(--ink)}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .event-place span{font-size:0}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .event-place span::after{content:"Naritaweg 51, 1043 BP Amsterdam → Amsterdam Sloterdijk → Schiphol Airport";font-size:13px;color:var(--muted)}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(1) b{font-size:0!important}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(1) b::after{content:"步行＋Sprinter 8223";font-size:13px}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(2) b{font-size:0!important}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(2) b::after{content:"步行約10分鐘／700公尺＋火車10分鐘";font-size:13px}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(3) b{font-size:0!important}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(3) b::after{content:"EUR 4.9／人";font-size:13px}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(4) b{font-size:0!important}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(4) b::after{content:"尚未購票";font-size:13px}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .more .detail-note span:nth-child(2){font-size:0!important}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .more .detail-note span:nth-child(2)::after{content:"尚未購票。06:45從Amsterdam ID Aparthotel出發，步行約10分鐘／700公尺到Amsterdam Sloterdijk；06:55搭Sprinter 8223 Hoofddorp，約10分鐘、2站、11號月台，07:05抵達Schiphol Airport。";font-size:13px}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .status{font-size:0!important;color:var(--red)!important;background:var(--red-soft)!important;border-color:rgba(197,90,83,.28)!important}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card.kind-transit:nth-child(3) .status::after{content:"尚未購票";font-size:11px;color:var(--red)}
+/* The old global Day-2 rest-time rule must not leak into Day 17. */
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card:nth-child(5) .event-time{font-size:0!important}
+body:has(#dayScroller .day-chip.active[data-day="17"]) #eventTimeline>.event-card:nth-child(5) .event-time::after{content:"◷ 09:30–10:30";font-size:14px}
