@@ -1,0 +1,32 @@
+name: Apply Europe Trip UI Fix
+on:
+  push:
+    branches:
+      - europe-trip-2026
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+          fetch-depth: 0
+      - name: Fix index.html
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          s=s.replace('grid-template-columns: repeat(18, 126px); column-gap: 8px; width: calc(18 * 126px + 17 * 8px + 4px); min-width: calc(18 * 126px + 17 * 8px + 4px);','grid-template-columns: repeat(19, 126px); column-gap: 8px; width: calc(19 * 126px + 18 * 8px + 4px); min-width: calc(19 * 126px + 18 * 8px + 4px);')
+          s=s.replace('const code={"奧地利":"AT","芬蘭":"FI","挪威":"NO","荷蘭":"NL"}[stage.country]||stage.country;','const code={"奧地利":"奧地利 (Austria)","芬蘭":"芬蘭 (Finland)","挪威":"挪威 (Norway)","荷蘭":"荷蘭 (Netherlands)"}[stage.country]||stage.country;')
+          s=s.replace('el.setPointerCapture?.(e.pointerId);','')
+          p.write_text(s)
+          PY
+      - name: Commit fix
+        run: |
+          git add index.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --cached --quiet; then echo "No changes"; else git commit -m "Fix timeline labels and day clicks"; git push origin HEAD:europe-trip-2026; fi
