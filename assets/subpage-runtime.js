@@ -27,4 +27,19 @@
     const map = {'../daily/':'days','../transport/':'transport','../stay/':'stay','./':'luggage','../budget/':'budget'};
     if(map[href]) btn.dataset.tab = map[href];
   });
+
+  /* common.js still owns the original renderers. Some split pages intentionally
+     do not contain the other feature DOM, so the shared init can stop on a
+     missing-node exception before reaching the current feature renderer.
+     Recover only the renderer(s) whose real target exists; this does not alter
+     the source UI or data. */
+  window.addEventListener('error', function(){
+    setTimeout(function(){
+      try { if(document.getElementById('ticketAppList') && typeof renderTicketApps === 'function') renderTicketApps(); } catch(e) {}
+      try { if(document.getElementById('practicalList') && typeof renderPractical === 'function') renderPractical(); } catch(e) {}
+      try { if(document.getElementById('bookingList') && typeof renderBookings === 'function') renderBookings(); } catch(e) {}
+      try { if(document.getElementById('checklist') && typeof renderChecklist === 'function') renderChecklist(); } catch(e) {}
+      try { if(document.getElementById('taxList') && typeof renderTax === 'function') renderTax(); } catch(e) {}
+    }, 0);
+  }, {once:true});
 })();
