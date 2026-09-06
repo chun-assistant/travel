@@ -1,11 +1,13 @@
-/* Split-page compatibility bridge: keep common.js unchanged while giving its shared render/init code the containers it expects. */
+/* Split-page compatibility bridge: let common.js render the original feature data on split pages without changing the shared UI. */
 (function(){
+  if (document.body?.dataset.page !== 'luggage') return;
   const ids = [
-    'globalNotices','dayScroller','countryScroll','transportList','hotelList',
+    'globalNotices','dayScroller','countryTrack','countryScroll','daySummary',
+    'eventFilters','eventTimeline','transportFilters','transportList','hotelList',
     'ticketAppList','checklist','practicalList','bookingList','taxList',
-    'budgetList','foodList','mealList','eventSearch','clearSearch','jumpToday',
-    'resetChecks','budgetSegments','imageModal','imageModalContent',
-    'imageModalCaption','imageModalClose','eventList','daySummary','dayFilters'
+    'budgetSummary','budgetList','foodList','mealList','toast',
+    'eventSearch','clearSearch','jumpToday','resetChecks','budgetSegments',
+    'imageModal','imageModalContent','imageModalCaption','imageModalClose'
   ];
   const host = document.createElement('div');
   host.id = 'splitRuntimeHost';
@@ -22,7 +24,7 @@
   document.querySelectorAll('.bottom-nav .nav-btn').forEach(btn=>{
     if(btn.dataset.tab) return;
     const href = btn.getAttribute('href') || '';
-    const map = {'../daily/':'daily','../transport/':'transport','../stay/':'stay','./':'luggage','../budget/':'budget'};
+    const map = {'../daily/':'days','../transport/':'transport','../stay/':'stay','./':'luggage','../budget/':'budget'};
     if(map[href]) btn.dataset.tab = map[href];
   });
 })();
