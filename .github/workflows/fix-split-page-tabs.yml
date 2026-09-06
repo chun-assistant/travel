@@ -6,7 +6,7 @@ permissions:
   contents: write
 jobs:
   fix:
-    if: github.event.head_commit.message == 'chore: install one-time split page fix workflow'
+    if: github.event.head_commit.message == 'fix: trigger split page tab repair'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
