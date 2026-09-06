@@ -1,1 +1,0 @@
-Temporary note: split-site refactor is planned but not generated yet.
