@@ -1,0 +1,31 @@
+name: Fix split page navigation markup
+on:
+  push:
+    branches:
+      - europe-trip-2026
+permissions:
+  contents: write
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+      - name: Fix active navigation tag
+        run: |
+          sed -i 's/<button class="nav-btn active"/<a class="nav-btn active"/g' daily/index.html transport/index.html stay/index.html prep-tools/index.html budget/index.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add daily/index.html transport/index.html stay/index.html prep-tools/index.html budget/index.html
+          git commit -m "Fix navigation markup in split pages"
+          git push origin europe-trip-2026
+      - name: Remove temporary workflow
+        if: always()
+        run: |
+          git rm -f .github/workflows/fix-nav-markup.yml || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Remove temporary navigation fix workflow" || true
+          git push origin europe-trip-2026 || true
