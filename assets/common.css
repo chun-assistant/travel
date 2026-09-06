@@ -5,20 +5,22 @@
 .day-chip[data-day="1"]::after,.day-chip[data-day="9"]::after,.day-chip[data-day="14"]::after,.day-chip[data-day="15"]::after{content:"✈ 報到";position:absolute;top:6px;right:6px;z-index:3;display:block;padding:2px 5px;border-radius:999px;color:var(--red);background:var(--red-soft);border:1px solid rgba(197,90,83,.28);font-size:8px;line-height:1.1;font-weight:850;white-space:nowrap;pointer-events:none}
 .day-chip.active[data-day="1"]::after,.day-chip.active[data-day="9"]::after,.day-chip.active[data-day="14"]::after,.day-chip.active[data-day="15"]::after{color:#fff;background:rgba(197,90,83,.84);border-color:rgba(255,255,255,.30)}
 
-/* Day 2 daily itinerary — preserve the original card format. */
-#eventTimeline .event-card.transport:nth-child(1) .event-time{font-size:0}
-#eventTimeline .event-card.transport:nth-child(1) .event-time::after{content:"◷ 08:16／08:34 → 08:59／09:11";font-size:14px}
-#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(1) b{font-size:0}
-#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(1) b::after{content:"REX 7 (8:16)／IC (8:34) → Vienna Central → 步行約6分 → Südtiroler Platz → U1 Leopoldau → Stephansplatz → 步行約4分／350公尺 → 飯店";font-size:13px}
-#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(2) b{font-size:0}
-#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(2) b::after{content:"約37–43分鐘";font-size:13px}
-#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(3) b{font-size:0}
-#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(3) b::after{content:"EUR 4.4";font-size:13px}
-#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(4) b{font-size:0}
-#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(4) b::after{content:"ÖBB App／機台";font-size:13px}
-#eventTimeline .event-card.transport:nth-child(1) .more .detail-note span:nth-child(2){font-size:0}
-#eventTimeline .event-card.transport:nth-child(1) .more .detail-note span:nth-child(2)::after{content:"提醒：8:16 搭 REX 7，8:36 抵 Vienna Central；步行約6分鐘至 Südtiroler Platz，搭 U1 Leopoldau，8:55 抵 Stephansplatz，再步行約4分鐘／350公尺，8:59 抵飯店。另一方案 8:34 搭 IC，8:48 抵 Vienna Central，9:01 抵 Südtiroler Platz，搭 U1 Leopoldau，9:07 抵 Stephansplatz，再步行約4分鐘／350公尺，9:11 抵飯店。尚未購票。";font-size:13px}
-#eventTimeline .event-card.transport:nth-child(1) h3{font-size:0}
-#eventTimeline .event-card.transport:nth-child(1) h3::after{content:"VIE→Südtiroler Platz→Stephansplatz→飯店";font-size:17px;line-height:1.35;font-weight:800;color:var(--ink)}
-#eventTimeline .event-card.transport:nth-child(1){position:relative}
-#eventTimeline .event-card.transport:nth-child(1) h3::before{content:"尚未購票";display:inline-block;margin:0 0 7px;padding:4px 9px;border-radius:999px;color:var(--red);background:var(--red-soft);border:1px solid rgba(197,90,83,.28);font-size:11px;line-height:1.1;font-weight:850}
+/* Day 2 daily itinerary — original card structure, corrected to match the two route screenshots. */
+#eventTimeline>.event-card.transport:nth-child(1) .event-time{font-size:0!important}
+#eventTimeline>.event-card.transport:nth-child(1) .event-time::after{content:"◷ 08:16／08:34 → 08:59／09:11";font-size:14px}
+#eventTimeline>.event-card.transport:nth-child(1) h4{font-size:0!important}
+#eventTimeline>.event-card.transport:nth-child(1) h4::after{content:"VIE→Südtiroler Platz→Stephansplatz→飯店";font-size:17px;line-height:1.35;font-weight:800;color:var(--ink)}
+#eventTimeline>.event-card.transport:nth-child(1) .event-place span{font-size:0}
+#eventTimeline>.event-card.transport:nth-child(1) .event-place span::after{content:"Flughafen Wien Bahnhof → Südtiroler Platz → Stephansplatz → Austria Trend Hotel Europa Wien";font-size:13px;color:var(--muted)}
+#eventTimeline>.event-card.transport:nth-child(1) .meta-box:nth-child(1) b{font-size:0!important}
+#eventTimeline>.event-card.transport:nth-child(1) .meta-box:nth-child(1) b::after{content:"REX 7／IC＋U1＋步行350公尺";font-size:13px}
+#eventTimeline>.event-card.transport:nth-child(1) .meta-box:nth-child(2) b{font-size:0!important}
+#eventTimeline>.event-card.transport:nth-child(1) .meta-box:nth-child(2) b::after{content:"約37–43分鐘";font-size:13px}
+#eventTimeline>.event-card.transport:nth-child(1) .meta-box:nth-child(3) b{font-size:0!important}
+#eventTimeline>.event-card.transport:nth-child(1) .meta-box:nth-child(3) b::after{content:"EUR 4.4";font-size:13px}
+#eventTimeline>.event-card.transport:nth-child(1) .meta-box:nth-child(4) b{font-size:0!important}
+#eventTimeline>.event-card.transport:nth-child(1) .meta-box:nth-child(4) b::after{content:"ÖBB App／機台";font-size:13px}
+#eventTimeline>.event-card.transport:nth-child(1) .more .detail-note span:nth-child(2){font-size:0!important}
+#eventTimeline>.event-card.transport:nth-child(1) .more .detail-note span:nth-child(2)::after{content:"提醒：尚未購票。8:16 搭 REX 7，8:36 抵 Vienna Central；步行約6分鐘至 Südtiroler Platz，搭 U1 Leopoldau，8:55 抵 Stephansplatz，再步行約4分鐘／350公尺，8:59 抵飯店。另一方案 8:34 搭 IC，8:48 抵 Vienna Central，9:01 抵 Südtiroler Platz，搭 U1 Leopoldau，9:07 抵 Stephansplatz，再步行約4分鐘／350公尺，9:11 抵飯店。";font-size:13px}
+#eventTimeline>.event-card.transport:nth-child(1) .status{font-size:0!important;color:var(--red)!important;background:var(--red-soft)!important;border-color:rgba(197,90,83,.28)!important}
+#eventTimeline>.event-card.transport:nth-child(1) .status::after{content:"尚未購票";font-size:11px;color:var(--red)}
