@@ -34,3 +34,5 @@ jobs:
           git add prep-tools/index.html
           git commit -m "Fix Vienna entry image path"
           git push origin europe-trip-2026
+
+# one-time trigger
