@@ -1,0 +1,45 @@
+name: Use PNG for Vienna entry guide
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update Vienna guide image reference
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
+          old = 'assets/vienna-entry-3x4.svg'
+          new = 'assets/vienna-entry-3x4.svg.png'
+          if old in text:
+              text = text.replace(old, new)
+              p.write_text(text, encoding='utf-8')
+              print('Updated Vienna guide reference to PNG.')
+          else:
+              print('No old SVG reference found; leaving index.html unchanged.')
+          PY
+
+      - name: Remove one-time workflow and commit
+        run: |
+          rm -f .github/workflows/convert-vienna-entry-to-png.yml
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No changes needed.'
+          else
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'Switch Vienna entry guide to PNG'
+            git push
+          fi
