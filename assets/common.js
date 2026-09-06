@@ -418,6 +418,10 @@ const TICKET_APPS = [
           if(!item || chip.querySelector('.flight-checkin-badge')) return;
           chip.insertAdjacentHTML('beforeend','<span class="flight-checkin-badge">'+item.label+'</span>');
           chip.classList.add('has-flight-checkin');
+const badge=chip.querySelector('.flight-checkin-badge');
+if(badge){ badge.style.cssText='display:block;margin-top:4px;padding:3px 6px;border-radius:999px;color:#c55a53;background:#fdeae6;border:1px solid rgba(197,90,83,.28);font-size:9px;font-weight:800;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'; }
+if(chip.classList.contains('active')){ badge.style.color='#fff'; badge.style.background='rgba(197,90,83,.82)'; badge.style.borderColor='rgba(255,255,255,.28)'; }
+/* FLIGHT_CHECKIN_INLINE_STYLE */
         });
       }
       const host=document.getElementById('dayScroller');
