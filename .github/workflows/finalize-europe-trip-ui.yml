@@ -1,0 +1,27 @@
+name: Finalize Europe Trip UI
+on:
+  push:
+    branches:
+      - europe-trip-2026
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+          fetch-depth: 0
+      - name: Patch index.html
+        env:
+          PATCH_B64: ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCnA9UGF0aCgnaW5kZXguaHRtbCcpOyBzPXAudGVhZF90ZXh0KCkKczo9cS5yZXBsYWNlKCdzZXRUaW1lb3V0KCk9PmJ0bi5zY3JvbGxJbnRvVmlldyh7YmVoYXZpb3I6InNtb290aCIsaW5saW5lOiJjZW50ZXIiLGJsb2NrOiJuZWFyZXN0In0sMjApOycsJ3NldFRpbWVvdXQoKCk9PiQoIi5kYXktY2hpcC5hY3RpdmUiKT8uc2Nyb2xsSW50b1ZpZXcoe2JlaGF2aW9yOiJzbW9vdGgiLGlubGluZToiY2VudGVyIixibG9jazoi bmVhcmVzdCJ9KSwyMCk7JykKczo9cy5yZXBsYWNlKCdn cmlkLXRlbXBsYXRlLWNvbHVtbnM6IHJlcGVhdCgxOCwgMTI2cHgpOyBjb2x1bW4tZ2FwOiA4cHg7IHdpZHRoOiBjYWxjKDE4ICogMTI2cHggKyAxNyAqIDhweCArIDRweCk7IG1pbi13aWR0aDogY2FsYygxOCAqIDEyNnB4ICsgMTcgKiA4cHggKyA0cHgpOycsJ2dyaWQtdGVtcGxhdGUtY29sdW1uczogcmVwZWF0KDE5LCAxMjZweCk7IGNvbHVtbi1nYXAgOiA4cHg7IHdpZHRoOiBjYWxjKDE5ICogMTI2cHggKyAxOCAqIDhweCArIDRweCk7IG1pbi13aWR0aDogY2FsYygxOSAqIDEyNnB4ICsgMTggKiA4cHggKyA0cHgpOycpCnM9cy5yZXBsYWNlKCdjb25zdCBjb2RlPXsi6KqX5YyW5p2kIjoiQVQiLCJ8t8KQp5Y2X5YqgIjoiRklfIiwibm8iOiJOTyIsIuiNt+iYrSI6Ik5MIn1bc3RhZ2UuY291bnRyeV18fHN0YWdlLmNvdW50cnk7JywnY29uc3QgY29kZT17IuWKl+WMluadpCI6IuWKl+WMluadpCAoQXVzdHJpYSkiLCLoh6XomrEiOiLoh6XomrEgKEZpbmxhbmQpIiwi5ZKM5pav5YqgIjoi5ZKM5pav5YqgIChOb3J3YXkpIiwi6I236JitIjoi6I236JitIChOZXRoZXJsYW5kcykifVtzdGFnZS5jb3VudHJ5XXx8c3RhZ2UuY291bnRyeTsnKQphPXMuY29udHJ5KGZ1bmN0aW9uK2luZGV4KCcgICAgZnVuY3Rpb24gZW5hYmxlSG9yaXpvbnRhbERyYWcoJykpCmI9cy5pbmRleCgnICAgIGZ1bmN0aW9uIHJlbmRlckNvdW50cnlUcmFjaygpJyxhKQpzPXM6Y3JlbWF0ZV9zdHJpbmcoWydmb290J10pIGlmIEZhbHNlIGVsc2Ugcwo= 
+        run: |
+          echo "$PATCH_B64" | base64 -d > /tmp/patch.py
+          python3 /tmp/patch.py
+      - name: Commit patch
+        run: |
+          git add index.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --cached --quiet; then echo "No changes"; else git commit -m "Fix timeline sync, country labels and day links"; git push origin HEAD:europe-trip-2026; fi
