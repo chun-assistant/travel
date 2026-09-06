@@ -1,10 +1,12 @@
 name: Rebuild travel pages from original
 on:
-  workflow_dispatch:
+  push:
+    branches: [europe-trip-2026]
 permissions:
   contents: write
 jobs:
   rebuild:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,15 +22,10 @@ jobs:
           import re, subprocess
           source_commit = '35f04d3474eccbb7e298b30baace5ade99579df9'
           original = subprocess.check_output(['git','show',f'{source_commit}:index.html'], text=True)
-
           style = re.search(r'<style>(.*?)</style>', original, re.S).group(1)
           scripts = re.findall(r'<script(?:\s[^>]*)?>(.*?)</script>', original, re.S)
           js = '\n\n'.join(scripts)
-
-          # Make the shared JS safe for independently-rendered feature pages.
-          js = re.sub(
-              r'function init\(\) \{.*?\n    \}\n    init\(\);',
-              '''function init() {
+          js = re.sub(r'function init\(\) \{.*?\n    \}\n    init\(\);', '''function init() {
       if (document.querySelector("#countdown")) renderCountdown();
       if (document.querySelector("#networkBadge")) renderNetwork();
       if (document.querySelector("#globalNotices")) renderNotices();
@@ -46,10 +43,7 @@ jobs:
       if (document.querySelector("#imageModal")) bindGuideImages();
       const initialTab = document.querySelector(".tab-panel")?.id?.replace(/^tab-/, "") || state.tab;
       showTab(initialTab, false);
-      $$(".nav-btn").forEach(btn=>{
-        if (btn.tagName === "A") return;
-        btn.addEventListener("click",()=>showTab(btn.dataset.tab));
-      });
+      $$(".nav-btn").forEach(btn=>{ if (btn.tagName === "A") return; btn.addEventListener("click",()=>showTab(btn.dataset.tab)); });
       const jump = $("#jumpToday");
       if (jump) jump.addEventListener("click",()=>{state.day=currentTripDay();save("aurora-day",state.day);renderDayView();toast(`已切換 Day ${state.day}`);});
       const search = $("#eventSearch");
@@ -62,74 +56,42 @@ jobs:
       if (reset) reset.addEventListener("click",()=>{state.checks={};save("aurora-checks",state.checks);if($("#bookingList"))renderBookings();if($("#checklistList"))renderChecklist();toast("已重設勾選");});
     }
     init();''', js, flags=re.S)
-
-          # Remove embedded CSS/JS from the page shell; keep the original body structure.
           body = re.search(r'<body>(.*?)</body>', original, re.S).group(1)
           body = re.sub(r'<script(?:\s[^>]*)?>.*?</script>', '', body, flags=re.S)
-
-          header_m = re.search(r'(<header\b.*?</header>)', body, re.S)
-          header = header_m.group(1) if header_m else ''
-          main_m = re.search(r'<main>(.*?)</main>', body, re.S)
-          main_inner = main_m.group(1) if main_m else ''
+          header = re.search(r'(<header\b.*?</header>)', body, re.S).group(1)
+          main_inner = re.search(r'<main>(.*?)</main>', body, re.S).group(1)
           sections = list(re.finditer(r'<section class="tab-panel(?: active)?" id="tab-([^"]+)".*?</section>', main_inner, re.S))
-          if len(sections) < 5:
-              raise SystemExit(f'Expected 5 tab sections, found {len(sections)}')
+          if len(sections) < 5: raise SystemExit(f'Expected 5 tab sections, found {len(sections)}')
           section_map = {m.group(1): m.group(0) for m in sections}
-          nav_m = re.search(r'(<nav class="bottom-nav".*?</nav>)', body, re.S)
-          nav = nav_m.group(1) if nav_m else ''
-
-          # Shared shell. Preserve original head metadata and use external CSS/JS.
+          nav = re.search(r'(<nav class="bottom-nav".*?</nav>)', body, re.S).group(1)
           head = re.search(r'<head>(.*?)</head>', original, re.S).group(1)
           head = re.sub(r'<style>.*?</style>', '<link rel="stylesheet" href="{css}">', head, flags=re.S)
           head = re.sub(r'<script(?:\s[^>]*)?>.*?</script>', '', head, flags=re.S)
-
-          def make_page(key, title, folder):
-              rel = '../assets/common.css'
-              script = '../assets/common.js'
-              h = head.replace('{css}', rel)
-              section = section_map[key].replace(' class="tab-panel active"', ' class="tab-panel active"')
-              # On standalone pages, bottom nav is real links instead of JS tab buttons.
+          def make_page(key, folder):
+              h = head.replace('{css}', '../assets/common.css')
               n = nav
-              replacements = {
-                'data-tab="days"': 'href="../daily/" data-tab="days"',
-                'data-tab="transport"': 'href="../transport/" data-tab="transport"',
-                'data-tab="hotels"': 'href="../stay/" data-tab="hotels"',
-                'data-tab="luggage"': 'href="../prep-tools/" data-tab="luggage"',
-                'data-tab="budget"': 'href="../budget/" data-tab="budget"',
-              }
-              for a,b in replacements.items(): n=n.replace(a,b)
-              n=n.replace('<button class="nav-btn"', '<a class="nav-btn"').replace('</button>', '</a>')
-              # Fix only nav labels conversion safely: original nav buttons contain nested spans, so closing tags are all buttons.
-              page = f'''<!doctype html>\n<html lang="zh-Hant-TW">\n<head>{h}</head>\n<body>\n<div class="app-shell">{header}<main>{section}</main>{n}</div>\n<script src="{script}"></script>\n</body>\n</html>'''
-              Path(folder,'index.html').write_text(page, encoding='utf-8')
-
-          for folder,key,title in [
-              ('daily','days','每日行程'),
-              ('transport','transport','交通'),
-              ('stay','hotels','住宿'),
-              ('prep-tools','luggage','行前與工具'),
-              ('budget','budget','預算'),
-          ]:
-              Path(folder).mkdir(exist_ok=True)
-              make_page(key,title,folder)
-
-          Path('assets/common.css').write_text(style.strip()+"\n", encoding='utf-8')
-          Path('assets/common.js').write_text(js.strip()+"\n", encoding='utf-8')
-
-          # Root must look exactly like the original entry view: open the daily page.
-          Path('index.html').write_text('''<!doctype html>\n<html lang="zh-Hant-TW">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n<title>2026 歐洲極光之旅｜18天行程 App</title>\n<meta http-equiv="refresh" content="0; url=daily/">\n<script>location.replace('daily/');</script>\n</head>\n<body><p>正在開啟每日行程…</p></body>\n</html>\n''', encoding='utf-8')
+              for a,b in {
+                'data-tab="days"':'href="../daily/" data-tab="days"',
+                'data-tab="transport"':'href="../transport/" data-tab="transport"',
+                'data-tab="hotels"':'href="../stay/" data-tab="hotels"',
+                'data-tab="luggage"':'href="../prep-tools/" data-tab="luggage"',
+                'data-tab="budget"':'href="../budget/" data-tab="budget"'}.items(): n=n.replace(a,b)
+              n=n.replace('<button class="nav-btn"','<a class="nav-btn"').replace('</button>','</a>')
+              page=f'''<!doctype html>\n<html lang="zh-Hant-TW">\n<head>{h}</head>\n<body>\n<div class="app-shell">{header}<main>{section_map[key]}</main>{n}</div>\n<script src="../assets/common.js"></script>\n</body>\n</html>'''
+              Path(folder,'index.html').write_text(page,encoding='utf-8')
+          for folder,key in [('daily','days'),('transport','transport'),('stay','hotels'),('prep-tools','luggage'),('budget','budget')]:
+              Path(folder).mkdir(exist_ok=True); make_page(key,folder)
+          Path('assets/common.css').write_text(style.strip()+'\n',encoding='utf-8')
+          Path('assets/common.js').write_text(js.strip()+'\n',encoding='utf-8')
+          Path('index.html').write_text('''<!doctype html>\n<html lang="zh-Hant-TW">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n<title>2026 歐洲極光之旅｜18天行程 App</title>\n<meta http-equiv="refresh" content="0; url=daily/">\n<script>location.replace('daily/');</script>\n</head>\n<body><p>正在開啟每日行程…</p></body>\n</html>\n''',encoding='utf-8')
           PY
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A
-          git commit -m 'Rebuild split pages preserving original layout' || true
-          git push origin europe-trip-2026
+          git config user.name 'github-actions[bot]'; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A; git commit -m 'Rebuild split pages preserving original layout'; git push origin europe-trip-2026
       - name: Remove temporary workflow
         if: always()
         shell: bash
         run: |
           git rm -f .github/workflows/rebuild-pages-from-original.yml || true
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git config user.name 'github-actions[bot]'; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'Remove temporary rebuild workflow' || true
           git push origin europe-trip-2026 || true
