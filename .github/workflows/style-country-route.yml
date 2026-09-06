@@ -1,0 +1,73 @@
+name: Refine Country Route UI
+
+on:
+  push:
+    branches:
+      - europe-trip-2026
+
+permissions:
+  contents: write
+
+jobs:
+  refine:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+          fetch-depth: 1
+
+      - name: Make country route a thin day-aligned bar
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          replacements = {
+            '.country-overview { margin: 1px 0 13px; padding: 13px 0 8px; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.76); box-shadow: 0 6px 20px rgba(26,67,79,.05); }':
+            '.country-overview { margin: 0 0 9px; padding: 0; overflow: hidden; border: 0; border-radius: 0; background: transparent; box-shadow: none; }',
+            '.country-overview-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 0 13px 7px; }':
+            '.country-overview-head { display: none; }',
+            '.country-scroll { overflow-x: auto; scrollbar-width: none; }':
+            '.country-scroll { overflow: hidden; scrollbar-width: none; }',
+            '.country-track { position: relative; display: flex; width: max-content; min-width: 100%; padding: 5px 9px 1px; }':
+            '.country-track { position: relative; display: flex; width: 100%; min-width: 100%; height: 34px; padding: 0; align-items: flex-start; }',
+            '.country-track::before { content: ""; position: absolute; top: 28px; left: 69px; right: 69px; height: 3px; border-radius: 999px; background: linear-gradient(90deg,#db8b5d,#6eb7b0,#6088b8,#7898d7); }':
+            '.country-track::before { content: ""; position: absolute; left: 0; right: 0; top: 23px; height: 3px; border-radius: 999px; background: linear-gradient(90deg,#db8b5d,#6eb7b0,#6088b8,#7898d7); }',
+            '.country-stage { position: relative; z-index: 1; width: 138px; padding: 0 5px 7px; border: 0; color: var(--ink); background: transparent; text-align: center; cursor: pointer; }':
+            '.country-stage { position: relative; z-index: 1; flex: var(--stage-days,1); width: auto; min-width: 0; height: 34px; padding: 0 3px; border: 0; color: var(--ink); background: transparent; text-align: center; cursor: pointer; }',
+            '.country-dot { width: 46px; height: 46px; display: grid; place-items: center; margin: 0 auto 5px; border: 3px solid #fff; border-radius: 50%; background: var(--stage-color,#7ca99b); box-shadow: 0 0 0 2px rgba(16,45,62,.10),0 5px 13px rgba(16,45,62,.12); font-size: 23px; transition: transform .18s ease; }':
+            '.country-dot { display: none; }',
+            '.country-stage b { display: block; font-size: 12px; }':
+            '.country-stage b { display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 19px; padding: 0 7px; border-radius: 999px; color: #fff; background: var(--stage-color,#7ca99b); font-size: 10px; line-height: 1; letter-spacing: .03em; box-shadow: 0 2px 6px rgba(16,45,62,.12); }',
+            '.country-stage small { display: block; color: var(--muted); font-size: 9.5px; }':
+            '.country-stage small { display: none; }',
+            '.country-stage.active .country-dot { transform: translateY(-2px) scale(1.08); box-shadow: 0 0 0 3px var(--navy),0 7px 16px rgba(16,45,62,.20); }':
+            '.country-stage.active b { box-shadow: 0 0 0 2px var(--navy),0 3px 8px rgba(16,45,62,.18); }',
+          }
+          for old, new in replacements.items():
+              if old not in s:
+                  raise SystemExit(f'Missing expected CSS block: {old[:80]}')
+              s = s.replace(old, new, 1)
+
+          old_js = '$("#countryTrack").innerHTML = COUNTRY_STAGES.map(stage=>`<button class="country-stage ${state.day>=stage.start&&state.day<=stage.end?"active":""}" data-day="${stage.start}" style="--stage-color:${stage.color}" aria-label="前往${escapeHtml(stage.country)}行程 Day ${stage.start}"><span class="country-dot">${stage.flag}</span><b>${escapeHtml(stage.country)} · ${stage.days}天</b><small>Day ${stage.start}–${stage.end}</small></button>`).join("");'
+          new_js = '$("#countryTrack").innerHTML = COUNTRY_STAGES.map(stage=>{ const code={"奧地利":"AT","芬蘭":"FI","挪威":"NO","荷蘭":"NL"}[stage.country]||stage.country; return `<button class="country-stage ${state.day>=stage.start&&state.day<=stage.end?"active":""}" data-day="${stage.start}" style="--stage-color:${stage.color};--stage-days:${stage.end-stage.start+1}" aria-label="前往${escapeHtml(stage.country)}行程 Day ${stage.start}"><span class="country-dot">${stage.flag}</span><b>${code}</b><small>Day ${stage.start}–${stage.end}</small></button>`; }).join("");'
+          if old_js not in s:
+              raise SystemExit('Missing expected renderCountryTrack block')
+          s = s.replace(old_js, new_js, 1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+          git diff --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No UI changes needed."
+          else
+            git commit -m "Refine country route into thin day timeline"
+            git push origin HEAD:europe-trip-2026
+          fi
