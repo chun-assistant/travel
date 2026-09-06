@@ -1,0 +1,56 @@
+name: Split site into editable pages
+on:
+  push:
+    branches: [europe-trip-2026]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  split:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+          fetch-depth: 0
+      - name: Split index.html
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          # Preserve the current full site as a temporary source during this one-time migration.
+          style = re.search(r'<style>(.*?)</style>', s, re.S).group(1)
+          script = re.search(r'<script>(.*?)</script>\s*</body>', s, re.S).group(1)
+          panels = dict(re.findall(r'<section[^>]+class=["\']tab-panel[^>]*id=["\']([^"\']+)["\'][^>]*>(.*?)</section>', s, re.S))
+          # Fallback parser for class/id attribute order.
+          if len(panels) < 3:
+            panels = {}
+            for m in re.finditer(r'<section\b[^>]*class=["\'][^"\']*tab-panel[^"\']*["\'][^>]*>.*?</section>', s, re.S):
+              block=m.group(0); im=re.search(r'\bid=["\']([^"\']+)', block)
+              if im: panels[im.group(1)] = block
+          nav = re.search(r'<nav[^>]*class=["\'][^"\']*bottom[^"\']*["\'][^>]*>(.*?)</nav>', s, re.S)
+          common_head = '''<!doctype html>\n<html lang="zh-Hant-TW"><head>\n<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n<meta name="theme-color" content="#102d3e"><meta name="apple-mobile-web-app-capable" content="yes">\n<title>2026 歐洲極光之旅｜18天行程 App</title>\n<link rel="stylesheet" href="assets/common.css">\n</head><body>\n'''
+          common_foot = '\n<script src="assets/common.js"></script>\n</body></html>\n'
+          Path('assets/common.css').write_text(style.strip()+"\n", encoding='utf-8')
+          Path('assets/common.js').write_text(script.strip()+"\n", encoding='utf-8')
+          mapping = [('daily','每日行程'),('transport','交通'),('stay','住宿'),('prep-tools','行前與工具'),('budget','預算')]
+          for slug,label in mapping:
+            candidates=[k for k in panels if k.lower() in slug or slug in k.lower() or label in panels[k]]
+            if not candidates: continue
+            block=panels[candidates[0]]
+            html=common_head+f'<main class="page-shell"><div class="page-title"><h1>{label}</h1><p>2026 歐洲極光之旅</p></div>\n'+block+common_foot
+            Path(slug+'.html').write_text(html,encoding='utf-8')
+          # Make index a navigation-only landing page while retaining the same visual language.
+          cards=''.join(f'<a class="category-card" href="{slug}.html"><strong>{label}</strong><span>開啟{label}</span></a>' for slug,label in mapping)
+          index=common_head+f'''<main class="page-shell landing"><div class="hero"><p class="eyebrow">2026 EUROPE TRIP</p><h1>2026 歐洲極光之旅</h1><p>18 天旅行資料與行程工具</p></div><div class="category-grid">{cards}</div></main>'''+common_foot
+          p.write_text(index,encoding='utf-8')
+      - name: Commit migration
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html daily.html transport.html stay.html prep-tools.html budget.html assets/common.css assets/common.js
+          git diff --cached --quiet || git commit -m "refactor: split travel site into editable pages"
+          git push origin europe-trip-2026
