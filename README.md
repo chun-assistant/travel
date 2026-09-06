@@ -1,3 +1,3 @@
 # europe-trip-2026
 
-UI fix trigger
+UI fix trigger 2
