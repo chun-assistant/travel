@@ -11,21 +11,16 @@
 .bottom-nav .nav-btn:nth-child(5)::before{ -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M3 10h18M7 15h3M16 15h2'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M3 10h18M7 15h3M16 15h2'/%3E%3C/svg%3E"); } .bottom-nav .nav-btn:nth-child(5)::after{content:"餐食與購物";}
 
 /* Flight online check-in reminder — layout-safe highlight. */
-.day-chip[data-day="1"],
-.day-chip[data-day="9"],
-.day-chip[data-day="14"],
-.day-chip[data-day="15"] { position:relative; box-shadow:0 0 0 2px rgba(197,90,83,.22),0 8px 18px rgba(197,90,83,.10); }
-.day-chip[data-day="1"]::after,
-.day-chip[data-day="9"]::after,
-.day-chip[data-day="14"]::after,
-.day-chip[data-day="15"]::after { content:""; position:absolute; top:6px; right:7px; width:7px; height:7px; border-radius:50%; background:var(--red); box-shadow:0 0 0 3px var(--red-soft); }
-.day-chip[data-day="1"]::before,
-.day-chip[data-day="9"]::before,
-.day-chip[data-day="14"]::before,
-.day-chip[data-day="15"]::before { position:absolute; right:7px; bottom:6px; z-index:2; display:block; padding:3px 6px; border-radius:999px; color:var(--red); background:var(--red-soft); border:1px solid rgba(197,90,83,.28); font-size:9px; line-height:1.15; font-weight:850; white-space:nowrap; pointer-events:none; }
-.day-chip[data-day="1"]::before { content:"✈ 報到 9/24 23:35"; }
-.day-chip[data-day="9"]::before { content:"✈ 報到 10/2 03:40"; }
-.day-chip[data-day="14"]::before { content:"✈ 報到 10/7 05:50"; }
-.day-chip[data-day="15"]::before { content:"✈ 報到 10/8 11:00"; }
-.day-chip.active[data-day="1"]::before,.day-chip.active[data-day="9"]::before,.day-chip.active[data-day="14"]::before,.day-chip.active[data-day="15"]::before { color:#fff; background:rgba(197,90,83,.84); border-color:rgba(255,255,255,.30); }
-.day-chip.active[data-day="1"],.day-chip.active[data-day="9"],.day-chip.active[data-day="14"],.day-chip.active[data-day="15"] { box-shadow:0 0 0 2px rgba(197,90,83,.55),0 8px 18px rgba(197,90,83,.18); }
+.day-chip[data-day="1"],.day-chip[data-day="9"],.day-chip[data-day="14"],.day-chip[data-day="15"]{position:relative;box-shadow:0 0 0 2px rgba(197,90,83,.22),0 8px 18px rgba(197,90,83,.10)}
+.day-chip[data-day="1"]::after,.day-chip[data-day="9"]::after,.day-chip[data-day="14"]::after,.day-chip[data-day="15"]::after{content:"";position:absolute;top:6px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 0 3px var(--red-soft)}
+.day-chip[data-day="1"]::before,.day-chip[data-day="9"]::before,.day-chip[data-day="14"]::before,.day-chip[data-day="15"]::before{position:absolute;right:7px;bottom:6px;z-index:2;display:block;padding:3px 6px;border-radius:999px;color:var(--red);background:var(--red-soft);border:1px solid rgba(197,90,83,.28);font-size:9px;line-height:1.15;font-weight:850;white-space:nowrap;pointer-events:none}
+.day-chip[data-day="1"]::before{content:"✈ 報到 9/24 23:35"}.day-chip[data-day="9"]::before{content:"✈ 報到 10/2 03:40"}.day-chip[data-day="14"]::before{content:"✈ 報到 10/7 05:50"}.day-chip[data-day="15"]::before{content:"✈ 報到 10/8 11:00"}
+.day-chip.active[data-day="1"]::before,.day-chip.active[data-day="9"]::before,.day-chip.active[data-day="14"]::before,.day-chip.active[data-day="15"]::before{color:#fff;background:rgba(197,90,83,.84);border-color:rgba(255,255,255,.30)}
+.day-chip.active[data-day="1"],.day-chip.active[data-day="9"],.day-chip.active[data-day="14"],.day-chip.active[data-day="15"]{box-shadow:0 0 0 2px rgba(197,90,83,.55),0 8px 18px rgba(197,90,83,.18)}
+
+/* Remove the JS badge from normal flow; the single pseudo badge above is the visual annotation. */
+.day-chip.has-flight-checkin .flight-checkin-badge{display:none!important}
+.day-chip[data-day="1"]::before{content:"✈ CI0063／AY1472 · 9/24 23:35"}
+.day-chip[data-day="9"]::before{content:"✈ WF993 · 10/2 03:40"}
+.day-chip[data-day="14"]::before{content:"✈ SAS · 10/7 05:50"}
+.day-chip[data-day="15"]::before{content:"✈ CI0074 · 10/8 11:00"}
