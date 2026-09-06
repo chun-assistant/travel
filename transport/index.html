@@ -1,28 +1,20 @@
 <!doctype html>
 <html lang="zh-Hant-TW">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#102d3e">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="2026歐洲之旅">
-  <title>2026 歐洲極光之旅｜18天行程 App</title>
-  <link rel="stylesheet" href="../assets/common.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#102d3e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="2026歐洲之旅">
+  <title>2026 歐洲極光之旅｜18天行程 App</title><link rel="stylesheet" href="../assets/common.css">
+  <style>
+    .transport-card.is-unpaid{position:relative}
+    #transportFilters .unpaid-filter{color:#74858b;background:transparent;border:0}
+    #transportFilters .unpaid-filter.active{color:var(--navy);background:#eaf3f1}
+    .bottom-nav{position:fixed;z-index:50;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,980px);display:grid;grid-template-columns:repeat(5,1fr);gap:2px;padding:7px 8px calc(7px + var(--safe-bottom));background:rgba(255,255,255,.94);border-top:1px solid rgba(193,211,207,.8);box-shadow:0 -12px 35px rgba(16,45,62,.12);backdrop-filter:blur(18px)}
+    .nav-btn{min-height:58px;border:0;border-radius:13px;background:transparent;color:#74858b;font-size:10px;font-weight:750;cursor:pointer;text-decoration:none;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .nav-btn svg{display:block;width:22px;height:22px;margin:0 auto 3px;stroke-width:1.8}
+    .nav-btn.active{color:var(--navy);background:#eaf3f1}
+  </style>
 </head>
 <body data-page="transport">
-  <div class="app-shell">
-    <header class="hero">
-      <div class="stars"></div>
-      <div class="hero-inner">
-        <div class="eyebrow"><span>EUROPE · AURORA 2026</span><span class="eyebrow-badge" id="networkBadge"><i class="online-dot"></i><span>離線可查看</span></span></div>
-        <h1>18天歐洲極光之旅</h1><p class="hero-sub">2026.09.24 — 10.11 · 奧地利・芬蘭・挪威・荷蘭</p>
-        <div class="route-line" aria-label="旅行路線"><span class="route-stop">台北</span><span class="route-arrow">›</span><span class="route-stop">維也納</span><span class="route-arrow">›</span><span class="route-stop">赫爾辛基</span><span class="route-arrow">›</span><span class="route-stop">拉普蘭</span><span class="route-arrow">›</span><span class="route-stop">特羅姆瑟</span><span class="route-arrow">›</span><span class="route-stop">阿姆斯特丹</span></div>
-        <div class="hero-stats"><div class="hero-stat"><b>18 天</b><small>完整逐時行程</small></div><div class="hero-stat"><b>248 站</b><small>一鍵開啟導航</small></div><div class="hero-stat"><b id="countdownValue">—</b><small id="countdownLabel">距離出發</small></div></div>
-      </div>
-    </header>
-    <main><section class="tab-panel active" id="tab-transport" aria-labelledby="nav-transport"><div class="section-head"><div><h2>交通</h2><p>班次、費用、時間與路線集中查</p></div></div><div class="chip-row" id="transportFilters"></div><div class="card-list" id="transportList"></div></section></main>
-  </div>
+  <div class="app-shell"><header class="hero"><div class="stars"></div><div class="hero-inner"><div class="eyebrow"><span>EUROPE · AURORA 2026</span><span class="eyebrow-badge" id="networkBadge"><i class="online-dot"></i><span>離線可查看</span></span></div><h1>18天歐洲極光之旅</h1><p class="hero-sub">2026.09.24 — 10.11 · 奧地利・芬蘭・挪威・荷蘭</p><div class="route-line" aria-label="旅行路線"><span class="route-stop">台北</span><span class="route-arrow">›</span><span class="route-stop">維也納</span><span class="route-arrow">›</span><span class="route-stop">赫爾辛基</span><span class="route-arrow">›</span><span class="route-stop">拉普蘭</span><span class="route-arrow">›</span><span class="route-stop">特羅姆瑟</span><span class="route-arrow">›</span><span class="route-stop">阿姆斯特丹</span></div><div class="hero-stats"><div class="hero-stat"><b>18 天</b><small>完整逐時行程</small></div><div class="hero-stat"><b>248 站</b><small>一鍵開啟導航</small></div><div class="hero-stat"><b id="countdownValue">—</b><small id="countdownLabel">距離出發</small></div></div></div></header><main><section class="tab-panel active" id="tab-transport" aria-labelledby="nav-transport"><div class="section-head"><div><h2>交通</h2><p>班次、費用、時間與路線集中查</p></div></div><div class="chip-row" id="transportFilters"></div><div class="card-list" id="transportList"></div></section></main></div>
   <div id="splitRuntimeHost" hidden><div id="globalNotices"></div><div id="dayScroller"></div><div id="countryTrack"></div><div id="countryScroll"></div><div id="daySummary"></div><div id="eventFilters"></div><div id="eventTimeline"></div><div id="hotelList"></div><div id="ticketAppList"></div><div id="checklist"></div><div id="checkPercent"></div><div id="checkCount"></div><div id="progressFill"></div><div id="practicalList"></div><div id="bookingList"></div><div id="taxList"></div><div id="budgetSummary"></div><div id="budgetList"></div><div id="foodList"></div><div id="mealList"></div><div id="toast"></div><input id="eventSearch"><button id="clearSearch"></button><button id="jumpToday"></button><button id="resetChecks"></button><div id="budgetSegments"></div><div id="imageModal"></div><div id="imageModalContent"></div><div id="imageModalCaption"></div><button id="imageModalClose"></button></div>
   <nav class="bottom-nav" aria-label="主要導覽">
     <a class="nav-btn" href="../daily/" id="nav-days"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M16 2v4M8 2v4M3 9h18"></path></svg>每日行程</a>
@@ -31,40 +23,15 @@
     <a class="nav-btn" href="../prep-tools/" id="nav-luggage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="5" y="6" width="14" height="15" rx="2"></rect><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M8 10v7M12 10v7M16 10v7"></path></svg>行前與工具</a>
     <a class="nav-btn" href="../budget/" id="nav-budget"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18M7 15h3"></path></svg>餐食與購物</a>
   </nav>
-  <script src="../assets/common.js"></script>
-  <script>
-  document.addEventListener('DOMContentLoaded',function(){
-    const flightDetails={
-      'TPE→VIE／AMS→TPE':{url:'https://airportservice.china-airlines.com/eCheckin/eCheckin_home?country=tw&locale=zh',time:'9/22 23:45（48小時前）／10/8 11:00（48小時前）',how:'輸入訂位代號＋Full Name'},
-      'VIE→HEL':{url:'https://www.finnair.com/hk-zh/manage/view?fromCheckIn=false',time:'9/24 23:35（36小時前）',how:'輸入訂位代號＋Last Name'},
-      'KKN→TOS':{url:'https://www.flysas.com/en/checkin',time:'10/2 03:40（30小時前）',how:'輸入訂位代號＋Last Name'},
-      'TOS→OSL→AMS':{url:'https://www.flysas.com/en/checkin',time:'10/7 05:50（30小時前）',how:'輸入訂位代號＋Last Name'}
-    };
-    function addFlightRows(){
-      document.querySelectorAll('#transportList .transport-card').forEach(card=>{
-        const title=card.querySelector('h3');
-        if(!title||card.dataset.checkinAdded)return;
-        const key=Object.keys(flightDetails).find(k=>title.textContent.trim().includes(k));
-        if(!key)return;
-        const d=flightDetails[key];
-        card.dataset.checkinAdded='1';
-        card.insertAdjacentHTML('beforeend','<div class="info-card-row"><span>網路報到網址</span><b><a href="'+d.url+'" target="_blank" rel="noopener">開啟報到頁面 ↗</a></b></div><div class="info-card-row"><span>網路報到時間</span><b>'+d.time+'</b></div><div class="info-card-row"><span>如何報到</span><b>'+d.how+'</b></div>');
-      });
-    }
-    function removeObsoleteAmsterdamTransfer(){
-      document.querySelectorAll('#transportList .transport-card').forEach(card=>{
-        const title=card.querySelector('h3');
-        if(title&&title.textContent.trim()==='Amsterdam ID→AMS')card.remove();
-      });
-    }
-    function syncTransportCards(){
-      removeObsoleteAmsterdamTransfer();
-      addFlightRows();
-    }
-    const list=document.getElementById('transportList');
-    if(list)new MutationObserver(syncTransportCards).observe(list,{childList:true});
-    syncTransportCards();
-  });
-  </script>
-</body>
-</html>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+const flightDetails={'TPE→VIE／AMS→TPE':{url:'https://airportservice.china-airlines.com/eCheckin/eCheckin_home?country=tw&locale=zh',time:'9/22 23:45（48小時前）／10/8 11:00（48小時前）',how:'輸入訂位代號＋Full Name'},'VIE→HEL':{url:'https://www.finnair.com/hk-zh/manage/view?fromCheckIn=false',time:'9/24 23:35（36小時前）',how:'輸入訂位代號＋Last Name'},'KKN→TOS':{url:'https://www.flysas.com/en/checkin',time:'10/2 03:40（30小時前）',how:'輸入訂位代號＋Last Name'},'TOS→OSL→AMS':{url:'https://www.flysas.com/en/checkin',time:'10/7 05:50（30小時前）',how:'輸入訂位代號＋Last Name'}};
+function addFlightRows(){document.querySelectorAll('#transportList .transport-card').forEach(card=>{const title=card.querySelector('h3');if(!title||card.dataset.checkinAdded)return;const key=Object.keys(flightDetails).find(k=>title.textContent.trim().includes(k));if(!key)return;const d=flightDetails[key];card.dataset.checkinAdded='1';card.insertAdjacentHTML('beforeend','<div class="info-card-row"><span>網路報到網址</span><b><a href="'+d.url+'" target="_blank" rel="noopener">開啟報到頁面 ↗</a></b></div><div class="info-card-row"><span>網路報到時間</span><b>'+d.time+'</b></div><div class="info-card-row"><span>如何報到</span><b>'+d.how+'</b></div>')})}
+function removeObsoleteAmsterdamTransfer(){document.querySelectorAll('#transportList .transport-card').forEach(card=>{const title=card.querySelector('h3');if(title&&title.textContent.trim()==='Amsterdam ID→AMS')card.remove()})}
+function updateDay2ViennaTransfer(){document.querySelectorAll('#transportList .transport-card').forEach(card=>{const title=card.querySelector('h3');if(!title)return;const cardText=card.textContent.replace(/\s+/g,' ');if(!/Day\s*2|9\/25|維也納/.test(cardText)||!/機場|Airport|飯店/.test(cardText))return;if(card.dataset.day2TransferUpdated)return;card.dataset.day2TransferUpdated='1';title.textContent='VIE→Südtiroler Platz→Stephansplatz→飯店';const subtitle=card.querySelector('.subtitle');if(subtitle)subtitle.textContent='REX 7／IC＋U1＋步行350m';card.querySelectorAll('.info-card-row').forEach(row=>row.remove());card.insertAdjacentHTML('beforeend','<div class="info-card-row"><span>時間</span><b>8:16（REX 7）／8:34（IC）<br>8:59／9:11 抵達飯店</b></div><div class="info-card-row"><span>方式</span><b>🚆 REX 7／IC → Vienna Central<br>🚶 步行約 6 分鐘 → Südtiroler Platz<br>🚇 U1 Leopoldau → Stephansplatz<br>🚶 步行約 4 分鐘／350 公尺 → 飯店</b></div><div class="info-card-row"><span>時常</span><b>約 37–43 分鐘（依班次）</b></div><div class="info-card-row"><span>費用／人</span><b>EUR 4.4</b></div><div class="info-card-row"><span>提醒</span><b>尚未購票；REX 7 與 IC 擇一。8:16 班次 8:59 抵達，8:34 班次 9:11 抵達。</b></div>')})}
+function markUnpaid(){document.querySelectorAll('#transportList .transport-card').forEach(card=>{if(card.dataset.unpaidMarked)return;const text=card.textContent.replace(/\s+/g,' ');if(!/Stephansplatz/.test(text)||!/(U1|機場|Airport|VIE)/.test(text))return;card.dataset.unpaidMarked='1';card.classList.add('is-unpaid');const status=card.querySelector('.status');if(status)status.textContent='尚未購票'})}
+function setupFilter(){const filters=document.getElementById('transportFilters');if(!filters||filters.dataset.unpaidSetup)return;filters.dataset.unpaidSetup='1';const ensureBtn=function(){if(filters.querySelector('.unpaid-filter'))return;const btn=document.createElement('button');btn.type='button';btn.className='filter-chip unpaid-filter';btn.textContent='尚未購票';btn.setAttribute('aria-pressed','false');filters.appendChild(btn)};const apply=function(active){markUnpaid();const btn=filters.querySelector('.unpaid-filter');if(btn){btn.classList.toggle('active',active);btn.setAttribute('aria-pressed',String(active))}document.querySelectorAll('#transportList .transport-card').forEach(card=>{card.style.display=active?(card.classList.contains('is-unpaid')?'':'none'):''})};filters.addEventListener('click',function(e){const btn=e.target.closest('.unpaid-filter');if(btn){e.preventDefault();e.stopPropagation();apply(!btn.classList.contains('active'));}},true);new MutationObserver(function(){ensureBtn()}).observe(filters,{childList:true});ensureBtn()}
+function sync(){removeObsoleteAmsterdamTransfer();addFlightRows();updateDay2ViennaTransfer();markUnpaid();setupFilter()}const list=document.getElementById('transportList');if(list)new MutationObserver(sync).observe(list,{childList:true});sync();
+});
+</script><script src="../assets/common.js"></script>
+</body></html>
