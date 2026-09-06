@@ -201,7 +201,15 @@ const TICKET_APPS = [
     }
 
     function renderDayScroller() {
-      $("#dayScroller").innerHTML = APP_DATA.overview.map(d => `<button class="day-chip ${d.day===state.day?"active":""}" data-day="${d.day}"><b>Day ${d.day}</b><small>${escapeHtml(dateLabel(d.date))}</small><small class="day-place">${escapeHtml(d.city)}</small></button>`).join("");
+      $("#dayScroller").innerHTML = APP_DATA.overview.map(d => {
+        const dayStage = d.day >= 2 && d.day <= 3 ? COUNTRY_STAGES[0]
+          : d.day >= 4 && d.day <= 8 ? COUNTRY_STAGES[1]
+          : d.day >= 9 && d.day <= 14 ? COUNTRY_STAGES[2]
+          : d.day >= 15 && d.day <= 17 ? COUNTRY_STAGES[3]
+          : null;
+        const dayColor = dayStage?.color || "#dbe6e3";
+        return `<button class="day-chip ${d.day===state.day?"active":""}" data-day="${d.day}" style="--day-color:${dayColor}"><b>Day ${d.day}</b><small>${escapeHtml(dateLabel(d.date))}</small><small class="day-place">${escapeHtml(d.city)}</small></button>`;
+      }).join("");
       $$(".day-chip").forEach(btn => btn.addEventListener("click", () => { state.day=Number(btn.dataset.day); save("aurora-day",state.day); renderDayView(); setTimeout(()=>btn.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}),20); }));
     }
 
@@ -379,33 +387,14 @@ const TICKET_APPS = [
       }));
     }
     function init() {
-      if ($("#countdown")) renderCountdown();
-      if ($("#networkBadge")) renderNetwork();
-      if ($("#globalNotices")) renderNotices();
-      if ($("#dayScroller")) renderDayView();
-      if ($("#transportList")) renderTransport();
-      if ($("#hotelList")) renderHotels();
-      if ($("#ticketAppList")) renderTicketApps();
-      if ($("#checklistList")) renderChecklist();
-      if ($("#practicalList")) renderPractical();
-      if ($("#bookingList")) renderBookings();
-      if ($("#taxList")) renderTax();
-      if ($("#budgetList")) renderBudget();
-      if ($("#foodList")) renderFood();
-      if ($("#mealList")) renderMeals();
-      if ($("#imageModal")) bindGuideImages();
-      const initialTab = document.querySelector(".tab-panel")?.id?.replace(/^tab-/, "") || state.tab;
-      showTab(initialTab, false);
-      $$(".nav-btn").forEach(btn=>{ if (btn.tagName === "A") return; btn.addEventListener("click",()=>showTab(btn.dataset.tab)); });
-      const jump = $("#jumpToday");
-      if (jump) jump.addEventListener("click",()=>{state.day=currentTripDay();save("aurora-day",state.day);renderDayView();toast(`已切換 Day ${state.day}`);});
-      const search = $("#eventSearch");
-      if (search) search.addEventListener("input",e=>{state.eventSearch=e.target.value;renderEvents();});
-      const clear = $("#clearSearch");
-      if (clear) clear.addEventListener("click",()=>{$("#eventSearch").value="";state.eventSearch="";renderEvents();});
-      if ($("#luggageSegments")) bindSegmented("#luggageSegments", "#luggageSub", "luggage");
-      if ($("#budgetSegments")) bindSegmented("#budgetSegments", "#budgetSub", "budget");
-      const reset = $("#resetChecks");
-      if (reset) reset.addEventListener("click",()=>{state.checks={};save("aurora-checks",state.checks);if($("#bookingList"))renderBookings();if($("#checklistList"))renderChecklist();toast("已重設勾選");});
+      renderCountdown(); renderNetwork(); renderNotices(); renderDayView(); renderTransport(); renderHotels(); renderTicketApps(); renderChecklist(); renderPractical(); renderBookings(); renderTax(); renderBudget(); renderFood(); renderMeals(); bindGuideImages();
+      showTab(state.tab,false);
+      $$(".nav-btn").forEach(btn=>btn.addEventListener("click",()=>showTab(btn.dataset.tab)));
+      $("#jumpToday").addEventListener("click",()=>{state.day=currentTripDay();save("aurora-day",state.day);renderDayView();toast(`已切換 Day ${state.day}`);});
+      $("#eventSearch").addEventListener("input",e=>{state.eventSearch=e.target.value;renderEvents();});
+      $("#clearSearch").addEventListener("click",()=>{$("#eventSearch").value="";state.eventSearch="";renderEvents();});
+      $("#resetChecks").addEventListener("click",()=>{if(confirm("確定要清除所有行李與待辦勾選紀錄嗎？")){state.checks={};save("aurora-checks",state.checks);renderChecklist();renderBookings();toast("行李與待辦已重設");}});
+      bindSegments("#luggageSegments","sub-"); bindSegments("#budgetSegments","budget-");
+      window.addEventListener("online",renderNetwork); window.addEventListener("offline",renderNetwork);
     }
     init();
