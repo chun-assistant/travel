@@ -1,0 +1,45 @@
+name: Update Vienna Entry Guide Image
+on:
+  push:
+    branches:
+      - europe-trip-2026
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+          fetch-depth: 0
+      - name: Replace embedded Vienna image
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = s
+          pattern = r'(<img\s+src=")data:image/webp;base64,[^"]+("\s+alt="維也納機場入境全攻略流程圖與注意事項")'
+          s, n = re.subn(pattern, r'\1assets/vienna-entry-3x4.svg\2', s, count=1)
+          if n:
+              p.write_text(s, encoding='utf-8')
+              print('Vienna entry image replaced.')
+          elif 'assets/vienna-entry-3x4.svg' in s:
+              print('Vienna entry image already points to SVG.')
+          else:
+              raise SystemExit('Target Vienna image tag not found.')
+          PY
+      - name: Commit website change
+        run: |
+          git add index.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --cached --quiet; then
+            echo "No website change needed."
+          else
+            git commit -m "Update Vienna entry guide image"
+            git push origin HEAD:europe-trip-2026
+          fi
