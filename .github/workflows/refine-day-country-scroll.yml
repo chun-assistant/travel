@@ -1,0 +1,127 @@
+name: Refine Day Country Scroll
+
+on:
+  push:
+    branches:
+      - europe-trip-2026
+
+permissions:
+  contents: write
+
+jobs:
+  refine:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+          fetch-depth: 0
+      - name: Patch index.html
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          old = '''    .day-scroller, .chip-row, .segmented {
+      display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 9px; margin: 0 -2px;
+    }
+    .day-scroller::-webkit-scrollbar, .chip-row::-webkit-scrollbar, .segmented::-webkit-scrollbar { display: none; }
+'''
+          new = '''    .day-scroller, .chip-row, .segmented {
+      display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 9px; margin: 0 -2px;
+    }
+    .day-scroller, .country-scroll {
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+    }
+    .day-scroller.dragging, .country-scroll.dragging { cursor: grabbing; }
+    .day-scroller::-webkit-scrollbar, .chip-row::-webkit-scrollbar, .segmented::-webkit-scrollbar { display: none; }
+'''
+          if old not in s: raise SystemExit('day scroller CSS block not found')
+          s = s.replace(old, new, 1)
+
+          old = '''    .country-scroll { overflow: hidden; scrollbar-width: none; }
+    .country-scroll::-webkit-scrollbar { display: none; }
+    .country-track { position: relative; display: flex; width: 100%; min-width: 100%; height: 34px; padding: 0; align-items: flex-start; }
+    .country-track::before { content: ""; position: absolute; left: 0; right: 0; top: 23px; height: 3px; border-radius: 999px; background: linear-gradient(90deg,#db8b5d,#6eb7b0,#6088b8,#7898d7); }
+    .country-stage { position: relative; z-index: 1; flex: var(--stage-days,1); width: auto; min-width: 0; height: 34px; padding: 0 3px; border: 0; color: var(--ink); background: transparent; text-align: center; cursor: pointer; }
+'''
+          new = '''    .country-scroll { overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+    .country-scroll::-webkit-scrollbar { display: none; }
+    .country-track { position: relative; display: grid; grid-template-columns: repeat(18, 126px); column-gap: 8px; width: calc(18 * 126px + 17 * 8px + 4px); min-width: calc(18 * 126px + 17 * 8px + 4px); height: 34px; padding: 0 2px; align-items: flex-start; }
+    .country-track::before { content: ""; position: absolute; left: 2px; right: 2px; top: 23px; height: 3px; border-radius: 999px; background: linear-gradient(90deg,#db8b5d,#6eb7b0,#6088b8,#7898d7); }
+    .country-stage { position: relative; z-index: 1; grid-column: var(--stage-start) / var(--stage-end); width: auto; min-width: 0; height: 34px; padding: 0 3px; border: 0; color: var(--ink); background: transparent; text-align: center; cursor: pointer; }
+'''
+          if old not in s: raise SystemExit('country CSS block not found')
+          s = s.replace(old, new, 1)
+
+          old = '''    function renderCountryTrack() {
+      $("#countryTrack").innerHTML = COUNTRY_STAGES.map(stage=>{ const code={"奧地利":"AT","芬蘭":"FI","挪威":"NO","荷蘭":"NL"}[stage.country]||stage.country; return `<button class="country-stage ${state.day>=stage.start&&state.day<=stage.end?"active":""}" data-day="${stage.start}" style="--stage-color:${stage.color};--stage-days:${stage.end-stage.start+1}" aria-label="前往${escapeHtml(stage.country)}行程 Day ${stage.start}"><span class="country-dot">${stage.flag}</span><b>${code}</b><small>Day ${stage.start}–${stage.end}</small></button>`; }).join("");
+      $$(".country-stage",$("#countryTrack")).forEach(btn=>btn.addEventListener("click",()=>{state.day=Number(btn.dataset.day);save("aurora-day",state.day);renderDayView();setTimeout(()=>$(".day-chip.active")?.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}),20);}));
+    }
+'''
+          new = '''    function renderCountryTrack() {
+      $("#countryTrack").innerHTML = COUNTRY_STAGES.map(stage=>{ const code={"奧地利":"AT","芬蘭":"FI","挪威":"NO","荷蘭":"NL"}[stage.country]||stage.country; return `<button class="country-stage ${state.day>=stage.start&&state.day<=stage.end?"active":""}" data-day="${stage.start}" style="--stage-color:${stage.color};--stage-start:${stage.start};--stage-end:${stage.end+1}" aria-label="前往${escapeHtml(stage.country)}行程 Day ${stage.start}"><span class="country-dot">${stage.flag}</span><b>${code}</b><small>Day ${stage.start}–${stage.end}</small></button>`; }).join("");
+      $$(".country-stage",$("#countryTrack")).forEach(btn=>btn.addEventListener("click",()=>{state.day=Number(btn.dataset.day);save("aurora-day",state.day);renderDayView();setTimeout(()=>$(".day-chip.active")?.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}),20);}));
+    }
+
+    function enableHorizontalDrag(selector) {
+      const el = $(selector);
+      if (!el || el.dataset.dragReady) return;
+      el.dataset.dragReady = "1";
+      let dragging = false, startX = 0, startScroll = 0;
+      el.addEventListener("pointerdown", e => {
+        if (e.button !== 0) return;
+        dragging = true; startX = e.clientX; startScroll = el.scrollLeft;
+        el.classList.add("dragging");
+        el.setPointerCapture?.(e.pointerId);
+      });
+      el.addEventListener("pointermove", e => {
+        if (!dragging) return;
+        el.scrollLeft = startScroll - (e.clientX - startX);
+      });
+      const stop = () => { dragging = false; el.classList.remove("dragging"); };
+      el.addEventListener("pointerup", stop);
+      el.addEventListener("pointercancel", stop);
+      el.addEventListener("pointerleave", e => { if (dragging && !el.hasPointerCapture?.(e.pointerId)) stop(); });
+      el.addEventListener("wheel", e => {
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+          el.scrollLeft += e.deltaY;
+          e.preventDefault();
+        }
+      }, {passive:false});
+    }
+'''
+          if old not in s: raise SystemExit('renderCountryTrack block not found')
+          s = s.replace(old, new, 1)
+
+          old = '''    function renderDayView() {
+      renderDayScroller();
+      renderCountryTrack();
+'''
+          new = '''    function renderDayView() {
+      renderDayScroller();
+      renderCountryTrack();
+      enableHorizontalDrag("#dayScroller");
+      enableHorizontalDrag("#countryScroll");
+'''
+          if old not in s: raise SystemExit('renderDayView block not found')
+          s = s.replace(old, new, 1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+          git diff --check
+          git add index.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --cached --quiet; then
+            echo "No changes needed."
+          else
+            git commit -m "Align country timeline with days and enable desktop drag"
+            git push origin HEAD:europe-trip-2026
+          fi
