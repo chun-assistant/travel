@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1540" viewBox="0 0 900 1540">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eefaff"/><stop offset=".5" stop-color="#fffdf7"/><stop offset="1" stop-color="#eef8f3"/></linearGradient>
+  <style>
+    text{font-family:-apple-system,BlinkMacSystemFont,'PingFang TC','Microsoft JhengHei',sans-serif;fill:#17456a}
+    .title{font-size:54px;font-weight:900}.sub{font-size:21px;font-weight:800}.th{font-size:18px;font-weight:900;fill:white}.day{font-size:17px;font-weight:900}.place{font-size:15px;font-weight:800}.meal{font-size:13px;font-weight:750}.tiny{font-size:11px;font-weight:700}.note{font-size:14px;font-weight:750}
+  </style>
+</defs>
+<rect width="900" height="1540" rx="28" fill="url(#bg)"/>
+<circle cx="95" cy="82" r="54" fill="#dff2ff"/><circle cx="790" cy="78" r="62" fill="#e6f5ed"/><text x="38" y="92" class="title">18天 歐洲之旅</text><text x="42" y="132" class="sub">早餐・午餐・晚餐一覽表</text><text x="675" y="68" class="sub">🍴 Good Food</text><text x="675" y="97" class="sub">Good Mood ♡</text>
+<g transform="translate(24 166)">
+  <rect width="852" height="48" rx="13" fill="#176da8"/><rect x="292" width="180" height="48" fill="#eebc45"/><rect x="472" width="190" height="48" fill="#48aa99"/><rect x="662" width="190" height="48" rx="0 13 13 0" fill="#ec8094"/>
+  <text x="17" y="31" class="th">Day</text><text x="73" y="31" class="th">日期</text><text x="150" y="31" class="th">地點／行程</text><text x="346" y="31" class="th">🥐 早餐</text><text x="526" y="31" class="th">🍴 午餐</text><text x="716" y="31" class="th">🍽 晚餐</text>
+
+  <g transform="translate(0 48)">
+    <rect width="852" height="68" fill="#fff" stroke="#d9e8e7"/><text x="18" y="27" class="day">1</text><text x="66" y="27" class="day">9/24</text><text x="145" y="27" class="place">台北 → 維也納</text><text x="366" y="37" class="meal">—</text><text x="560" y="37" class="meal">—</text><text x="690" y="27" class="meal">✈ 機上 CI0063</text>
+  </g>
+  <g transform="translate(0 116)">
+    <rect width="852" height="68" fill="#fbfefe" stroke="#d9e8e7"/><text x="18" y="27" class="day">2</text><text x="66" y="27" class="day">9/25</text><text x="145" y="27" class="place">維也納</text><text x="310" y="27" class="meal">✈ 飛機餐 CI0063</text><text x="486" y="23" class="meal">🍽 Figlmüller</text><text x="486" y="43" class="tiny">維也納炸豬排</text><text x="678" y="23" class="meal">● 自理</text><text x="678" y="43" class="tiny">＋ 超市採買 🛒</text>
+  </g>
+  <g transform="translate(0 184)">
+    <rect width="852" height="76" fill="#fff" stroke="#d9e8e7"/><text x="18" y="29" class="day">3</text><text x="66" y="29" class="day">9/26</text><text x="145" y="29" class="place">維也納 → 赫爾辛基</text><text x="322" y="31" class="meal">● 自理</text><text x="486" y="23" class="meal">✈ AY1472</text><text x="486" y="43" class="tiny">未含飛機餐／藍莓汁必點</text><text x="678" y="23" class="meal">🍽 Gastro Hub</text><text x="678" y="43" class="tiny">＋ 超市採買 🛒</text>
+  </g>
+  <g transform="translate(0 260)">
+    <rect width="852" height="76" fill="#fbfefe" stroke="#d9e8e7"/><text x="18" y="29" class="day">4</text><text x="66" y="29" class="day">9/27</text><text x="145" y="23" class="place">赫爾辛基 → 羅瓦涅米</text><text x="145" y="44" class="tiny">夜臥火車</text><text x="322" y="31" class="meal">● 自理</text><text x="486" y="23" class="meal">🍲 老鷹市場</text><text x="486" y="43" class="tiny">Kappeli</text><text x="678" y="23" class="meal">● 自理</text><text x="678" y="43" class="tiny">＋ 超市採買 🛒</text>
+  </g>
+  <g transform="translate(0 336)">
+    <rect width="852" height="76" fill="#fff" stroke="#d9e8e7"/><text x="18" y="29" class="day">5</text><text x="66" y="29" class="day">9/28</text><text x="145" y="23" class="place">羅瓦涅米</text><text x="145" y="44" class="tiny">聖誕老人村</text><text x="322" y="31" class="meal">● 自理</text><text x="486" y="23" class="meal">🍽 Santa’s Salmon Place</text><text x="486" y="43" class="tiny">烤鮭魚</text><text x="678" y="23" class="meal">● 自理</text><text x="678" y="43" class="tiny">＋ 超市採買 🛒</text>
+  </g>
+  <g transform="translate(0 412)">
+    <rect width="852" height="76" fill="#fbfefe" stroke="#d9e8e7"/><text x="18" y="29" class="day">6</text><text x="66" y="29" class="day">9/29</text><text x="145" y="29" class="place">羅瓦涅米 → 伊瓦洛</text><text x="305" y="23" class="meal">🛏 飯店早餐</text><text x="305" y="43" class="tiny">Nova Skyland</text><text x="486" y="23" class="meal">● 自理</text><text x="486" y="43" class="tiny">12:00 上巴士前準備</text><text x="678" y="23" class="meal">🍕 pubi.fi Pizza</text><text x="678" y="43" class="tiny">＋ 超市採買 🛒</text>
+  </g>
+  <g transform="translate(0 488)">
+    <rect width="852" height="76" fill="#fff" stroke="#d9e8e7"/><text x="18" y="29" class="day">7</text><text x="66" y="29" class="day">9/30</text><text x="145" y="29" class="place">伊瓦洛／Nellim</text><text x="305" y="23" class="meal">🛏 飯店早餐</text><text x="305" y="43" class="tiny">Kultahippu</text><text x="486" y="23" class="meal">🍲 Nellim 日遊</text><text x="486" y="43" class="tiny">含午餐</text><text x="678" y="23" class="meal">● 自理</text><text x="678" y="43" class="tiny">＋ 超市採買 🛒</text>
+  </g>
+  <g transform="translate(0 564)">
+    <rect width="852" height="76" fill="#fbfefe" stroke="#d9e8e7"/><text x="18" y="29" class="day">8</text><text x="66" y="29" class="day">10/1</text><text x="145" y="29" class="place">伊瓦洛 → 薩利色爾卡</text><text x="305" y="23" class="meal">🛏 飯店早餐</text><text x="305" y="43" class="tiny">Kultahippu</text><text x="486" y="31" class="meal">● 自理</text><text x="678" y="23" class="meal">🛏 飯店晚餐</text><text x="678" y="43" class="tiny">Northern Lights Village</text>
+  </g>
+  <g transform="translate(0 640)">
+    <rect width="852" height="76" fill="#fff" stroke="#d9e8e7"/><text x="18" y="29" class="day">9</text><text x="66" y="29" class="day">10/2</text><text x="145" y="29" class="place">薩利色爾卡 → 希爾克內斯</text><text x="305" y="23" class="meal">🛏 飯店早餐</text><text x="305" y="43" class="tiny">Northern Lights Village</text><text x="486" y="31" class="meal">● 自理</text><text x="678" y="23" class="meal">🦀 Thon Hotel 帝王蟹</text><text x="678" y="43" class="tiny">＋ 超市採買 🛒</text>
+  </g>
+  <g transform="translate(0 716)">
+    <rect width="852" height="76" fill="#fbfefe" stroke="#d9e8e7"/><text x="18" y="29" class="day">10</text><text x="66" y="29" class="day">10/3</text><text x="145" y="29" class="place">希爾克內斯 → 特羅姆瑟</text><text x="322" y="31" class="meal">● 自理</text><text x="486" y="23" class="meal">🍝 Pastafabrikken</text><text x="486" y="43" class="tiny">義大利麵</text><text x="678" y="23" class="meal">● 自理</text><text x="678" y="43" class="tiny">＋ 超市採買 🛒</text>
+  </g>
+  <g transform="translate(0 792)">
+    <rect width="852" height="76" fill="#fff" stroke="#d9e8e7"/><text x="18" y="29" class="day">11</text><text x="66" y="29" class="day">10/4</text><text x="145" y="29" class="place">塞尼亞島</text><text x="305" y="23" class="meal">🛏 飯店早餐</text><text x="305" y="43" class="tiny">Quality Hotel Grand</text><text x="486" y="23" class="meal">🥪 塞尼亞一日遊</text><text x="486" y="43" class="tiny">含午餐</text><text x="678" y="23" class="meal">● 自理</text><text x="678" y="43" class="tiny">＋ 超市採買 🛒</text>
+  </g>
+  <g transform="translate(0 868)">
+    <rect width="852" height="76" fill="#fbfefe" stroke="#d9e8e7"/><text x="18" y="29" class="day">12</text><text x="66" y="29" class="day">10/5</text><text x="145" y="29" class="place">特羅姆瑟</text><text x="305" y="23" class="meal">🛏 飯店早餐</text><text x="305" y="43" class="tiny">Quality Hotel Grand</text><text x="486" y="31" class="meal">● 自理</text><text x="678" y="23" class="meal">● 自理</text><text x="678" y="43" class="tiny">＋ 超市採買 🛒</text>
+  </g>
+  <g transform="translate(0 944)">
+    <rect width="852" height="76" fill="#fff" stroke="#d9e8e7"/><text x="18" y="29" class="day">13</text><text x="66" y="29" class="day">10/6</text><text x="145" y="29" class="place">Kvaløya／Sommarøy</text><text x="305" y="23" class="meal">🛏 飯店早餐</text><text x="305" y="43" class="tiny">Quality Hotel Grand</text><text x="486" y="23" class="meal">🐟 行程含午餐</text><text x="486" y="43" class="tiny">戶外活動</text><text x="678" y="31" class="meal">● 自理</text>
+  </g>
+  <g transform="translate(0 1020)">
+    <rect width="852" height="76" fill="#fbfefe" stroke="#d9e8e7"/><text x="18" y="29" class="day">14</text><text x="66" y="29" class="day">10/7</text><text x="145" y="29" class="place">特羅姆瑟峽灣</text><text x="305" y="23" class="meal">🛏 飯店早餐</text><text x="305" y="43" class="tiny">Quality Hotel Grand</text><text x="486" y="23" class="meal">🚤 Capella 魚船</text><text x="486" y="43" class="tiny">含午餐</text><text x="678" y="31" class="meal">● 自理</text>
+  </g>
+  <g transform="translate(0 1096)">
+    <rect width="852" height="76" fill="#fff" stroke="#d9e8e7"/><text x="18" y="29" class="day">15</text><text x="66" y="29" class="day">10/8</text><text x="145" y="23" class="place">特羅姆瑟 → 奧斯陸 →</text><text x="145" y="44" class="tiny">阿姆斯特丹</text><text x="305" y="23" class="meal">🛏 飯店早餐</text><text x="305" y="43" class="tiny">Quality Hotel Grand</text><text x="486" y="23" class="meal">✈ SAS TOS → OSL</text><text x="486" y="43" class="tiny">轉機</text><text x="678" y="23" class="meal">● 自理</text><text x="678" y="43" class="tiny">＋ 超市採買 🛒</text>
+  </g>
+  <g transform="translate(0 1172)">
+    <rect width="852" height="76" fill="#fbfefe" stroke="#d9e8e7"/><text x="18" y="29" class="day">16</text><text x="66" y="29" class="day">10/9</text><text x="145" y="29" class="place">阿姆斯特丹</text><text x="322" y="31" class="meal">● 自理</text><text x="486" y="23" class="meal">🏪 Albert Cuyp 市集</text><text x="486" y="43" class="tiny">自行安排</text><text x="678" y="23" class="meal">● 自理</text><text x="678" y="43" class="tiny">＋ 超市採買 🛒</text>
+  </g>
+  <g transform="translate(0 1248)">
+    <rect width="852" height="76" fill="#fff" stroke="#d9e8e7"/><text x="18" y="29" class="day">17</text><text x="66" y="29" class="day">10/10</text><text x="145" y="29" class="place">阿姆斯特丹 → 台北</text><text x="322" y="31" class="meal">● 自理</text><text x="486" y="31" class="meal">✈ 飛機餐 CI0074</text><text x="678" y="31" class="meal">✈ 飛機餐 CI0074</text>
+  </g>
+  <g transform="translate(0 1324)">
+    <rect width="852" height="68" rx="0 0 13 13" fill="#fbfefe" stroke="#d9e8e7"/><text x="18" y="27" class="day">18</text><text x="66" y="27" class="day">10/11</text><text x="145" y="27" class="place">台北</text><text x="366" y="37" class="meal">—</text><text x="560" y="37" class="meal">—</text><text x="747" y="37" class="meal">—</text>
+  </g>
+</g>
+<rect x="28" y="1450" width="844" height="60" rx="18" fill="#fff8e8" stroke="#efc66b" stroke-dasharray="6 5"/><text x="50" y="1476" class="note">小提醒｜自理餐與超市採買會依實際營業、天候與行程狀況彈性調整。</text><text x="50" y="1499" class="tiny">餐廳與活動供餐以現場及預訂內容為準。</text>
+</svg>
