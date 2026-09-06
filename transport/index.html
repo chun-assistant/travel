@@ -66,7 +66,7 @@
         if(card.dataset.day2TransferUpdated)return;
         card.dataset.day2TransferUpdated='1';
         card.querySelectorAll('.info-card-row').forEach(row=>row.remove());
-        card.insertAdjacentHTML('beforeend','<div class="info-card-row"><span>🚆</span><b>REX 7 (8:16) or IC (8:34)<br>→ Vienna Central</b></div><div class="info-card-row"><span>🚇</span><b>轉 U1 Südtiroler Platz<br>→ Stephansplatz</b></div><div class="info-card-row"><span>🚶</span><b>走 4 分鐘到飯店 (350公尺)<br>8:59 or 9:19 抵達</b></div>');
+        card.insertAdjacentHTML('beforeend','<div class="info-card-row"><span>時間</span><b>8:16（REX 7）／8:34（IC）<br>8:59／9:19 抵達飯店</b></div><div class="info-card-row"><span>方式</span><b>🚆 REX 7／IC → Vienna Central<br>🚇 U1 Südtiroler Platz → Stephansplatz<br>🚶 步行約 4 分鐘 → 飯店</b></div><div class="info-card-row"><span>時常</span><b>約 43–45 分鐘（依班次）</b></div><div class="info-card-row"><span>費用／人</span><b>依現有交通票券／當日票價</b></div><div class="info-card-row"><span>提醒</span><b>REX 7 與 IC 擇一；抵達 Vienna Central 後轉 U1。</b></div>');
       });
     }
     function syncTransportCards(){
