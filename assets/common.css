@@ -15,3 +15,17 @@
 .day-chip[data-day="1"]::after,.day-chip[data-day="9"]::after,.day-chip[data-day="14"]::after,.day-chip[data-day="15"]::after{content:"";position:absolute;top:6px;right:6px;z-index:3;display:block;padding:2px 5px;border-radius:999px;color:var(--red);background:var(--red-soft);border:1px solid rgba(197,90,83,.28);font-size:8px;line-height:1.1;font-weight:850;white-space:nowrap;pointer-events:none}
 .day-chip[data-day="1"]::after{content:"✈ 報到"}.day-chip[data-day="9"]::after{content:"✈ 報到"}.day-chip[data-day="14"]::after{content:"✈ 報到"}.day-chip[data-day="15"]::after{content:"✈ 報到"}
 .day-chip.active[data-day="1"]::after,.day-chip.active[data-day="9"]::after,.day-chip.active[data-day="14"]::after,.day-chip.active[data-day="15"]::after{color:#fff;background:rgba(197,90,83,.84);border-color:rgba(255,255,255,.30)}
+
+/* Day 2 daily itinerary — preserve the original card format and correct the rail fare. */
+#eventTimeline .event-card.transport:nth-child(1) .event-time{font-size:0}
+#eventTimeline .event-card.transport:nth-child(1) .event-time::after{content:"◷ 08:16／08:34 → 08:59／09:19";font-size:14px}
+#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(1) b{font-size:0}
+#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(1) b::after{content:"REX 7 (8:16)／IC (8:34) → Vienna Central";font-size:13px}
+#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(2) b{font-size:0}
+#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(2) b::after{content:"約43–45分鐘";font-size:13px}
+#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(3) b{font-size:0}
+#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(3) b::after{content:"EUR 4.4";font-size:13px}
+#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(4) b{font-size:0}
+#eventTimeline .event-card.transport:nth-child(1) .meta-box:nth-child(4) b::after{content:"ÖBB App／機台";font-size:13px}
+#eventTimeline .event-card.transport:nth-child(1) .more .detail-note span:nth-child(2){font-size:0}
+#eventTimeline .event-card.transport:nth-child(1) .more .detail-note span:nth-child(2)::after{content:"提醒：REX 7 (8:16) 或 IC (8:34) → Vienna Central；轉 U1 Südtiroler Platz → Stephansplatz；再走 4 分鐘到飯店（350公尺）。";font-size:13px}
