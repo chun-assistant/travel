@@ -9,6 +9,12 @@
   <meta name="apple-mobile-web-app-title" content="2026歐洲之旅">
   <title>2026 歐洲極光之旅｜18天行程 App</title>
   <link rel="stylesheet" href="../assets/common.css">
+  <style>
+    .transport-card.is-unpaid{position:relative}
+    .transport-card .unpaid-badge{display:inline-flex;align-items:center;gap:4px;margin:0 0 8px;padding:4px 9px;border-radius:999px;color:var(--red);background:var(--red-soft);border:1px solid rgba(197,90,83,.28);font-size:11px;line-height:1.1;font-weight:850}
+    #transportFilters .unpaid-filter{color:var(--red);background:var(--red-soft);border-color:rgba(197,90,83,.28)}
+    #transportFilters .unpaid-filter.active{color:#fff;background:var(--red);border-color:var(--red)}
+  </style>
 </head>
 <body data-page="transport">
   <div class="app-shell">
@@ -69,10 +75,44 @@
         card.insertAdjacentHTML('beforeend','<div class="info-card-row"><span>時間</span><b>8:16（REX 7）／8:34（IC）<br>8:59／9:19 抵達飯店</b></div><div class="info-card-row"><span>方式</span><b>🚆 REX 7／IC → Vienna Central<br>🚇 U1 Südtiroler Platz → Stephansplatz<br>🚶 步行約 4 分鐘 → 飯店</b></div><div class="info-card-row"><span>時常</span><b>約 43–45 分鐘（依班次）</b></div><div class="info-card-row"><span>費用／人</span><b>依現有交通票券／當日票價</b></div><div class="info-card-row"><span>提醒</span><b>REX 7 與 IC 擇一；抵達 Vienna Central 後轉 U1。</b></div>');
       });
     }
+    function markUnpaidCityTransport(){
+      document.querySelectorAll('#transportList .transport-card').forEach(card=>{
+        if(card.dataset.unpaidMarked)return;
+        const text=card.textContent.replace(/\s+/g,' ');
+        const isCityTransport=/Stephansplatz/.test(text)&&/(U1|Wien Hbf|Wien Hauptbahnhof|市區交通)/.test(text)&&!/(機場|Airport|VIE)/.test(text);
+        if(!isCityTransport)return;
+        card.dataset.unpaidMarked='1';
+        card.classList.add('is-unpaid');
+        const status=[...card.querySelectorAll('*')].find(el=>el.children.length===0&&el.textContent.trim()==='已更新');
+        if(status)status.textContent='尚未購票';
+        const title=card.querySelector('h3');
+        if(title)title.insertAdjacentHTML('beforebegin','<div class="unpaid-badge">尚未購票</div>');
+      });
+    }
+    function setupUnpaidFilter(){
+      const filters=document.getElementById('transportFilters');
+      if(!filters||filters.querySelector('.unpaid-filter'))return;
+      const btn=document.createElement('button');
+      btn.type='button';
+      btn.className='chip unpaid-filter';
+      btn.textContent='尚未購票';
+      btn.setAttribute('aria-pressed','false');
+      btn.addEventListener('click',function(){
+        markUnpaidCityTransport();
+        const active=btn.classList.toggle('active');
+        btn.setAttribute('aria-pressed',String(active));
+        document.querySelectorAll('#transportList .transport-card').forEach(card=>{
+          card.style.display=active?(card.classList.contains('is-unpaid')?'':'none'):'';
+        });
+      });
+      filters.appendChild(btn);
+    }
     function syncTransportCards(){
       removeObsoleteAmsterdamTransfer();
       addFlightRows();
       updateDay2ViennaTransfer();
+      markUnpaidCityTransport();
+      setupUnpaidFilter();
     }
     const list=document.getElementById('transportList');
     if(list)new MutationObserver(syncTransportCards).observe(list,{childList:true});
