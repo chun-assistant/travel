@@ -94,7 +94,7 @@
       if(!filters||filters.querySelector('.unpaid-filter'))return;
       const btn=document.createElement('button');
       btn.type='button';
-      btn.className='chip unpaid-filter';
+      btn.className='filter-chip unpaid-filter';
       btn.textContent='尚未購票';
       btn.setAttribute('aria-pressed','false');
       btn.addEventListener('click',function(){
@@ -104,6 +104,13 @@
         document.querySelectorAll('#transportList .transport-card').forEach(card=>{
           card.style.display=active?(card.classList.contains('is-unpaid')?'':'none'):'';
         });
+      });
+      filters.addEventListener('click',function(e){
+        const other=e.target.closest('.filter-chip');
+        if(!other||other===btn)return;
+        btn.classList.remove('active');
+        btn.setAttribute('aria-pressed','false');
+        document.querySelectorAll('#transportList .transport-card').forEach(card=>card.style.display='');
       });
       filters.appendChild(btn);
     }
