@@ -139,5 +139,16 @@ document.addEventListener('DOMContentLoaded', function () {
   nav.forEach((n, i) => n.classList.toggle('active', i === wanted - 1));
 });
 </script>
+
+<script>
+document.addEventListener('click', function (event) {
+  const btn = event.target.closest('.bottom-nav .nav-btn[data-tab]');
+  if (!btn) return;
+  event.preventDefault();
+  const routes = {'days': '../daily/', 'transport': '../transport/', 'hotels': '../stay/', 'luggage': '../prep-tools/', 'budget': '../budget/'};
+  const href = routes[btn.dataset.tab];
+  if (href) window.location.href = href;
+}, true);
+</script>
 </body>
 </html>
