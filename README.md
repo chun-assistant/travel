@@ -280,5 +280,3 @@ AI #5 → budget/index.html
 ## 一句話規則
 
 > **小功能獨立 HTML，大功能獨立 folder + sub HTML；圖片統一 PNG 放 `assets/`；共用 UI 放 `common.css / common.js`；`index.html` 只做首頁與導覽。**
-
-<!-- rebuild trigger -->
