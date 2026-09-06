@@ -59,3 +59,7 @@
 #eventTimeline>.event-card.kind-transit:nth-child(4) .meta-box:nth-child(3) b::after{content:"EUR 0";font-size:13px}
 #eventTimeline>.event-card.kind-transit:nth-child(4) .more .detail-note span:nth-child(2){font-size:0!important}
 #eventTimeline>.event-card.kind-transit:nth-child(4) .more .detail-note span:nth-child(2)::after{content:"REX 7方案08:55離開Stephansplatz，08:59抵達飯店；IC方案09:07離開Stephansplatz，09:11抵達飯店。步行約350公尺。";font-size:13px}
+
+/* Day 2 hotel luggage/rest: both rail options arrive at the hotel at 08:59 / 09:11, so rest starts at 09:11. */
+#eventTimeline>.event-card:nth-child(5) .event-time{font-size:0!important}
+#eventTimeline>.event-card:nth-child(5) .event-time::after{content:"◷ 09:11–09:40";font-size:14px}
