@@ -25,48 +25,12 @@ window.AURORA_SHOPPING_DATA = {
   ]
 };
 
-/* Meal overview compatibility fix.
-   The previous wrapper SVG referenced another SVG internally; Chromium may block
-   that nested SVG when the wrapper itself is loaded through <img>, leaving only
-   the highlight rectangles visible. Use the self-contained base chart directly
-   and recreate the self-meal emphasis as responsive HTML overlays. */
+/* Meal overview compatibility: use one self-contained SVG so Chromium does not
+   need to load nested SVG content. The self-meal highlight is now drawn inside
+   meal-overview-base.svg itself, avoiding duplicate overlays and icon/text overlap. */
 document.addEventListener('DOMContentLoaded', function () {
-  var mealButton = document.getElementById('mealZoom');
-  var mealImage = mealButton && mealButton.querySelector('img');
+  var mealImage = document.querySelector('#mealZoom img');
   var modalImage = document.querySelector('#mealModal img');
   if (mealImage) mealImage.src = '../assets/meal-overview-base.svg';
   if (modalImage) modalImage.src = '../assets/meal-overview-base.svg';
-  if (!mealButton || !mealImage || mealButton.querySelector('.meal-self-overlay')) return;
-
-  mealButton.style.position = 'relative';
-  mealButton.style.overflow = 'hidden';
-
-  var style = document.createElement('style');
-  style.textContent = [
-    '.meal-self-overlay{position:absolute;inset:0;pointer-events:none;z-index:2}',
-    '.meal-self-mark{position:absolute;border:2px solid #f0b72f;border-radius:12px;background:rgba(255,217,90,.20);box-sizing:border-box}',
-    '.meal-self-mark::before{content:"";position:absolute;left:7px;top:7px;width:9px;height:9px;border-radius:50%;background:#f6b91f;box-shadow:0 0 0 2px rgba(255,255,255,.55)}'
-  ].join('');
-  document.head.appendChild(style);
-
-  var marks = [
-    [697,295,174,56],[327,365,170,56],[327,435,170,56],[697,435,174,56],
-    [327,505,170,56],[697,505,174,56],[507,575,180,56],[697,645,174,56],
-    [507,715,180,56],[507,785,180,56],[327,855,170,56],[697,855,174,56],
-    [697,925,174,56],[507,995,180,56],[697,995,174,56],[697,1065,174,56],
-    [697,1135,174,56],[697,1205,174,56],[327,1275,170,56],[697,1275,174,56],
-    [327,1345,170,56]
-  ];
-  var overlay = document.createElement('span');
-  overlay.className = 'meal-self-overlay';
-  marks.forEach(function (m) {
-    var s = document.createElement('span');
-    s.className = 'meal-self-mark';
-    s.style.left = (m[0] / 900 * 100).toFixed(3) + '%';
-    s.style.top = (m[1] / 1760 * 100).toFixed(3) + '%';
-    s.style.width = (m[2] / 900 * 100).toFixed(3) + '%';
-    s.style.height = (m[3] / 1760 * 100).toFixed(3) + '%';
-    overlay.appendChild(s);
-  });
-  mealButton.appendChild(overlay);
 });
