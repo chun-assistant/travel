@@ -57,9 +57,22 @@
         if(title&&title.textContent.trim()==='Amsterdam ID→AMS')card.remove();
       });
     }
+    function updateDay2ViennaTransfer(){
+      document.querySelectorAll('#transportList .transport-card').forEach(card=>{
+        const title=card.querySelector('h3');
+        if(!title)return;
+        const cardText=card.textContent.replace(/\s+/g,' ');
+        if(!/Day\s*2|9\/25|維也納/.test(cardText) || !/機場|Airport|飯店/.test(cardText))return;
+        if(card.dataset.day2TransferUpdated)return;
+        card.dataset.day2TransferUpdated='1';
+        card.querySelectorAll('.info-card-row').forEach(row=>row.remove());
+        card.insertAdjacentHTML('beforeend','<div class="info-card-row"><span>🚆</span><b>REX 7 (8:16) or IC (8:34)<br>→ Vienna Central</b></div><div class="info-card-row"><span>🚇</span><b>轉 U1 Südtiroler Platz<br>→ Stephansplatz</b></div><div class="info-card-row"><span>🚶</span><b>走 4 分鐘到飯店 (350公尺)<br>8:59 or 9:19 抵達</b></div>');
+      });
+    }
     function syncTransportCards(){
       removeObsoleteAmsterdamTransfer();
       addFlightRows();
+      updateDay2ViennaTransfer();
     }
     const list=document.getElementById('transportList');
     if(list)new MutationObserver(syncTransportCards).observe(list,{childList:true});
