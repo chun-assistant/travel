@@ -1,0 +1,76 @@
+name: Fix Timeline Sync
+on:
+  push:
+    paths:
+      - .github/workflows/fix-timeline-sync.yml
+    branches:
+      - europe-trip-2026
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+          fetch-depth: 0
+      - name: Patch timeline sync
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          old='''      if (dayScroller && countryScroll && !dayScroller.dataset.syncReady) {
+        dayScroller.dataset.syncReady = "1";
+        countryScroll.dataset.syncReady = "1";
+        let syncingScroll = false;
+        dayScroller.addEventListener("scroll", () => {
+          if (syncingScroll) return;
+          syncingScroll = true;
+          countryScroll.scrollLeft = dayScroller.scrollLeft;
+          requestAnimationFrame(() => { syncingScroll = false; });
+        }, {passive:true});
+        countryScroll.addEventListener("scroll", () => {
+          if (syncingScroll) return;
+          syncingScroll = true;
+          dayScroller.scrollLeft = countryScroll.scrollLeft;
+          requestAnimationFrame(() => { syncingScroll = false; });
+        }, {passive:true});
+      }'''
+          new='''      if (dayScroller && countryScroll && !dayScroller.dataset.syncReady) {
+        dayScroller.dataset.syncReady = "1";
+        countryScroll.dataset.syncReady = "1";
+        let syncingScroll = false;
+        const syncScroll = (source, target) => {
+          if (syncingScroll) return;
+          const sourceMax = Math.max(1, source.scrollWidth - source.clientWidth);
+          const targetMax = Math.max(0, target.scrollWidth - target.clientWidth);
+          const progress = Math.max(0, Math.min(1, source.scrollLeft / sourceMax));
+          syncingScroll = true;
+          target.scrollLeft = progress * targetMax;
+          requestAnimationFrame(() => { syncingScroll = false; });
+        };
+        const syncCountryActive = () => {
+          const step = 126 + 8;
+          const day = Math.max(1, Math.min(19, Math.round(dayScroller.scrollLeft / step) + 1));
+          $$(".country-stage", countryScroll).forEach(btn => {
+            const start = Number(btn.style.getPropertyValue("--stage-start"));
+            const end = Number(btn.style.getPropertyValue("--stage-end")) - 1;
+            btn.classList.toggle("active", day >= start && day <= end);
+          });
+        };
+        dayScroller.addEventListener("scroll", () => { syncScroll(dayScroller, countryScroll); syncCountryActive(); }, {passive:true});
+        countryScroll.addEventListener("scroll", () => syncScroll(countryScroll, dayScroller), {passive:true});
+        syncCountryActive();
+      }'''
+          if old not in s: raise SystemExit('sync block not found')
+          s=s.replace(old,new)
+          p.write_text(s)
+          PY
+      - name: Commit patch
+        run: |
+          git add index.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --cached --quiet; then echo "No changes"; else git commit -m "Sync country timeline with day scroll position"; git push origin HEAD:europe-trip-2026; fi
