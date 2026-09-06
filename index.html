@@ -664,6 +664,25 @@
       renderCountryTrack();
       enableHorizontalDrag("#dayScroller");
       enableHorizontalDrag("#countryScroll");
+      const dayScroller = $("#dayScroller");
+      const countryScroll = $("#countryScroll");
+      if (dayScroller && countryScroll && !dayScroller.dataset.syncReady) {
+        dayScroller.dataset.syncReady = "1";
+        countryScroll.dataset.syncReady = "1";
+        let syncingScroll = false;
+        dayScroller.addEventListener("scroll", () => {
+          if (syncingScroll) return;
+          syncingScroll = true;
+          countryScroll.scrollLeft = dayScroller.scrollLeft;
+          requestAnimationFrame(() => { syncingScroll = false; });
+        }, {passive:true});
+        countryScroll.addEventListener("scroll", () => {
+          if (syncingScroll) return;
+          syncingScroll = true;
+          dayScroller.scrollLeft = countryScroll.scrollLeft;
+          requestAnimationFrame(() => { syncingScroll = false; });
+        }, {passive:true});
+      }
       const d = APP_DATA.overview.find(x => x.day === state.day);
       if (!d) return;
       $("#daySummary").innerHTML = `<article class="day-summary"><div class="day-kicker">DAY ${d.day} · ${escapeHtml(dateLabel(d.date))}</div><h3>${escapeHtml(d.city)}</h3><p>${escapeHtml(d.highlight)}</p><div class="day-summary-meta"><span>🚉 ${escapeHtml(d.transport)}</span><span>🛏️ ${escapeHtml(d.hotel)}</span><span>🚶 體力 ${escapeHtml(d.effort)}</span><span>💰 ${fmtTwd(d.estimate)}</span></div></article>`;
