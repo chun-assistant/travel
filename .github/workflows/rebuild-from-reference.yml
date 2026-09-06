@@ -1,0 +1,107 @@
+name: Rebuild from approved reference UI
+
+on:
+  push:
+    branches: [europe-trip-2026]
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target branch
+        uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+          fetch-depth: 1
+
+      - name: Rebuild pages from reference repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/yangchinghsuan955-web/europe-trip-2026/main/index.html -o /tmp/reference-index.html
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+          
+          src = Path('/tmp/reference-index.html').read_text(encoding='utf-8')
+          
+          style_blocks = re.findall(r'<style[^>]*>(.*?)</style>', src, re.S | re.I)
+          script_blocks = re.findall(r'<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>', src, re.S | re.I)
+          css = '\n\n'.join(x.strip() for x in style_blocks if x.strip()) + '\n'
+          js = '\n\n'.join(x.strip() for x in script_blocks if x.strip()) + '\n'
+          
+          Path('assets').mkdir(exist_ok=True)
+          Path('assets/common.css').write_text(css, encoding='utf-8')
+          Path('assets/common.js').write_text(js, encoding='utf-8')
+          
+          # Keep the approved source markup and only externalize shared CSS/JS.
+          base = re.sub(r'<style[^>]*>.*?</style>', '<link rel="stylesheet" href="../assets/common.css">', src, count=1, flags=re.S | re.I)
+          base = re.sub(r'<script(?![^>]*\bsrc=)[^>]*>.*?</script>', '<script src="../assets/common.js"></script>', base, flags=re.S | re.I)
+          
+          # The reference page contains the five feature panels in navigation order.
+          nav_tabs = re.findall(r'<(?:a|button)[^>]*data-tab=["\']([^"\']+)["\'][^>]*>', src, re.I)
+          nav_tabs = [x for x in nav_tabs if x in {'days','transport','hotels','luggage','budget'}]
+          if len(nav_tabs) < 5:
+              nav_tabs = ['days','transport','hotels','luggage','budget']
+          nav_tabs = nav_tabs[:5]
+          
+          folders = {
+              'days': 'daily',
+              'transport': 'transport',
+              'hotels': 'stay',
+              'luggage': 'prep-tools',
+              'budget': 'budget',
+          }
+          
+          # Make navigation work across folder pages without changing its visual design.
+          nav_replacements = {
+              'days': '../daily/',
+              'transport': '../transport/',
+              'hotels': '../stay/',
+              'luggage': '../prep-tools/',
+              'budget': '../budget/',
+          }
+          
+          for tab, folder in folders.items():
+              out = base
+              out = re.sub(r'<body([^>]*)>', lambda m: '<body' + m.group(1) + f' data-page="{tab}">', out, count=1, flags=re.I)
+              
+              # Keep all original markup/logic intact; select the requested panel after load.
+              selector_js = f'''\n<script>\ndocument.addEventListener('DOMContentLoaded', function () {{\n  const wanted = {nav_tabs.index(tab) + 1};\n  const panels = document.querySelectorAll('.tab-panel');\n  panels.forEach((p, i) => p.classList.toggle('active', i === wanted - 1));\n  const nav = document.querySelectorAll('.bottom-nav .nav-btn');\n  nav.forEach((n, i) => n.classList.toggle('active', i === wanted - 1));\n}});\n</script>\n'''
+              out = out.replace('</body>', selector_js + '</body>', 1)
+              
+              for key, href in nav_replacements.items():
+                  out = re.sub(r'(data-tab=["\']' + re.escape(key) + r'["\'][^>]*?href=["\'])[^"\']*(["\'])', r'\g<1>' + href + r'\2', out, flags=re.I)
+                  out = re.sub(r'(<(?:a|button)[^>]*href=["\'])[^"\']*(["\'][^>]*data-tab=["\']' + re.escape(key) + r'["\'])', r'\1' + href + r'\2', out, flags=re.I)
+              
+              p = Path(folder)
+              p.mkdir(exist_ok=True)
+              (p / 'index.html').write_text(out, encoding='utf-8')
+          
+          # Root stays intentionally tiny and routes into the real app.
+          Path('index.html').write_text('''<!doctype html>\n<html lang="zh-Hant-TW">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n<title>2026 歐洲極光之旅｜18天行程 App</title>\n<meta http-equiv="refresh" content="0; url=daily/">\n<script>location.replace("daily/");</script>\n</head>\n<body><p>正在開啟每日行程…</p></body>\n</html>\n''', encoding='utf-8')
+          
+          # Remove the rejected experimental daily-only design.
+          for p in [Path('daily/daily-modern.css'), Path('daily/daily-modern.js')]:
+              if p.exists(): p.unlink()
+          
+          # Preserve the existing Vienna PNG if present; all UI styling comes from the reference source.
+          
+          PY
+
+      - name: Commit rebuilt site
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Restore approved UI and rebuild feature pages"
+          git push origin europe-trip-2026
