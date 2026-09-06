@@ -61,9 +61,9 @@
   document.addEventListener('DOMContentLoaded',function(){
     const flightDetails={
       'TPE→VIE／AMS→TPE':{url:'https://airportservice.china-airlines.com/eCheckin/eCheckin_home?country=tw&locale=zh',time:'9/22 23:45（48小時前）／10/8 11:00（48小時前）',how:'輸入訂位代號＋Full Name'},
-      'VIE→HEL':{url:'https://www.finnair.com/hk-zh/manage/view?fromCheckIn=false',time:'9/24 23:35（36小時前）',how:'輸入 LAST NAME'},
-      'KKN→TOS':{url:'https://www.flysas.com/en/checkin',time:'10/2 03:40（30小時前）',how:'輸入 LAST NAME'},
-      'TOS→OSL→AMS':{url:'https://www.flysas.com/en/checkin',time:'10/7 05:50（30小時前）',how:'輸入 LAST NAME'}
+      'VIE→HEL':{url:'https://www.finnair.com/hk-zh/manage/view?fromCheckIn=false',time:'9/24 23:35（36小時前）',how:'輸入訂位代號＋Last Name'},
+      'KKN→TOS':{url:'https://www.flysas.com/en/checkin',time:'10/2 03:40（30小時前）',how:'輸入訂位代號＋Last Name'},
+      'TOS→OSL→AMS':{url:'https://www.flysas.com/en/checkin',time:'10/7 05:50（30小時前）',how:'輸入訂位代號＋Last Name'}
     };
     function addFlightRows(){document.querySelectorAll('#transportList .transport-card').forEach(card=>{const title=card.querySelector('h3');if(!title||card.dataset.checkinAdded)return;const key=Object.keys(flightDetails).find(k=>title.textContent.trim().includes(k));if(!key)return;const d=flightDetails[key];card.dataset.checkinAdded='1';card.insertAdjacentHTML('beforeend','<div class="info-card-row"><span>網路報到網址</span><b><a href="'+d.url+'" target="_blank" rel="noopener">開啟報到頁面 ↗</a></b></div><div class="info-card-row"><span>網路報到時間</span><b>'+d.time+'</b></div><div class="info-card-row"><span>如何報到</span><b>'+d.how+'</b></div>');});}
     const list=document.getElementById('transportList');if(list)new MutationObserver(addFlightRows).observe(list,{childList:true});addFlightRows();
