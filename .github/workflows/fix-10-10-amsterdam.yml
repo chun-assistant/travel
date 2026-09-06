@@ -17,18 +17,15 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import re
-          p = Path('assets/common.js')
-          s = p.read_text(encoding='utf-8')
+          p=Path('assets/common.js'); s=p.read_text(encoding='utf-8')
           def repl(m):
-              obj=m.group(0)
-              if 'Amsterdam ID' not in obj or 'Schiphol' not in obj: return obj
-              return "{date:'10/10',type:'火車',route:'Amsterdam ID Aparthotel→Schiphol Airport',service:'步行＋NS Sprinter 8223 Hoofddorp',time:'06:45 從飯店出發；06:55 Amsterdam Sloterdijk搭車 → 07:05 Schiphol Airport',method:'步行約10分鐘／700公尺 → Sprinter 8223；約10分鐘、2站、11號月台',duration:'約20分鐘',currency:'EUR',cost:4.9,status:'尚未購票',note:'尚未購票。依路線：06:45 Amsterdam ID Aparthotel出發，步行約10分鐘／700公尺到Amsterdam Sloterdijk；06:55搭Sprinter 8223 Hoofddorp，07:05抵達Schiphol Airport。'}"
-          s2=re.sub(r"\{[^{}]*date\s*:\s*['\"]10/10['\"][^{}]*\}", repl, s)
+            o=m.group(0)
+            if 'Amsterdam ID' not in o or 'Schiphol' not in o: return o
+            return "{date:'10/10',type:'火車',route:'Amsterdam ID Aparthotel→Schiphol Airport',service:'步行＋NS Sprinter 8223 Hoofddorp',time:'06:45 從飯店出發；06:55 Amsterdam Sloterdijk搭車 → 07:05 Schiphol Airport',method:'步行約10分鐘／700公尺 → Sprinter 8223；約10分鐘、2站、11號月台',duration:'約20分鐘',currency:'EUR',cost:4.9,status:'尚未購票',note:'尚未購票。依路線：06:45 Amsterdam ID Aparthotel出發，步行約10分鐘／700公尺到Amsterdam Sloterdijk；06:55搭Sprinter 8223 Hoofddorp，07:05抵達Schiphol Airport。'}"
+          s2=re.sub(r"\{[^{}]*date\s*:\s*['\"]10/10['\"][^{}]*\}",repl,s)
           if s2==s: raise SystemExit('No 10/10 Amsterdam object found in common.js')
           p.write_text(s2,encoding='utf-8')
           PY
-      - name: Commit corrected data
-        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/common.js
