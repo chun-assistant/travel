@@ -17,14 +17,26 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          import re
-          p=Path('index.html')
-          s=p.read_text()
-          s=s.replace('grid-template-columns: repeat(18, 126px); column-gap: 8px; width: calc(18 * 126px + 17 * 8px + 4px); min-width: calc(18 * 126px + 17 * 8px + 4px);','grid-template-columns: repeat(19, 126px); column-gap: 8px; width: calc(19 * 126px + 18 * 8px + 4px); min-width: calc(19 * 126px + 18 * 8px + 4px);')
-          s=s.replace('const code={"奧地利":"AT","芬蘭":"FI","挪威":"NO","荷蘭":"NL"}[stage.country]||stage.country;','const code={"奧地利":"奧地利 (Austria)","芬蘭":"芬蘭 (Finland)","挪威":"挪威 (Norway)","荷蘭":"荷蘭 (Netherlands)"}[stage.country]||stage.country;')
-          s=s.replace('el.setPointerCapture?.(e.pointerId);','')
-          pattern=r'''      if \(dayScroller && countryScroll && !dayScroller\.dataset\.syncReady\) \{.*?      \}\n      const d = APP_DATA\.overview\.find'''
-          replacement='''      if (dayScroller && countryScroll && !dayScroller.dataset.syncReady) {
+          p = Path('index.html')
+          s = p.read_text()
+          s = s.replace(
+            'grid-template-columns: repeat(18, 126px); column-gap: 8px; width: calc(18 * 126px + 17 * 8px + 4px); min-width: calc(18 * 126px + 17 * 8px + 4px);',
+            'grid-template-columns: repeat(19, 126px); column-gap: 8px; width: calc(19 * 126px + 18 * 8px + 4px); min-width: calc(19 * 126px + 18 * 8px + 4px);'
+          )
+          s = s.replace(
+            'const code={"奧地利":"AT","芬蘭":"FI","挪威":"NO","荷蘭":"NL"}[stage.country]||stage.country;',
+            'const code={"奧地利":"奧地利 (Austria)","芬蘭":"芬蘭 (Finland)","挪威":"挪威 (Norway)","荷蘭":"荷蘭 (Netherlands)"}[stage.country]||stage.country;'
+          )
+          s = s.replace('el.setPointerCapture?.(e.pointerId);', '')
+
+          start_marker = '      if (dayScroller && countryScroll && !dayScroller.dataset.syncReady) {'
+          end_marker = '      const d = APP_DATA.overview.find'
+          start = s.find(start_marker)
+          end = s.find(end_marker, start)
+          if start < 0 or end < 0:
+              raise SystemExit('timeline sync block not found')
+
+          block = '''      if (dayScroller && countryScroll && !dayScroller.dataset.syncReady) {
         dayScroller.dataset.syncReady = "1";
         countryScroll.dataset.syncReady = "1";
         let syncingScroll = false;
@@ -38,21 +50,24 @@ jobs:
           requestAnimationFrame(() => { syncingScroll = false; });
         };
         const syncCountryActive = () => {
+          const dayCount = APP_DATA.overview.length;
           const step = 126 + 8;
-          const day = Math.max(1, Math.min(19, Math.round(dayScroller.scrollLeft / step) + 1));
+          const day = Math.max(1, Math.min(dayCount, Math.round(dayScroller.scrollLeft / step) + 1));
           $$(".country-stage", countryScroll).forEach(btn => {
-            const start = Number(btn.style.getPropertyValue("--stage-start"));
-            const end = Number(btn.style.getPropertyValue("--stage-end")) - 1;
-            btn.classList.toggle("active", day >= start && day <= end);
+            const startDay = Number(btn.style.getPropertyValue("--stage-start"));
+            const endDay = Number(btn.style.getPropertyValue("--stage-end")) - 1;
+            btn.classList.toggle("active", day >= startDay && day <= endDay);
           });
         };
-        dayScroller.addEventListener("scroll", () => { syncScroll(dayScroller, countryScroll); syncCountryActive(); }, {passive:true});
+        dayScroller.addEventListener("scroll", () => {
+          syncScroll(dayScroller, countryScroll);
+          syncCountryActive();
+        }, {passive:true});
         countryScroll.addEventListener("scroll", () => syncScroll(countryScroll, dayScroller), {passive:true});
         syncCountryActive();
       }
-      const d = APP_DATA.overview.find'''
-          s,n=re.subn(pattern,replacement,s,flags=re.S)
-          if n != 1: raise SystemExit(f'sync block not found: {n}')
+'''
+          s = s[:start] + block + s[end:]
           p.write_text(s)
           PY
       - name: Commit fix
@@ -60,4 +75,9 @@ jobs:
           git add index.html
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --cached --quiet; then echo "No changes"; else git commit -m "Sync country timeline with day scroll"; git push origin HEAD:europe-trip-2026; fi
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Sync country timeline with day scroll"
+            git push origin HEAD:europe-trip-2026
+          fi
