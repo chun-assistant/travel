@@ -1,17 +1,20 @@
 name: Sync source main and add flight check-in highlights
-on:
-  push:
-    branches: [europe-trip-2026]
+on: [push]
 permissions:
   contents: write
 jobs:
   sync:
-    if: ${{ !startsWith(github.event.head_commit.message, 'Sync source main') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
+      - name: Stop recursive sync commit
+        run: |
+          if git log -1 --pretty=%B | grep -q '^Sync source main and add flight check-in highlights$'; then
+            echo 'Already synced; stop.'
+            exit 0
+          fi
       - name: Copy source main
         run: |
           git clone --depth 1 --branch main https://github.com/yangchinghsuan955-web/europe-trip-2026.git /tmp/source
@@ -30,14 +33,13 @@ jobs:
               if needle not in s:
                   raise SystemExit('renderDayScroller needle not found')
               s = s.replace(needle, replacement, 1)
-              s += '''\n\n    /* FLIGHT_CHECKIN_MARKERS */\n'''
+              s += '\n\n    /* FLIGHT_CHECKIN_MARKERS */\n'
               js.write_text(s, encoding='utf-8')
-
           css = Path('assets/common.css')
           c = css.read_text(encoding='utf-8')
           css_marker = '/* FLIGHT_CHECKIN_STYLE */'
           if css_marker not in c:
-              c += '''\n\n    /* FLIGHT_CHECKIN_STYLE */\n    .day-chip.has-flight-checkin { position: relative; padding-bottom: 29px; }\n    .day-chip .flight-checkin-badge { display:block; margin-top:4px; padding:3px 7px; border-radius:999px; color:var(--red); background:var(--red-soft); border:1px solid rgba(197,90,83,.30); font-size:9px; line-height:1.2; font-weight:850; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }\n    .day-chip.active .flight-checkin-badge { color:#fff; background:rgba(197,90,83,.84); border-color:rgba(255,255,255,.30); }\n'''
+              c += '\n\n    /* FLIGHT_CHECKIN_STYLE */\n    .day-chip.has-flight-checkin { position: relative; padding-bottom: 29px; }\n    .day-chip .flight-checkin-badge { display:block; margin-top:4px; padding:3px 7px; border-radius:999px; color:var(--red); background:var(--red-soft); border:1px solid rgba(197,90,83,.30); font-size:9px; line-height:1.2; font-weight:850; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }\n    .day-chip.active .flight-checkin-badge { color:#fff; background:rgba(197,90,83,.84); border-color:rgba(255,255,255,.30); }\n'
               css.write_text(c, encoding='utf-8')
           PY
       - name: Commit synced source plus check-in markers
