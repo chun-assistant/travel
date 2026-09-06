@@ -126,6 +126,8 @@
     .day-scroller, .chip-row, .segmented {
       display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 9px; margin: 0 -2px;
     }
+    .day-scroller, .country-scroll { cursor: grab; user-select: none; -webkit-user-select: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+    .day-scroller.dragging, .country-scroll.dragging { cursor: grabbing; }
     .day-scroller::-webkit-scrollbar, .chip-row::-webkit-scrollbar, .segmented::-webkit-scrollbar { display: none; }
     .day-chip, .filter-chip, .segment {
       flex: 0 0 auto; border: 1px solid var(--line); background: rgba(255,255,255,.8); border-radius: 999px; min-height: 40px; padding: 7px 13px; font-weight: 700; font-size: 13px; cursor: pointer;
@@ -140,11 +142,11 @@
     .country-overview-head { display: none; }
     .country-overview-head b { color: var(--navy); font-size: 14px; }
     .country-overview-head small { color: var(--muted); font-size: 9.5px; text-align: right; }
-    .country-scroll { overflow: hidden; scrollbar-width: none; }
+    .country-scroll { overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
     .country-scroll::-webkit-scrollbar { display: none; }
-    .country-track { position: relative; display: flex; width: 100%; min-width: 100%; height: 34px; padding: 0; align-items: flex-start; }
-    .country-track::before { content: ""; position: absolute; left: 0; right: 0; top: 23px; height: 3px; border-radius: 999px; background: linear-gradient(90deg,#db8b5d,#6eb7b0,#6088b8,#7898d7); }
-    .country-stage { position: relative; z-index: 1; flex: var(--stage-days,1); width: auto; min-width: 0; height: 34px; padding: 0 3px; border: 0; color: var(--ink); background: transparent; text-align: center; cursor: pointer; }
+    .country-track { position: relative; display: grid; grid-template-columns: repeat(18, 126px); column-gap: 8px; width: calc(18 * 126px + 17 * 8px + 4px); min-width: calc(18 * 126px + 17 * 8px + 4px); height: 34px; padding: 0 2px; align-items: flex-start; }
+    .country-track::before { content: ""; position: absolute; left: 2px; right: 2px; top: 23px; height: 3px; border-radius: 999px; background: linear-gradient(90deg,#db8b5d,#6eb7b0,#6088b8,#7898d7); }
+    .country-stage { position: relative; z-index: 1; grid-column: var(--stage-start) / var(--stage-end); width: auto; min-width: 0; height: 34px; padding: 0 3px; border: 0; color: var(--ink); background: transparent; text-align: center; cursor: pointer; }
     .country-dot { display: none; }
     .country-stage b { display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 19px; padding: 0 7px; border-radius: 999px; color: #fff; background: var(--stage-color,#7ca99b); font-size: 10px; line-height: 1; letter-spacing: .03em; box-shadow: 0 2px 6px rgba(16,45,62,.12); }
     .country-stage small { display: none; }
@@ -640,13 +642,28 @@
     }
 
     function renderCountryTrack() {
-      $("#countryTrack").innerHTML = COUNTRY_STAGES.map(stage=>{ const code={"奧地利":"AT","芬蘭":"FI","挪威":"NO","荷蘭":"NL"}[stage.country]||stage.country; return `<button class="country-stage ${state.day>=stage.start&&state.day<=stage.end?"active":""}" data-day="${stage.start}" style="--stage-color:${stage.color};--stage-days:${stage.end-stage.start+1}" aria-label="前往${escapeHtml(stage.country)}行程 Day ${stage.start}"><span class="country-dot">${stage.flag}</span><b>${code}</b><small>Day ${stage.start}–${stage.end}</small></button>`; }).join("");
+      $("#countryTrack").innerHTML = COUNTRY_STAGES.map(stage=>{ const code={"奧地利":"AT","芬蘭":"FI","挪威":"NO","荷蘭":"NL"}[stage.country]||stage.country; return `<button class="country-stage ${state.day>=stage.start&&state.day<=stage.end?"active":""}" data-day="${stage.start}" style="--stage-color:${stage.color};--stage-start:${stage.start};--stage-end:${stage.end+1}" aria-label="前往${escapeHtml(stage.country)}行程 Day ${stage.start}"><span class="country-dot">${stage.flag}</span><b>${code}</b><small>Day ${stage.start}–${stage.end}</small></button>`; }).join("");
       $$(".country-stage",$("#countryTrack")).forEach(btn=>btn.addEventListener("click",()=>{state.day=Number(btn.dataset.day);save("aurora-day",state.day);renderDayView();setTimeout(()=>$(".day-chip.active")?.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}),20);}));
+    }
+
+    function enableHorizontalDrag(selector) {
+      const el = $(selector);
+      if (!el || el.dataset.dragReady) return;
+      el.dataset.dragReady = "1";
+      let dragging = false, startX = 0, startScroll = 0;
+      el.addEventListener("pointerdown", e => { if (e.button !== 0) return; dragging = true; startX = e.clientX; startScroll = el.scrollLeft; el.classList.add("dragging"); el.setPointerCapture?.(e.pointerId); });
+      el.addEventListener("pointermove", e => { if (dragging) el.scrollLeft = startScroll - (e.clientX - startX); });
+      const stop = () => { dragging = false; el.classList.remove("dragging"); };
+      el.addEventListener("pointerup", stop);
+      el.addEventListener("pointercancel", stop);
+      el.addEventListener("wheel", e => { if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { el.scrollLeft += e.deltaY; e.preventDefault(); } }, {passive:false});
     }
 
     function renderDayView() {
       renderDayScroller();
       renderCountryTrack();
+      enableHorizontalDrag("#dayScroller");
+      enableHorizontalDrag("#countryScroll");
       const d = APP_DATA.overview.find(x => x.day === state.day);
       if (!d) return;
       $("#daySummary").innerHTML = `<article class="day-summary"><div class="day-kicker">DAY ${d.day} · ${escapeHtml(dateLabel(d.date))}</div><h3>${escapeHtml(d.city)}</h3><p>${escapeHtml(d.highlight)}</p><div class="day-summary-meta"><span>🚉 ${escapeHtml(d.transport)}</span><span>🛏️ ${escapeHtml(d.hotel)}</span><span>🚶 體力 ${escapeHtml(d.effort)}</span><span>💰 ${fmtTwd(d.estimate)}</span></div></article>`;
