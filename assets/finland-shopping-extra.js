@@ -1,6 +1,31 @@
 (function(){
   var data=window.AURORA_SHOPPING_DATA;
   if(!data)return;
+
+  var imageMap={
+    'pur Bio-Apfelchips geriffelt':'../assets/shopping/vienna/bio-apfelchips.webp',
+    'BILLA Bio Schoko Haferkekse':'../assets/shopping/vienna/billa-bio-schoko-haferkekse.webp',
+    'Bonne Premium Mustikkamehu':'../assets/shopping/finland/bonne-premium-mustikkamehu.webp',
+    'Finnair Blueberry Juice Drink':'../assets/shopping/finland/finnair-blueberry-juice-drink.webp',
+    'Valio Hedelmätarha Luomu Puolukka-Karpalo':'../assets/shopping/finland/valio-puolukka-karpalo.webp',
+    'Froosh Smoothie':'../assets/shopping/finland/froosh-smoothie.webp',
+    'Karl Fazer Blue':'../assets/shopping/finland/karl-fazer-blue.webp',
+    'Karl Fazer Dark 70%':'../assets/shopping/finland/karl-fazer-dark-70.webp',
+    'Moomin Liquorice':'../assets/shopping/finland/moomin-liquorice.webp',
+    'Kellogg’s Trésor Choco Nougat':'../assets/shopping/finland/kelloggs-tresor.webp'
+  };
+
+  function patchProductImages(collection){
+    (collection||[]).forEach(function(section){
+      (section.groups||[]).forEach(function(group){
+        (group.products||[]).forEach(function(product){
+          if(imageMap[product.item])product.image=imageMap[product.item];
+        });
+      });
+    });
+  }
+  patchProductImages(data.supermarkets);
+
   data.souvenirs=data.souvenirs||[];
   var items=['Fazer Café 巧克力','Moomin 周邊／ARABIA・Iittala・Marimekko 聯名','Lumene 保養品','Marttiini 馴鹿皮手套'];
   data.souvenirs=data.souvenirs.filter(function(x){return items.indexOf(x.item)===-1});
