@@ -398,3 +398,29 @@ const TICKET_APPS = [
       window.addEventListener("online",renderNetwork); window.addEventListener("offline",renderNetwork);
     }
     init();
+
+    /* FLIGHT_CHECKIN_HIGHLIGHT */
+    (function(){
+      const checkins = [
+        {date:"2026-09-24", label:"✈ 航班報到 · CI0063／AY1472"},
+        {date:"2026-10-02", label:"✈ 航班報到 · WF993"},
+        {date:"2026-10-07", label:"✈ 航班報到 · SAS"},
+        {date:"2026-10-08", label:"✈ 航班報到 · CI0074"}
+      ];
+      function add(){
+        const chips = document.querySelectorAll('#dayScroller .day-chip');
+        if(!chips.length) return;
+        chips.forEach(chip=>{
+          const day = Number(chip.dataset.day);
+          const map = {1:"2026-09-24",9:"2026-10-02",14:"2026-10-07",15:"2026-10-08"};
+          const date = map[day];
+          const item = checkins.find(x=>x.date===date);
+          if(!item || chip.querySelector('.flight-checkin-badge')) return;
+          chip.insertAdjacentHTML('beforeend','<span class="flight-checkin-badge">'+item.label+'</span>');
+          chip.classList.add('has-flight-checkin');
+        });
+      }
+      const host=document.getElementById('dayScroller');
+      if(host) new MutationObserver(add).observe(host,{childList:true});
+      add();
+    })();
