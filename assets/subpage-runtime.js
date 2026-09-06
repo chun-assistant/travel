@@ -4,8 +4,8 @@
   const ids = [
     'globalNotices','dayScroller','countryTrack','countryScroll','daySummary',
     'eventFilters','eventTimeline','transportFilters','transportList','hotelList',
-    'ticketAppList','checklist','practicalList','bookingList','taxList',
-    'budgetSummary','budgetList','foodList','mealList','toast',
+    'ticketAppList','checklist','checkPercent','checkCount','progressFill',
+    'practicalList','bookingList','taxList','budgetSummary','budgetList','foodList','mealList','toast',
     'eventSearch','clearSearch','jumpToday','resetChecks','budgetSegments',
     'imageModal','imageModalContent','imageModalCaption','imageModalClose'
   ];
