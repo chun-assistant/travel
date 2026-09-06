@@ -1,0 +1,36 @@
+name: Fix Vienna entry image path
+
+on:
+  push:
+    branches: [europe-trip-2026]
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: ${{ github.event.head_commit.message != 'Fix Vienna entry image path' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+      - name: Fix relative asset path
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('prep-tools/index.html')
+          s = p.read_text(encoding='utf-8')
+          old = 'src="assets/vienna-entry-3x4.svg.png"'
+          new = 'src="../assets/vienna-entry-3x4.svg.png"'
+          if old not in s:
+              print('Path already fixed or not found; nothing to do.')
+              raise SystemExit(0)
+          s = s.replace(old, new)
+          p.write_text(s, encoding='utf-8')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prep-tools/index.html
+          git commit -m "Fix Vienna entry image path"
+          git push origin europe-trip-2026
