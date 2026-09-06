@@ -28,6 +28,27 @@
     if(map[href]) btn.dataset.tab = map[href];
   });
 
+  /* Keep the split-page bottom bar locked to the same viewport position as
+     the source page. On desktop, do not let a safe-area value change its
+     height and visually lift the bar. Mobile keeps the original safe-area
+     behavior. */
+  function lockBottomNav(){
+    const nav = document.querySelector('.bottom-nav');
+    if(!nav) return;
+    nav.style.setProperty('position','fixed','important');
+    nav.style.setProperty('top','auto','important');
+    nav.style.setProperty('bottom','0px','important');
+    nav.style.setProperty('left','50%','important');
+    nav.style.setProperty('transform','translateX(-50%)','important');
+    if(window.innerWidth >= 700){
+      nav.style.setProperty('padding-bottom','7px','important');
+    }
+  }
+  lockBottomNav();
+  window.addEventListener('resize', lockBottomNav);
+  window.addEventListener('orientationchange', lockBottomNav);
+  window.addEventListener('load', lockBottomNav);
+
   /* common.js still owns the original renderers. Some split pages intentionally
      do not contain the other feature DOM, so the shared init can stop on a
      missing-node exception before reaching the current feature renderer.
