@@ -1,7 +1,8 @@
 name: Rebuild travel site from original UI
 on:
   push:
-    branches: [europe-trip-2026]
+    branches:
+      - europe-trip-2026
 permissions:
   contents: write
 jobs:
@@ -13,88 +14,24 @@ jobs:
         with:
           ref: europe-trip-2026
           fetch-depth: 0
-      - name: Rebuild folder pages
-        shell: bash
+      - name: Rebuild split pages
+        env:
+          SCRIPT_B64: ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCByZSwgc3VicHJvY2VzcwoKc291cmNlX2NvbW1pdCA9ICIzNWYwNGQzNDc0ZWNjYmI3ZTI5OGIzMGJhYWNlNWFkZTk5NTc5ZGY5IgpvcmlnaW5hbCA9IHN1YnByb2Nlc3MuY2hlY2tfb3V0cHV0KFsiZ2l0IiwgInNob3ciLCBmIntzb3VyY2VfY29tbWl0fTppbmRleC5odG1sIl0sIHRleHQ9VHJ1ZSkKCnN0eWxlID0gcmUuc2VhcmNoKHIiPHN0eWxlPiguKj8pPC9zdHlsZT4iLCBvcmlnaW5hbCwgcmUuUykuZ3JvdXAoMSkKc2NyaXB0cyA9IHJlLmZpbmRhbGwociI8c2NyaXB0KD86XHNbXj5dKik/PiguKj8pPC9zY3JpcHQ+Iiwgb3JpZ2luYWwsIHJlLlMpCmpzID0gIlxuXG4iLmpvaW4oc2NyaXB0cykKCm5ld19pbml0ID0gIiIiZnVuY3Rpb24gaW5pdCgpIHsKICAgICAgaWYgKCQoIiNjb3VudGRvd24iKSkgcmVuZGVyQ291bnRkb3duKCk7CiAgICAgIGlmICgkKCIjbmV0d29ya0JhZGdlIikpIHJlbmRlck5ldHdvcmsoKTsKICAgICAgaWYgKCQoIiNnbG9iYWxOb3RpY2VzIikpIHJlbmRlck5vdGljZXMoKTsKICAgICAgaWYgKCQoIiNkYXlTY3JvbGxlciIpKSByZW5kZXJEYXlWaWV3KCk7CiAgICAgIGlmICgkKCIjdHJhbnNwb3J0TGlzdCIpKSByZW5kZXJUcmFuc3BvcnQoKTsKICAgICAgaWYgKCQoIiNob3RlbExpc3QiKSkgcmVuZGVySG90ZWxzKCk7CiAgICAgIGlmICgkKCIjdGlja2V0QXBwTGlzdCIpKSByZW5kZXJUaWNrZXRBcHBzKCk7CiAgICAgIGlmICgkKCIjY2hlY2tsaXN0TGlzdCIpKSByZW5kZXJDaGVja2xpc3QoKTsKICAgICAgaWYgKCQoIiNwcmFjdGljYWxMaXN0IikpIHJlbmRlclByYWN0aWNhbCgpOwogICAgICBpZiAoJCgiI2Jvb2tpbmdMaXN0IikpIHJlbmRlckJvb2tpbmdzKCk7CiAgICAgIGlmICgkKCIjdGF4TGlzdCIpIHJlbmRlclRheCgpOwogICAgICBpZiAoJCgiI2J1ZGdldExpc3QiKSkgcmVuZGVyQnVkZ2V0KCk7CiAgICAgIGlmICgkKCIjZm9vZExpc3QiKSkgcmVuZGVyRm9vZCgpOwogICAgICBpZiAoJCgiI21lYWxMaXN0IikpIHJlbmRlck1lYWxzKCk7CiAgICAgIGlmICgkKCIjaW1hZ2VNb2RhbCIpKSBiaW5kR3VpZGVJbWFnZXMoKTsKICAgICAgY29uc3QgaW5pdGlhbFRhYiA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoIi50YWItcGFuZWwiKT8uaWQ/LnJlcGxhY2UoL150YWItLywgIiIpIHx8IHN0YXRlLnRhYjsKICAgICAgc2hvd1RhYihpbml0aWFsVGFiLCBmYWxzZSk7CiAgICAgICQoJy5uYXYtYnRuJyk7CiAgICAgICQkKCIubmF2LWJ0biIpLmZvckVhY2goYnRuPT57IGlmIChidG4udGFnTmFtZSA9PT0gIkEiKSByZXR1cm47IGJ0bi5hZGRFdmVudExpc3RlbmVyKCJjbGljayIsKCk9PnNob3dUYWIoYnRuLmRhdGFzZXQudGFiKSk7IH0pOwogICAgICBjb25zdCBqdW1wID0gJCgiI2p1bXBUb2RheSIpOwogICAgICBpZiAoanVtcCkgDQpqdW1wLmFkZEV2ZW50TGlzdGVuZXIoImNsaWNrIixlPT57c3RhdGUuZGF5PWN1cnJlbnRUcmlwRGF5KCk7c2F2ZSgiYXVyb3JhLWRheSIsc3RhdGUuZGF5KTtyZW5kZXJEYXlWaWV3KCk7dG9hc3QoYOW3suWIh+aPmyBEYXkgJHtzdGF0ZS5kYXl9YCk7fSk7CiAgICAgIGNvbnN0IHNlYXJjaCA9ICQoIiNldmVudFNlYXJjaCIpOwogICAgICBpZiAoc2VhcmNoKSBzZWFyY2guYWRkRXZlbnRMaXN0ZW5lcigiaW5wdXQiLGU9PntzdGF0ZS5ldmVudFNlYXJjaD1lLnRhcmdldC52YWx1ZTtyZW5kZXJFdmVudHMoKTt9KTsKICAgICAgY29uc3QgY2xlYXIgPSAkKCIjY2xlYXJTZWFyY2giKTsKICAgICAgaWYgKGNsZWFyKSBjbGVhci5hZGRFdmVudExpc3RlbmVyKCJjbGljayIsKCk9PnskKCIjZXZlbnRTZWFyY2giKS52YWx1ZT0iIjtzdGF0ZS5ldmVudFNlYXJjaD0iIjtyZW5kZXJFdmVudHMoKTt9KTsKICAgICAgaWYgKCQoIiNsdWdnYWdlU2VnbWVudHMiKSkgYmluZFNlZ21lbnRlZCgiI2x1Z2dhZ2VTZWdtZW50cyIsICIjbHVnZ2FnZVN1YiIsICJsdWdnYWdlIik7CiAgICAgIGlmICgkKCIjYnVkZ2V0U2VnbWVudHMiKSkgYmluZFNlZ21lbnRlZCgiI2J1ZGdldFNlZ21lbnRzIiwgIiNidWRnZXRTdWIiLCAiYnVkZ2V0Iik7CiAgICAgIGNvbnN0IHJlc2V0ID0gJCgiI3Jlc2V0Q2hlY2tzIik7CiAgICAgIGlmIChyZXNldCkgcmVzZXQuYWRkRXZlbnRMaXN0ZW5lcigiY2xpY2siLCgpPT57c3RhdGUuY2hlY2tzPXt9O3NhdmUoImF1cm9yYS1jaGVja3MiLHN0YXRlLmNoZWNrcyk7aWYoJCgiI2Jvb2tpbmdMaXN0IikpcmVuZGVyQm9va2luZ3MoKTtpZigkKCIjY2hlY2tsaXN0TGlzdCIpX3JlbmRlckNoZWNrbGlzdCgpO3RvYXN0KCLlt7Lph43oqK3li77pgbgiKTt9KTsKICAgIH0KICAgIGluaXQoKSIiIgpzID0gcmUuc3ViKHIiZnVuY3Rpb24gaW5pdFxccypcKFxcKVxccypcey4qP1xuICAgIFx9XG4gICAgaW5pdFxccypcKFxcKTsiLCBuZXdfaW5pdCwganMsIGZsYWdzPXJlLlMpCgpib2R5ID0gcmUuc2VhcmNoKHIiPGJvZHk+KC4qPyk8L2JvZHk+Iiwgb3JpZ2luYWwsIHJlLlMpLmdyb3VwKDEpCmJvZHkgPSByZS5zdWJociI8c2NyaXB0KD86XHNbXj5dKik/Pi4qPzwvc2NyaXB0PiIsICIiLCBib2R5LCBmbGFncz1yZS5TKQpoZWFkZXIgPSByZS5zZWFyY2gociIoPGhlYWRlclxiLioucD88L2hlYWRlcj4pIiwgYm9keSwgcmUuUykuZ3JvdXAoMSkKbWFpbl9pbm5lciA9IHJlLnNlYXJjaChyIjxtYWluPiguKj8pPC9tYWluPiIsIGJvZHksIHJlLlMpLmdyb3VwKDEpCgpzdGFydHMgPSBsaXN0KHJlLmZpbmRpdGVyKHIiPHNlY3Rpb24gY2xhc3M9InRhYi1wYW5lbCggPzogYWN0aXZlKT8iIGlkPSJ0YWItKFsiXjwvXSpdKykiJywgbWFpbl9pbm5lcikpCmlmIGxlbihzdGFydHMpICE9IDU6CiAgICByYWlzZSBTeXN0ZW1FeGl0KGYiRXhwZWN0ZWQgNSB0b3AtbGV2ZWwgcGFuZWxzLCBmb3VuZCB7bGVuKHN0YXJ0cyl9IikKc2VjdGlvbl9tYXAgPSB7fQpmb3IgaSwgbSBpbiBlbnVtZXJhdGUoc3RhcnRzKToKICAgIGVuZCA9IHN0YXJ0c1tpKzFdLnN0YXJ0KCkgaWYgaSsxIDwgbGVuKHN0YXJ0cykgZWxzZSBsZW4obWFpbl9pbm5lcikKICAgIHNlY3Rpb25fbWFwW20uZ3JvdXAoMSldID0gbWFpbl9pbm5lclttLnN0YXJ0KCk6ZW5kXS5zdHJpcCgpCgpuYXYgPSByZS5zZWFyY2gociIoPG5hdiBjbGFzcz0iYm90dG9tLW5hdiIuKj88L25hdj4pIiwgYm9keSwgcmUuUykuZ3JvdXAoMSkKaGVhZCA9IHJlLnNlYXJjaChyIjxoZWFkPiguKj8pPC9oZWFkPiIsIG9yaWdpbmFsLCByZS5TKS5ncm91cCgxKQpoZWFkID0gcmUuc3ViKHIiPHN0eWxlPi4qPzwvc3R5bGU+IiwgJzxsaW5rIHJlbD0ic3R5bGVzaGVldCIgaHJlZj0ie2Nzc30iPicsIGhlYWQsIGZsYWdzPXJlLlMpCmhlYWQgPSByZS5zdWIociI8c2NyaXB0KD86XHNbXj5dKik/Pi4qPzwvc2NyaXB0PiIsICIiLCBoZWFkLCBmbGFncz1yZS5TKQoKcm91dGVzID0geyJkYXlzIjoiZGFpbHkiLCAidHJhbnNwb3J0IjoidHJhbnNwb3J0IiwgImhvdGVscyI6InN0YXkiLCAibHVnZ2FnZSI6InByZXAtdG9vbHMiLCAiYnVkZ2V0IjoiYnVkZ2V0In0KbmF2X3JvdXRlcyA9IHsKICAgICdkYXRhLXRhYj0iZGF5cyInOidocmVmPSIuLi9kYWlseS8iIGRhdGEtdGFiPSJkYXlzIicsCiAgICAnZGF0YS10YWI9InRyYW5zcG9ydCInOidocmVmPSIuLi90cmFuc3BvcnQvIiBkYXRhLXRhYj0idHJhbnNwb3J0IicsCiAgICAnZGF0YS10YWI9ImhvdGVscyInOidocmVmPSIuLi9zdGF5LyIgZGF0YS10YWI9ImhvdGVscyInLAogICAgJ2RhdGEtdGFiPSJsdWdnYWdlIic6J2hyZWY9Ii4uL3ByZXAtdG9vbHMvIiBkYXRhLXRhYj0ibHVnZ2FnZSInLAogICAgJ2RhdGEtdGFiPSJidWRnZXQiJzonaHJlZj0iLi4vYnVkZ2V0LyIgZGF0YS10YWI9ImJ1ZGdldCInCn0KCmZvciBrZXksIGZvbGRlciBpbiByb3V0ZXMuaXRlbXMoKToKICAgIG4gPSBuYXYKICAgIGZvciBhLCBiIGluIG5hdl9yb3V0ZXMuaXRlbXMoKToKICAgICAgICBuID0gbi5yZXBsYWNlKGEsIGIpCiAgICBuID0gbi5yZXBsYWNlKCc8YnV0dG9uIGNsYXNzPSJuYXYtYnRuIicsICc8YSBjbGFzcz0ibmF2LWJ0biInKS5yZXBsYWNlKCI8L2J1dHRvbj4iLCAiPC9hPiIpCiAgICBQYXRoKGZvbGRlcikubWtkaXIoZXhpc3Rfb2s9VHJ1ZSkKICAgIHBhZ2UgPSBmIiIiPCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9InpoLUhhbnQtVFciPgo8aGVhZD57aGVhZC5yZXBsYWNlKCJ7Y3NzfSIsICIuLi9hc3NldHMvY29tbW9uLmNzcyIpfTwvaGVhZD4KPGJvZHk+CjxkaXYgY2xhc3M9ImFwcC1zaGVsbCI+e2hlYWRlcn08bWFpbj57c2VjdGlvbl9tYXBba2V5XX08L21haW4+e259PC9kaXY+CjxzY3JpcHQgc3JjPSIuLi9hc3NldHMvY29tbW9uLmpzIj48L3NjcmlwdD4KPC9ib2R5Pgo8L2h0bWw+CiIiIgogICAgUGF0aChmb2xkZXIsICJpbmRleC5odG1sIikud3JpdGVfdGV4dChwYWdlLCBlbmNvZGluZz0idXRmLTgiKQoKUGF0aCgiYXNzZXRzL2NvbW1vbi5jc3MiKS53cml0ZV90ZXh0KHN0eWxlLnN0cmlwKCkrIlxuIiwgZW5jb2Rpbmc9InV0Zi04IikKUGF0aCgiYXNzZXRzL2NvbW1vbi5qcyIpLndyaXRlX3RleHQoanMuc3RyaXAoKSsiXG4iLCBlbmNvZGluZz0idXRmLTgiKQpQYXRoKCJpbmRleC5odG1sIikud3JpdGVfdGV4dCgiIiI8IWRvY3R5cGUgaHRtbD4KPGh0bWwgbGFuZz0iemgtSGFudC1UVyI+CjxoZWFkPgo8bWV0YSBjaGFyc2V0PSJ1dGYtOCI+CjxtZXRhIG5hbWU9InZpZXdwb3J0IiBjb250ZW50PSJ3aWR0aD1kZXZpY2Utd2lkdGgsaW5pdGlhbC1zY2FsZT0xLHZpZXdwb3J0LWZpdD1jb3ZlciI+Cjx0aXRsZT4yMDI2IOatkOa0sualteWFbeS5i+aXhe+9nDE45aSp6KGM56iLIEFwcDwvdGl0bGU+CjxtZXRhIGh0dHAtZXF1aXY9InJlZnJlc2giIGNvbnRlbnQ9IjA7IHVybD1kYWlseS8iPgo8c2NyaXB0PmxvY2F0aW9uLnJlcGxhY2UoImRhaWx5LyIpOzwvc2NyaXB0Pgo8L2hlYWQ+Cjxib2R5PjxwPuato+WcqOmWi+WVn+avj+aXpeihjOeoi+KApjwvcD48L2JvZHk+CjwvaHRtbD4KIiIiLCBlbmNvZGluZz0idXRmLTgiKQo="
         run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          import re, subprocess
-          source_commit='35f04d3474eccbb7e298b30baace5ade99579df9'
-          original=subprocess.check_output(['git','show',f'{source_commit}:index.html'],text=True)
-          style=re.search(r'<style>(.*?)</style>',original,re.S).group(1)
-          scripts=re.findall(r'<script(?:\s[^>]*)?>(.*?)</script>',original,re.S)
-          js='\n\n'.join(scripts)
-          new_init='''function init() {
-      if ($("#countdown")) renderCountdown();
-      if ($("#networkBadge")) renderNetwork();
-      if ($("#globalNotices")) renderNotices();
-      if ($("#dayScroller")) renderDayView();
-      if ($("#transportList")) renderTransport();
-      if ($("#hotelList")) renderHotels();
-      if ($("#ticketAppList")) renderTicketApps();
-      if ($("#checklistList")) renderChecklist();
-      if ($("#practicalList")) renderPractical();
-      if ($("#bookingList")) renderBookings();
-      if ($("#taxList")) renderTax();
-      if ($("#budgetList")) renderBudget();
-      if ($("#foodList")) renderFood();
-      if ($("#mealList")) renderMeals();
-      if ($("#imageModal")) bindGuideImages();
-      const initialTab = document.querySelector(".tab-panel")?.id?.replace(/^tab-/, "") || state.tab;
-      showTab(initialTab, false);
-      $$(".nav-btn").forEach(btn=>{ if (btn.tagName === "A") return; btn.addEventListener("click",()=>showTab(btn.dataset.tab)); });
-      const jump=$("#jumpToday");
-      if (jump) jump.addEventListener("click",()=>{state.day=currentTripDay();save("aurora-day",state.day);renderDayView();toast(`已切換 Day ${state.day}`);});
-      const search=$("#eventSearch");
-      if (search) search.addEventListener("input",e=>{state.eventSearch=e.target.value;renderEvents();});
-      const clear=$("#clearSearch");
-      if (clear) clear.addEventListener("click",()=>{$("#eventSearch").value="";state.eventSearch="";renderEvents();});
-      if ($("#luggageSegments")) bindSegmented("#luggageSegments", "#luggageSub", "luggage");
-      if ($("#budgetSegments")) bindSegmented("#budgetSegments", "#budgetSub", "budget");
-      const reset=$("#resetChecks");
-      if (reset) reset.addEventListener("click",()=>{state.checks={};save("aurora-checks",state.checks);if($("#bookingList"))renderBookings();if($("#checklistList"))renderChecklist();toast("已重設勾選");});
-    }
-    init();'''
-          js2=re.sub(r'function init\(\) \{.*?\n    \}\n    init\(\);',new_init,js,flags=re.S)
-          body=re.search(r'<body>(.*?)</body>',original,re.S).group(1)
-          body=re.sub(r'<script(?:\s[^>]*)?>.*?</script>','',body,flags=re.S)
-          header=re.search(r'(<header\b.*?</header>)',body,re.S).group(1)
-          main_inner=re.search(r'<main>(.*?)</main>',body,re.S).group(1)
-          starts=list(re.finditer(r'<section class="tab-panel(?: active)?" id="tab-([^"]+)"',main_inner))
-          if len(starts)!=5: raise SystemExit(f'Expected 5 top-level panels, found {len(starts)}')
-          section_map={}
-          for i,m in enumerate(starts):
-              end=starts[i+1].start() if i+1<len(starts) else len(main_inner)
-              section_map[m.group(1)]=main_inner[m.start():end].strip()
-          nav=re.search(r'(<nav class="bottom-nav".*?</nav>)',body,re.S).group(1)
-          head=re.search(r'<head>(.*?)</head>',original,re.S).group(1)
-          head=re.sub(r'<style>.*?</style>','<link rel="stylesheet" href="{css}">',head,flags=re.S)
-          head=re.sub(r'<script(?:\s[^>]*)?>.*?</script>','',head,flags=re.S)
-          routes={'days':'daily','transport':'transport','hotels':'stay','luggage':'prep-tools','budget':'budget'}
-          for key,folder in routes.items():
-              n=nav
-              for a,b in {'data-tab="days"':'href="../daily/" data-tab="days"','data-tab="transport"':'href="../transport/" data-tab="transport"','data-tab="hotels"':'href="../stay/" data-tab="hotels"','data-tab="luggage"':'href="../prep-tools/" data-tab="luggage"','data-tab="budget"':'href="../budget/" data-tab="budget"'}.items(): n=n.replace(a,b)
-              n=n.replace('<button class="nav-btn"','<a class="nav-btn"').replace('</button>','</a>')
-              Path(folder).mkdir(exist_ok=True)
-              page=f'''<!doctype html>\n<html lang="zh-Hant-TW">\n<head>{head.replace('{css}','../assets/common.css')}</head>\n<body>\n<div class="app-shell">{header}<main>{section_map[key]}</main>{n}</div>\n<script src="../assets/common.js"></script>\n</body>\n</html>\n'''
-              Path(folder,'index.html').write_text(page,encoding='utf-8')
-          Path('assets/common.css').write_text(style.strip()+'\n',encoding='utf-8')
-          Path('assets/common.js').write_text(js2.strip()+'\n',encoding='utf-8')
-          Path('index.html').write_text('''<!doctype html>\n<html lang="zh-Hant-TW">\n<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>2026 歐洲極光之旅｜18天行程 App</title><meta http-equiv="refresh" content="0; url=daily/"><script>location.replace('daily/');</script></head>\n<body><p>正在開啟每日行程…</p></body>\n</html>\n''',encoding='utf-8')
-          PY
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          echo "$SCRIPT_B64" | base64 -d > /tmp/rebuild.py
+          python3 /tmp/rebuild.py
+      - name: Commit rebuilt site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m 'Restore original UI while splitting feature pages'
+          git commit -m "Restore original UI and split feature pages"
           git push origin europe-trip-2026
-      - name: Remove temporary and obsolete UI workflows
+      - name: Remove temporary workflow
         if: always()
-        shell: bash
         run: |
-          set +e
-          git rm -f .github/workflows/fix-europe-trip-ui.yml .github/workflows/rebuild-pages-from-original.yml
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'Remove temporary UI rebuild workflows'
-          git push origin europe-trip-2026
+          git rm -f .github/workflows/fix-europe-trip-ui.yml || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Remove temporary rebuild workflow" || true
+          git push origin europe-trip-2026 || true
