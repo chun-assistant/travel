@@ -1,0 +1,45 @@
+name: Fix Vienna PNG reference
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - europe-trip-2026
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+          fetch-depth: 0
+      - name: Fix image reference
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          s2 = s.replace('assets/vienna-entry-3x4.svg.png.png', 'assets/vienna-entry-3x4.svg.png')
+          if s2 != s:
+              p.write_text(s2, encoding='utf-8')
+              print('Fixed Vienna PNG reference.')
+          else:
+              print('No reference fix needed.')
+          PY
+      - name: Ensure PNG exists
+        run: |
+          mkdir -p assets
+          curl -L --fail --retry 3 https://raw.githubusercontent.com/yangchinghsuan955-web/europe-trip-2026/main/assets/vienna-entry-3x4.svg.png -o assets/vienna-entry-3x4.svg.png
+      - name: Commit fix
+        run: |
+          git add index.html assets/vienna-entry-3x4.svg.png
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if git diff --cached --quiet; then
+            echo 'No changes.'
+          else
+            git commit -m 'Fix Vienna PNG image path'
+            git push origin HEAD:europe-trip-2026
+          fi
