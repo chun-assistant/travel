@@ -22,21 +22,23 @@ s = s.replace(
 )
 s = s.replace('el.setPointerCapture?.(e.pointerId);', '')
 
-# Remove the four-item global notice block from the Days view without affecting other notice-style content elsewhere.
 s = s.replace(
     '.notice-stack { display: grid; gap: 9px; margin: 0 0 14px; }',
     '.notice-stack { display: none !important; }',
     1,
 )
 
-# Match Day 1–18 pills to the country timeline palette. Day 1 and Day 18 are travel/arrival days and stay neutral.
 s = s.replace(
     '.day-chip { text-align: left; min-width: 126px; }',
     '.day-chip { text-align: left; min-width: 126px; border-color: color-mix(in srgb, var(--day-color, var(--line)) 38%, var(--line)); background: color-mix(in srgb, var(--day-color, #fff) 13%, #fff); color: color-mix(in srgb, var(--day-color, var(--ink)) 88%, var(--ink)); }\n    .day-chip.active { color: #fff; background: var(--day-color, var(--navy)); border-color: var(--day-color, var(--navy)); box-shadow: 0 8px 18px color-mix(in srgb, var(--day-color, var(--navy)) 25%, transparent); }\n    .day-chip.active small, .day-chip.active .day-place { color: rgba(255,255,255,.82); }',
     1,
 )
+s = s.replace(
+    '.day-chip.active, .filter-chip.active, .segment.active { color: #fff; background: var(--navy); border-color: var(--navy); box-shadow: 0 8px 18px rgba(16,45,62,.18); }',
+    '.filter-chip.active, .segment.active { color: #fff; background: var(--navy); border-color: var(--navy); box-shadow: 0 8px 18px rgba(16,45,62,.18); }',
+    1,
+)
 
-# Render day pills with the same colors as the corresponding country timeline stages.
 old_render = '$("#dayScroller").innerHTML = APP_DATA.overview.map(d => `<button class="day-chip ${d.day===state.day?"active":""}" data-day="${d.day}"><b>Day ${d.day}</b><small>${escapeHtml(dateLabel(d.date))}</small><small class="day-place">${escapeHtml(d.city)}</small></button>`).join("");'
 new_render = '''$("#dayScroller").innerHTML = APP_DATA.overview.map(d => {
         const dayStage = d.day >= 2 && d.day <= 3 ? COUNTRY_STAGES[0]
