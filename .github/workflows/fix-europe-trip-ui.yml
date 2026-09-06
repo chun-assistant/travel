@@ -1,0 +1,27 @@
+name: Fix Europe Trip UI
+on:
+  push:
+    branches:
+      - europe-trip-2026
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+          fetch-depth: 0
+      - name: Patch index.html
+        env:
+          PATCH_B64: ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCnA9UGF0aCgnaW5kZXguaHRtbCcpOyBzPXAudGVhZF90ZXh0KCkKcz1zLnJlcGxhY2UoJ3NldFRpbWVvdXQoKCk9PmJ0bi5zY3JvbGxJbnRvVmlldyh7YmVoYXZpb3I6InNtb290aCIsaW5saW5lOiJjZW50ZXIiLGJsb2NrOiJuZWFyZXN0In0pLDIwKTsnLCdzZXRUaW1lb3V0KCgpPT4kKCIuZGF5LWNoaXAuYWN0aXZlIik/LnNjcm9sbEludG9WaWV3KHtiZWhhdmlvcjoic21vb3RoIixpbmxpbmU6ImNlbnRlciIsYmxvY2s6Im5lYXJlc3QifSksMjApOycpCnM9cy5yZXBsYWNlKCdncmlkLXRlbXBsYXRlLWNvbHVtbnM6IHJlcGVhdCgxOCwgMTI2cHgpOyBjb2x1bW4tZ2FwOiA4cHg7IHdpZHRoOiBjYWxjKDE4ICogMTI2cHggKyAxNyAqIDhweCArIDRweCk7IG1pbi13aWR0aDogY2FsYygxOCAqIDEyNnB4ICsgMTcgKiA4cHggKyA0cHgpOycsJ2dyaWQtdGVtcGxhdGUtY29sdW1uczogcmVwZWF0KDE5LCAxMjZweCk7IGNvbHVtbi1nYXA6IDhweDsgd2lkdGg6IGNhbGMoMTkgKiAxMjZweCArIDE4ICogOHB4ICsgNHB4KTsgbWluLXdpZHRoOiBjYWxjKDE5ICogMTI2cHggKyAxOCAqIDhweCArIDRweCk7JykKIyBDb3VudHJ5IGxhYmVsczogQ2hpbmVzZSAoRW5nbGlzaCksIHdoaWxlIHByZXNlcnZpbmcgZGF5LWNvbHVtbiBhbGlnbm1lbnQuCnM9cy5yZXBsYWNlKCdjb25zdCBjb2RlPXsi5aWn5Zyw5YipIjoiQVQiLCLoiqzomK0iOiJGSSIsIuaMquWogSI6Ik5PIiwi6I236JitIjoiTkwifVtzdGFnZS5jb3VudHJ5XXx8c3RhZ2UuY291bnRyeTsnLCAnY29uc3QgY29kZT17IuWlp+WcsOWIqSI6IuWlp+WcsOWIqSAoQXVzdHJpYSkiLCLoiqzomK0iOiLoiqzomK0gKEZpbmxhbmQpIiwi5oyq5aiBIjoi5oyq5aiBIChOb3J3YXkpIiwi6I236JitIjoi6I236JitIChOZXRoZXJsYW5kcykifVtzdGFnZS5jb3VudHJ5XXx8c3RhZ2UuY291bnRyeTsnKQojIE1ha2UgZGVza3RvcCBkcmFnIGNsaWNrLXNhZmU6IGEgY2xpY2sgd2l0aG91dCBtb3ZlbWVudCByZW1haW5zIGEgbm9ybWFsIGJ1dHRvbiBjbGljay4KYT1zLmluZGV4KCcgICAgZnVuY3Rpb24gZW5hYmxlSG9yaXpvbnRhbERyYWcoJyk7IGI9cy5pbmRleCgnICAgIGZ1bmN0aW9uIHJlbmRlckNvdW50cnlUcmFjaygpJyxhKQpzPXM6YWFuXSA= 
+        run: |
+          echo "$PATCH_B64" | base64 -d > /tmp/patch.py
+          python3 /tmp/patch.py
+      - name: Commit patch
+        run: |
+          git add index.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --cached --quiet; then echo "No changes"; else git commit -m "Fix timeline sync, country labels and day links"; git push origin HEAD:europe-trip-2026; fi
