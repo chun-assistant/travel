@@ -11,11 +11,27 @@
     #tab-luggage{display:block!important}
     #tab-luggage .subview{display:block!important}
     .bottom-nav .nav-btn{text-align:center!important}
-    .tax-checklist{margin:0;padding-left:1.35rem}
-    .tax-checklist li{margin:.45rem 0;line-height:1.65}
-    .tax-route{font-weight:700;line-height:1.7}
+    .tax-flow-grid{display:grid;gap:14px;margin-bottom:14px}
     .tax-flow-img{display:block;width:100%;height:auto;border-radius:14px}
+    .tax-flow-button{display:block;width:100%;padding:0;border:0;background:transparent;cursor:zoom-in}
+    .tax-checks{display:grid;gap:9px;margin-top:12px}
+    .tax-check{display:flex;gap:10px;align-items:flex-start;line-height:1.55}
+    .tax-check input{width:19px;height:19px;margin-top:2px;accent-color:#102d3e;flex:0 0 auto}
+    .tax-check span{flex:1}
     .tax-note{font-size:.94rem;line-height:1.7}
+    .tax-route{font-weight:700;line-height:1.7}
+    .tax-alert{margin-top:12px;padding:12px 14px;border-radius:12px;background:#fff6d8;line-height:1.65}
+    .tax-progress{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .tax-progress b{font-size:1.05rem}
+    .tax-progress-bar{height:8px;border-radius:999px;background:rgba(16,45,62,.12);overflow:hidden;margin-top:10px}
+    .tax-progress-bar i{display:block;height:100%;width:0;background:#102d3e;transition:width .2s ease}
+    .tax-status-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+    .tax-status-grid label{display:flex;gap:8px;align-items:center;padding:10px 12px;border:1px solid rgba(16,45,62,.12);border-radius:12px;background:#fff}
+    .image-modal{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.88);display:grid;place-items:center;padding:20px}
+    .image-modal[hidden]{display:none}
+    .image-modal img{max-width:min(1100px,96vw);max-height:88vh;border-radius:14px}
+    .image-modal-close{position:fixed;top:18px;right:18px;width:42px;height:42px;border:0;border-radius:50%;font-size:28px;cursor:pointer}
+    @media(min-width:760px){.tax-flow-grid{grid-template-columns:1fr 1fr}.tax-status-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
   </style>
 </head>
 <body data-page="luggage">
@@ -33,9 +49,9 @@
 
   <main>
     <section class="tab-panel active" id="tab-luggage">
-      <div class="section-head"><div><h2>行前與工具</h2><p>購票、入境、待辦、打包與退稅集中查看</p></div></div>
+      <div class="section-head"><div><h2>行前與工具</h2><p>旅行 App、入境、待辦、打包與退稅集中查看</p></div><button class="small-action" id="resetTaxChecks" type="button">重設勾選</button></div>
       <div class="segmented" id="luggageSegments">
-        <a class="segment" href="apps.html">購票 App</a>
+        <a class="segment" href="apps/">旅行 App</a>
         <a class="segment" href="entry.html">入境攻略</a>
         <a class="segment" href="booking.html">行前待辦</a>
         <a class="segment" href="checklist.html">行李清單</a>
@@ -43,152 +59,113 @@
       </div>
 
       <div class="subview active">
-        <div class="notice">
-          <div class="notice-icon">🧾</div>
-          <div><strong>四國購物，實際只在兩個機場辦退稅</strong><p><b>10/8 OSL＝挪威</b>；<b>10/10 AMS＝奧地利＋芬蘭＋荷蘭</b>。驗貨前不要把需要查驗的退稅商品先托運。</p></div>
+        <div class="notice"><div class="notice-icon">🧾</div><div><strong>先看流程圖，再依日期逐段確認</strong><p><b>10/8 OSL＝挪威</b>；<b>10/10 AMS＝奧地利＋芬蘭＋荷蘭</b>。下方只保留真正需要確認完成的項目。</p></div></div>
+
+        <div class="tax-flow-grid">
+          <article class="info-card"><h3>🇳🇴 OSL｜挪威退稅流程</h3><button class="tax-flow-button" type="button" data-zoom="../assets/norway-tax-free-flow.png" aria-label="放大 OSL 挪威退稅流程圖"><img class="tax-flow-img" src="../assets/norway-tax-free-flow.png" alt="OSL 挪威退稅流程圖"></button><p class="tax-note">10/8 TOS → OSL → AMS｜點圖放大</p></article>
+          <article class="info-card"><h3>🇳🇱 AMS｜EU／荷蘭退稅流程</h3><button class="tax-flow-button" type="button" data-zoom="../assets/eu-tax-free-flow.png" aria-label="放大 AMS EU 退稅流程圖"><img class="tax-flow-img" src="../assets/eu-tax-free-flow.png" alt="AMS 阿姆斯特丹 EU 退稅流程圖"></button><p class="tax-note">10/10 AMS → TPE｜點圖放大</p></article>
         </div>
 
         <article class="info-card">
-          <h3>退稅總覽</h3>
-          <div class="info-card-row"><span>🇦🇹 奧地利</span><b>10/10 AMS｜EU Tax Free Form</b></div>
-          <div class="info-card-row"><span>🇫🇮 芬蘭</span><b>10/10 AMS｜EU Tax Free Form</b></div>
-          <div class="info-card-row"><span>🇳🇴 挪威</span><b>10/8 OSL｜依退稅商辦理</b></div>
-          <div class="info-card-row"><span>🇳🇱 荷蘭</span><b>10/10 AMS｜NL Customs VAT</b></div>
-          <p class="tax-route">團員只要記：OSL＝挪威；AMS＝奧地利＋芬蘭＋荷蘭。</p>
+          <div class="tax-progress"><div><h3>✅ 我的退稅確認清單</h3><p class="tax-note">勾選狀態會保留在這台裝置。</p></div><b id="taxProgressText">0 / 0</b></div>
+          <div class="tax-progress-bar"><i id="taxProgressBar"></i></div>
         </article>
 
         <article class="info-card">
-          <h3>✅ 出發前完成</h3>
-          <ul class="tax-checklist">
-            <li>□ 安裝 Global Blue – Shop Tax Free App</li>
-            <li>□ 完成 Global Blue Passport Scan</li>
-            <li>□ 建立 Digital Membership Card</li>
-            <li>□ 綁定固定使用的退款信用卡</li>
-            <li>□ 安裝 NL Customs VAT App</li>
-            <li>□ 完成 NL Customs VAT 帳號／護照設定</li>
-            <li>□ 確認護照英文姓名與退稅資料完全一致</li>
-            <li>□ 準備專用退稅文件袋</li>
-            <li>□ 文件分成「奧地利／芬蘭 EU」、「挪威」、「荷蘭」三區</li>
-            <li>□ 決定全程固定使用哪張信用卡收取退款</li>
-            <li>□ OSL／AMS 退稅流程圖存入手機</li>
-            <li>□ 流程圖另印紙本備份</li>
-            <li>□ 全員確認：海關驗證完成 ≠ 退款已入帳</li>
-          </ul>
+          <h3>出發前｜只確認一次</h3>
+          <div class="tax-checks">
+            <label class="tax-check"><input type="checkbox" data-tax-check="prep-globalblue"><span>安裝 Global Blue，完成 Passport Scan／Digital Membership Card 並綁定退款信用卡</span></label>
+            <label class="tax-check"><input type="checkbox" data-tax-check="prep-nlvat"><span>安裝並設定 NL Customs VAT</span></label>
+            <label class="tax-check"><input type="checkbox" data-tax-check="prep-name"><span>確認護照英文姓名與退稅資料完全一致</span></label>
+            <label class="tax-check"><input type="checkbox" data-tax-check="prep-folder"><span>準備退稅文件袋：奧地利＋芬蘭 EU／挪威分開收納</span></label>
+            <label class="tax-check"><input type="checkbox" data-tax-check="prep-card"><span>決定全程固定使用的退款信用卡</span></label>
+          </div>
+          <div class="tax-alert"><b>⚠️ 紙本退稅單必查：Taiwan Country Code＝158</b><br>使用紙本退稅單的店家，離店前確認店員已填完整；特別核對 <b>Country Code 158</b>、英文姓名、護照號碼、金額、日期與退款方式。有錯當場更正。</div>
         </article>
 
         <article class="info-card">
-          <h3>🛍️ 購物時｜每次都做</h3>
-          <ul class="tax-checklist">
-            <li>□ 結帳前先問是否提供 Tax Free／VAT Refund</li>
-            <li>□ 確認已達當地退稅最低門檻</li>
-            <li>□ 由實際辦理退稅的人出示自己的護照</li>
-            <li>□ 核對姓名、護照號碼、購買日期、金額與商品資料</li>
-            <li>□ 確認退稅商 Logo：Global Blue／Planet／PIE VAT／其他</li>
-            <li>□ 索取並保存收據＋Tax Free Form／數位紀錄</li>
-            <li>□ 退稅商品保持未使用狀態並保留包裝／吊牌</li>
-            <li>□ 每晚拍照備份收據、Tax Free Form 與條碼</li>
-            <li>□ 每晚將文件放回正確國家的資料袋</li>
-          </ul>
-          <div class="info-card-row"><span>🇳🇱 荷蘭特別注意</span><b>結帳當下確認店家已完成數位登錄，並在 NL Customs VAT App 確認交易</b></div>
+          <h3>9/25 起｜每次購物</h3>
+          <div class="tax-checks">
+            <label class="tax-check"><input type="checkbox" data-tax-check="shop-taxfree"><span>結帳前確認可辦 Tax Free，並確認已達退稅門檻</span></label>
+            <label class="tax-check"><input type="checkbox" data-tax-check="shop-paper"><span>紙本退稅：拿到紙本退稅單，確認店員已填妥且 <b>Country Code＝158</b></span></label>
+            <label class="tax-check"><input type="checkbox" data-tax-check="shop-data"><span>核對姓名／護照號／金額／日期／退款方式與退稅商</span></label>
+            <label class="tax-check"><input type="checkbox" data-tax-check="shop-save"><span>收據＋退稅文件收好；商品保持未使用、可供查驗</span></label>
+          </div>
+          <div class="info-card-row"><span>🇳🇱 荷蘭</span><b>數位退稅：離店前確認交易已出現在 NL Customs VAT App</b></div>
         </article>
 
         <article class="info-card">
-          <h3>🌍 四國購物門檻快速看</h3>
-          <div class="info-card-row"><span>🇦🇹 奧地利</span><b>單張發票超過 €75｜AMS</b></div>
-          <div class="info-card-row"><span>🇫🇮 芬蘭</span><b>同店同張收據 ≥ €40｜AMS</b></div>
-          <div class="info-card-row"><span>🇳🇴 挪威</span><b>依合作退稅商門檻｜OSL</b></div>
-          <div class="info-card-row"><span>🇳🇱 荷蘭</span><b>同店同日 ≥ €50｜AMS</b></div>
+          <h3>🇦🇹 9/25 奧地利 → 🇫🇮 9/26–10/1 芬蘭</h3>
+          <p class="tax-note">這兩國先辦文件、保存商品，最後 10/10 在 AMS 統一完成 EU 出境驗證。</p>
+          <div class="tax-checks">
+            <label class="tax-check"><input type="checkbox" data-tax-check="eu-paper"><span>Tax Free Form＋原始收據已收好</span></label>
+            <label class="tax-check"><input type="checkbox" data-tax-check="eu-folder"><span>放入「奧地利＋芬蘭 EU」文件袋，商品保留至 10/10 AMS</span></label>
+          </div>
         </article>
 
         <article class="info-card">
-          <h3>🇦🇹 奧地利＋🇫🇮 芬蘭｜先保存，10/10 AMS 統一辦</h3>
-          <ul class="tax-checklist">
-            <li>□ 購物時完成 Tax Free 文件</li>
-            <li>□ 保存原始收據＋Tax Free Form</li>
-            <li>□ 商品保持未使用，方便 AMS 海關查驗</li>
-            <li>□ 文件放入「奧地利／芬蘭 EU」資料袋</li>
-            <li>□ 不使用 NL Customs VAT App 處理奧地利／芬蘭商品</li>
-          </ul>
+          <h3>🇳🇴 10/2–10/7 挪威購物</h3>
+          <div class="tax-checks">
+            <label class="tax-check"><input type="checkbox" data-tax-check="norway-paper"><span>每次購物確認 Tax Free，保存退稅單＋收據並確認 Provider</span></label>
+          </div>
         </article>
 
         <article class="info-card">
-          <h3>🇳🇴 10/7 晚上｜準備挪威退稅</h3>
-          <ul class="tax-checklist">
-            <li>□ 集中所有挪威退稅商品與退稅文件</li>
-            <li>□ 每張單據先確認 Provider：Global Blue／Planet／PIE VAT</li>
-            <li>□ 準備護照與 OSL → AMS 登機證</li>
-            <li>□ Global Blue 使用者確認 App／條碼可正常開啟</li>
-            <li>□ 商品保持未使用且可隨時拿出供查驗</li>
-            <li>□ 查驗完成前不要把需要驗貨的商品放進拿不到的托運行李</li>
-          </ul>
+          <h3>🇳🇴 10/7 晚上｜整理 OSL 退稅</h3>
+          <div class="tax-checks">
+            <label class="tax-check"><input type="checkbox" data-tax-check="osl-goods"><span>集中所有挪威退稅商品＋退稅單</span></label>
+            <label class="tax-check"><input type="checkbox" data-tax-check="osl-provider"><span>逐張確認 Provider：Global Blue／Planet／PIE VAT</span></label>
+            <label class="tax-check"><input type="checkbox" data-tax-check="osl-docs"><span>準備護照＋OSL → AMS 登機證；需要驗貨的商品保持可直接取出</span></label>
+          </div>
         </article>
 
         <article class="info-card">
-          <h3>🇳🇴 10/8 OSL｜挪威退稅</h3>
-          <p class="tax-note">TOS → OSL 11:50–13:45；OSL → AMS 16:30–18:25。抵達 OSL 後，<b>先看退稅單上的 Provider Logo</b>，不要把所有退稅單都當成 Global Blue。</p>
+          <h3>✈️ 🇳🇴 10/8｜OSL 挪威退稅</h3>
           <div class="info-card-row"><span>🔵 Global Blue</span><b>Departure Hall｜Check-in Area 8｜安檢前</b></div>
-          <div class="info-card-row"><span>🟠 Planet</span><b>依 OSL 現場／退稅單指示前往對應櫃位</b></div>
-          <div class="info-card-row"><span>🟣 PIE VAT</span><b>依 OSL 現場／退稅單指示前往對應櫃位</b></div>
-          <p class="tax-note"><b>操作：</b>護照＋OSL→AMS 登機證＋退稅單／App＋未使用商品 → 完成出口驗證 → 需要時出示商品 → 選信用卡退款 → 保存追蹤資料 → 前往 AMS 登機門。</p>
+          <div class="info-card-row"><span>🟠 Planet</span><b>依 OSL 當日／退稅單指示</b></div>
+          <div class="info-card-row"><span>🟣 PIE VAT</span><b>依 OSL 當日／退稅單指示</b></div>
+          <div class="tax-checks">
+            <label class="tax-check"><input type="checkbox" data-tax-check="osl-show"><span>出示護照＋登機證＋退稅單／App＋商品</span></label>
+            <label class="tax-check"><input type="checkbox" data-tax-check="osl-validate"><span>完成出口驗證</span></label>
+            <label class="tax-check"><input type="checkbox" data-tax-check="osl-refund"><span>確認退款方式並保存 Refund／Tracking ID</span></label>
+          </div>
         </article>
 
         <article class="info-card">
-          <h3>OSL 挪威退稅 reference 流程圖</h3>
-          <img class="tax-flow-img" src="../assets/norway-tax-free-flow.png" alt="OSL 挪威退稅流程圖">
+          <h3>🇳🇱 10/8–10/9｜荷蘭購物</h3>
+          <div class="tax-checks">
+            <label class="tax-check"><input type="checkbox" data-tax-check="nl-register"><span>店家已完成 Tax Free 數位登錄</span></label>
+            <label class="tax-check"><input type="checkbox" data-tax-check="nl-app"><span>離店前確認交易已出現在 NL Customs VAT App</span></label>
+          </div>
+          <div class="tax-alert"><b>🚨 App 沒看到交易，不要先離開店家。</b></div>
         </article>
 
         <article class="info-card">
-          <h3>⚠️ OSL 退稅後進入荷蘭</h3>
-          <p class="tax-note">挪威不是 EU。OSL 辦完退稅後，你們仍會先飛進荷蘭；若個人在挪威購買高價商品，仍要留意進入 EU 時的旅客免稅額與申報規則。</p>
+          <h3>✈️ 🇳🇱 10/10｜AMS 最終 EU 退稅</h3>
+          <div class="info-card-row"><span>🇳🇱 荷蘭</span><b>NL Customs VAT 數位 Validation</b></div>
+          <div class="tax-checks">
+            <label class="tax-check"><input type="checkbox" data-tax-check="ams-nl"><span>開啟 NL Customs VAT → Bluetooth＋定位 → 申請 Validation；若要求查驗則出示護照／登機證／商品</span></label>
+          </div>
+          <div class="info-card-row"><span>🇦🇹＋🇫🇮</span><b>紙本 Tax Free Form → AMS 海關驗證</b></div>
+          <div class="tax-checks">
+            <label class="tax-check"><input type="checkbox" data-tax-check="ams-eu"><span>Tax Free Form＋收據＋商品完成 AMS Customs 出境驗證</span></label>
+            <label class="tax-check"><input type="checkbox" data-tax-check="ams-refund"><span>驗證後依 Provider 辦退款並保存 Tracking ID</span></label>
+          </div>
+          <p class="tax-route">🚨 需驗貨商品：先完成海關驗證，再托運。</p>
         </article>
 
         <article class="info-card">
-          <h3>🇳🇱 10/9｜荷蘭購物</h3>
-          <ul class="tax-checklist">
-            <li>□ 結帳前詢問 Tax Free</li>
-            <li>□ 出示護照</li>
-            <li>□ 確認店家當下完成數位退稅登錄</li>
-            <li>□ 開啟 NL Customs VAT App，確認交易已出現</li>
-            <li>□ 若交易沒有出現，當場請店家確認，不要離店後才處理</li>
-          </ul>
-        </article>
-
-        <article class="info-card">
-          <h3>✈️ 10/10 AMS｜奧地利＋芬蘭＋荷蘭</h3>
-          <div class="info-card-row"><span>🇳🇱 荷蘭商品</span><b>NL Customs VAT App 數位驗證</b></div>
-          <ul class="tax-checklist">
-            <li>□ 開啟 NL Customs VAT App</li>
-            <li>□ 開啟 Bluetooth＋定位服務</li>
-            <li>□ 到海關區域附近，在 App 申請 Validation</li>
-            <li>□ Approved＝海關驗證完成；若要求人工查驗，帶護照、登機證與商品到 Customs Desk</li>
-          </ul>
-          <div class="info-card-row"><span>🇦🇹🇫🇮 奧地利／芬蘭</span><b>Tax Free Form＋收據＋商品 → AMS 海關驗證</b></div>
-          <ul class="tax-checklist">
-            <li>□ 準備護照、CI0074 登機證、Tax Free Form、原始收據、商品</li>
-            <li>□ 前往 Departure Hall 3 的 Customs Desk，依現場指示辦理</li>
-            <li>□ 海關完成出口驗證後，再依 Global Blue／Planet／其他 Provider 指示申請退款</li>
-            <li>□ 需要海關驗貨的商品必須保持可取出；驗證完成後再完成托運</li>
-          </ul>
-          <p class="tax-route">🚨 退稅品順序：驗貨／驗證 → 再托運。</p>
-        </article>
-
-        <article class="info-card">
-          <h3>AMS／EU 退稅 reference 流程圖</h3>
-          <img class="tax-flow-img" src="../assets/eu-tax-free-flow.png" alt="AMS 阿姆斯特丹 EU 退稅流程圖">
-        </article>
-
-        <article class="info-card">
-          <h3>💳 退款與回台後追蹤</h3>
-          <ul class="tax-checklist">
-            <li>□ 優先選信用卡退款</li>
-            <li>□ 保存退款追蹤碼／Refund ID</li>
-            <li>□ 已驗證的 Tax Free Form 先拍照備份</li>
-            <li>□ 保存所有原始收據、App 驗證畫面與登機證</li>
-            <li>□ 回台後檢查退款信用卡帳單</li>
-            <li>□ 已收到款項才標示「退稅完成」</li>
-            <li>□ 長時間未入帳時，依 Provider 追蹤退款狀態</li>
-          </ul>
-          <p class="tax-route">海關驗證完成 ≠ 退款已入帳，兩者是不同步驟。</p>
+          <h3>🏠 10/11 起｜回台後退款追蹤</h3>
+          <div class="tax-checks">
+            <label class="tax-check"><input type="checkbox" data-tax-check="home-save"><span>Refund／Tracking ID 與驗證紀錄已保存</span></label>
+          </div>
+          <div class="tax-status-grid">
+            <label><input type="checkbox" data-tax-check="refund-at"><span>🇦🇹 奧地利退款入帳</span></label>
+            <label><input type="checkbox" data-tax-check="refund-fi"><span>🇫🇮 芬蘭退款入帳</span></label>
+            <label><input type="checkbox" data-tax-check="refund-no"><span>🇳🇴 挪威退款入帳</span></label>
+            <label><input type="checkbox" data-tax-check="refund-nl"><span>🇳🇱 荷蘭退款入帳</span></label>
+          </div>
+          <p class="tax-route">海關驗證完成 ≠ 退款已入帳；四國款項都收到才算退稅完成。</p>
         </article>
       </div>
     </section>
@@ -202,8 +179,28 @@
     <a class="nav-btn" href="../budget/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M16 15h2"></path></svg>預算</a>
   </nav>
 </div>
+
+<div class="image-modal" id="taxImageModal" hidden><button class="image-modal-close" id="taxImageClose" type="button" aria-label="關閉">×</button><img id="taxImageModalContent" alt="退稅流程圖放大檢視"></div>
 <script src="../assets/subpage-runtime.js"></script>
 <script src="../assets/common.js"></script>
-<script>(function(){function fix(){document.getElementById('tab-luggage')?.classList.add('active');document.getElementById('luggageSegments')?.style.setProperty('display','flex','important');document.querySelector('#tab-luggage .subview')?.style.setProperty('display','block','important');document.querySelector('.bottom-nav .nav-btn[href="./"]')?.classList.add('active')}fix();document.addEventListener('DOMContentLoaded',fix);window.addEventListener('load',fix)})();</script>
+<script>
+(function(){
+  const key='europe-trip-2026-tax-checks';
+  const checks=[...document.querySelectorAll('[data-tax-check]')];
+  const progressText=document.getElementById('taxProgressText');
+  const progressBar=document.getElementById('taxProgressBar');
+  let saved={};
+  try{saved=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){saved={}}
+  checks.forEach(c=>{c.checked=!!saved[c.dataset.taxCheck];c.addEventListener('change',save)});
+  function save(){const data={};checks.forEach(c=>data[c.dataset.taxCheck]=c.checked);localStorage.setItem(key,JSON.stringify(data));update()}
+  function update(){const done=checks.filter(c=>c.checked).length;progressText.textContent=done+' / '+checks.length;progressBar.style.width=(checks.length?done/checks.length*100:0)+'%'}
+  document.getElementById('resetTaxChecks')?.addEventListener('click',()=>{checks.forEach(c=>c.checked=false);localStorage.removeItem(key);update()});
+  update();
+  const modal=document.getElementById('taxImageModal'), img=document.getElementById('taxImageModalContent');
+  document.querySelectorAll('[data-zoom]').forEach(b=>b.addEventListener('click',()=>{img.src=b.dataset.zoom;modal.hidden=false}));
+  document.getElementById('taxImageClose')?.addEventListener('click',()=>modal.hidden=true);
+  modal?.addEventListener('click',e=>{if(e.target===modal)modal.hidden=true});
+})();
+</script>
 </body>
 </html>
