@@ -25,12 +25,92 @@ window.AURORA_SHOPPING_DATA = {
   ]
 };
 
-/* Meal overview compatibility: use one self-contained SVG so Chromium does not
-   need to load nested SVG content. The self-meal highlight is now drawn inside
-   meal-overview-base.svg itself, avoiding duplicate overlays and icon/text overlap. */
+/* 每日餐食：使用單一 SVG 底圖，並把「自理」標示以 HTML 疊層重畫。
+   疊層會完整覆蓋底圖原文字，再把圓點、文字與備註分開排版，避免圖示蓋字。 */
 document.addEventListener('DOMContentLoaded', function () {
-  var mealImage = document.querySelector('#mealZoom img');
-  var modalImage = document.querySelector('#mealModal img');
+  var mealButton = document.getElementById('mealZoom');
+  var mealImage = mealButton && mealButton.querySelector('img');
+  var modal = document.getElementById('mealModal');
+  var modalImage = modal && modal.querySelector('img');
   if (mealImage) mealImage.src = '../assets/meal-overview-base.svg';
   if (modalImage) modalImage.src = '../assets/meal-overview-base.svg';
+  if (!mealButton || !mealImage) return;
+
+  var marks = [
+    {x:697,y:295,w:174,h:56,t:'dinner',n:'＋ 超市採買 🛒'},
+    {x:327,y:365,w:170,h:56,t:'breakfast',n:''},
+    {x:327,y:435,w:170,h:56,t:'breakfast',n:''},
+    {x:697,y:435,w:174,h:56,t:'dinner',n:'＋ 超市採買 🛒'},
+    {x:327,y:505,w:170,h:56,t:'breakfast',n:''},
+    {x:697,y:505,w:174,h:56,t:'dinner',n:'＋ 超市採買 🛒'},
+    {x:507,y:575,w:180,h:56,t:'lunch',n:'12:00 上巴士前準備'},
+    {x:697,y:645,w:174,h:56,t:'dinner',n:'＋ 超市採買 🛒'},
+    {x:507,y:715,w:180,h:56,t:'lunch',n:''},
+    {x:507,y:785,w:180,h:56,t:'lunch',n:''},
+    {x:327,y:855,w:170,h:56,t:'breakfast',n:''},
+    {x:697,y:855,w:174,h:56,t:'dinner',n:'＋ 超市採買 🛒'},
+    {x:697,y:925,w:174,h:56,t:'dinner',n:'＋ 超市採買 🛒'},
+    {x:507,y:995,w:180,h:56,t:'lunch',n:''},
+    {x:697,y:995,w:174,h:56,t:'dinner',n:'＋ 超市採買 🛒'},
+    {x:697,y:1065,w:174,h:56,t:'dinner',n:''},
+    {x:697,y:1135,w:174,h:56,t:'dinner',n:''},
+    {x:697,y:1205,w:174,h:56,t:'dinner',n:'＋ 超市採買 🛒'},
+    {x:327,y:1275,w:170,h:56,t:'breakfast',n:''},
+    {x:697,y:1275,w:174,h:56,t:'dinner',n:'＋ 超市採買 🛒'},
+    {x:327,y:1345,w:170,h:56,t:'breakfast',n:''}
+  ];
+
+  var style = document.createElement('style');
+  style.textContent = [
+    '.meal-self-overlay{position:absolute;inset:0;pointer-events:none;z-index:3}',
+    '.meal-self-mark{position:absolute;box-sizing:border-box;border:1.8px solid #f2ad15;border-radius:12px;font-family:\'PingFang TC\',\'Noto Sans TC\',\'Microsoft JhengHei\',sans-serif;color:#17456a;text-align:left}',
+    '.meal-self-mark.breakfast{background:#fff0b8}',
+    '.meal-self-mark.lunch{background:#edf0bd}',
+    '.meal-self-mark.dinner{background:#ffe0cc}',
+    '.meal-self-dot{position:absolute;left:6.5%;top:19%;width:3.2%;aspect-ratio:1;border-radius:50%;background:#f6b91f}',
+    '.meal-self-title{position:absolute;left:15%;top:15%;font-size:min(1.3vw,13px);line-height:1.1;font-weight:850;white-space:nowrap}',
+    '.meal-self-note{position:absolute;left:15%;top:52%;font-size:min(.96vw,10.5px);line-height:1.15;font-weight:650;white-space:nowrap}',
+    '.meal-modal-overlay{position:fixed;pointer-events:none;z-index:102}',
+    '@media(max-width:520px){.meal-self-mark{border-width:1px;border-radius:5px}}'
+  ].join('');
+  document.head.appendChild(style);
+
+  function buildOverlay(className) {
+    var overlay = document.createElement('span');
+    overlay.className = className;
+    marks.forEach(function (m) {
+      var mark = document.createElement('span');
+      mark.className = 'meal-self-mark ' + m.t;
+      mark.style.left = (m.x / 900 * 100).toFixed(4) + '%';
+      mark.style.top = (m.y / 1760 * 100).toFixed(4) + '%';
+      mark.style.width = (m.w / 900 * 100).toFixed(4) + '%';
+      mark.style.height = (m.h / 1760 * 100).toFixed(4) + '%';
+      var dot = document.createElement('span'); dot.className = 'meal-self-dot';
+      var title = document.createElement('span'); title.className = 'meal-self-title'; title.textContent = '自理';
+      mark.appendChild(dot); mark.appendChild(title);
+      if (m.n) { var note = document.createElement('span'); note.className = 'meal-self-note'; note.textContent = m.n; mark.appendChild(note); }
+      overlay.appendChild(mark);
+    });
+    return overlay;
+  }
+
+  mealButton.style.position = 'relative';
+  mealButton.style.overflow = 'hidden';
+  mealButton.querySelectorAll('.meal-self-overlay').forEach(function (x) { x.remove(); });
+  mealButton.appendChild(buildOverlay('meal-self-overlay'));
+
+  if (modal && modalImage) {
+    var modalOverlay = buildOverlay('meal-self-overlay meal-modal-overlay');
+    modal.appendChild(modalOverlay);
+    function positionModalOverlay() {
+      if (modal.hidden) return;
+      var r = modalImage.getBoundingClientRect();
+      modalOverlay.style.left = r.left + 'px';
+      modalOverlay.style.top = r.top + 'px';
+      modalOverlay.style.width = r.width + 'px';
+      modalOverlay.style.height = r.height + 'px';
+    }
+    new MutationObserver(function () { requestAnimationFrame(positionModalOverlay); }).observe(modal,{attributes:true,attributeFilter:['hidden']});
+    window.addEventListener('resize', positionModalOverlay);
+  }
 });
