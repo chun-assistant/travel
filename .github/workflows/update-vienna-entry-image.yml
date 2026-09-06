@@ -14,7 +14,15 @@ jobs:
         with:
           ref: europe-trip-2026
           fetch-depth: 0
-      - name: Replace embedded Vienna image
+
+      - name: Download Vienna PNG
+        run: |
+          mkdir -p assets
+          curl -L --fail --retry 3 \
+            https://raw.githubusercontent.com/yangchinghsuan955-web/europe-trip-2026/main/assets/vienna-entry-3x4.svg.png \
+            -o assets/vienna-entry-3x4.svg.png
+
+      - name: Replace Vienna image reference
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -22,24 +30,24 @@ jobs:
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
           old = s
+          s = s.replace('assets/vienna-entry-3x4.svg', 'assets/vienna-entry-3x4.svg.png')
           pattern = r'(<img\s+src=")data:image/webp;base64,[^"]+("\s+alt="維也納機場入境全攻略流程圖與注意事項")'
-          s, n = re.subn(pattern, r'\1assets/vienna-entry-3x4.svg\2', s, count=1)
-          if n:
+          s, n = re.subn(pattern, r'\1assets/vienna-entry-3x4.svg.png\2', s, count=1)
+          if s != old:
               p.write_text(s, encoding='utf-8')
-              print('Vienna entry image replaced.')
-          elif 'assets/vienna-entry-3x4.svg' in s:
-              print('Vienna entry image already points to SVG.')
+              print('Vienna entry image reference updated to PNG.')
           else:
-              raise SystemExit('Target Vienna image tag not found.')
+              print('Vienna entry image reference already uses PNG.')
           PY
-      - name: Commit website change
+
+      - name: Commit website and image
         run: |
-          git add index.html
+          git add index.html assets/vienna-entry-3x4.svg.png
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if git diff --cached --quiet; then
             echo "No website change needed."
           else
-            git commit -m "Update Vienna entry guide image"
+            git commit -m "Use PNG for Vienna entry guide"
             git push origin HEAD:europe-trip-2026
           fi
