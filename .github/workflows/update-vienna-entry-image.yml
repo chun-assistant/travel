@@ -22,7 +22,7 @@ jobs:
             https://raw.githubusercontent.com/yangchinghsuan955-web/europe-trip-2026/main/assets/vienna-entry-3x4.svg.png \
             -o assets/vienna-entry-3x4.svg.png
 
-      - name: Replace Vienna image reference
+      - name: Normalize Vienna image reference
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -30,12 +30,13 @@ jobs:
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
           old = s
-          s = s.replace('assets/vienna-entry-3x4.svg', 'assets/vienna-entry-3x4.svg.png')
+          s = s.replace('assets/vienna-entry-3x4.svg.png.png', 'assets/vienna-entry-3x4.svg.png')
+          s = s.replace('assets/vienna-entry-3x4.svg"', 'assets/vienna-entry-3x4.svg.png"')
           pattern = r'(<img\s+src=")data:image/webp;base64,[^"]+("\s+alt="維也納機場入境全攻略流程圖與注意事項")'
-          s, n = re.subn(pattern, r'\1assets/vienna-entry-3x4.svg.png\2', s, count=1)
+          s, _ = re.subn(pattern, r'\1assets/vienna-entry-3x4.svg.png\2', s, count=1)
           if s != old:
               p.write_text(s, encoding='utf-8')
-              print('Vienna entry image reference updated to PNG.')
+              print('Vienna entry image reference normalized to PNG.')
           else:
               print('Vienna entry image reference already uses PNG.')
           PY
@@ -48,6 +49,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No website change needed."
           else
-            git commit -m "Use PNG for Vienna entry guide"
+            git commit -m "Normalize Vienna PNG reference"
             git push origin HEAD:europe-trip-2026
           fi
