@@ -268,6 +268,7 @@ assets/subpage-runtime.js
 3. HTML / CSS 使用相對路徑
 4. 不要把大型圖片直接塞進 HTML base64
 5. 不要把圖片散落到各功能 folder
+6. **禁止上傳或新增 SVG 圖片檔；網站新增圖片一律使用 PNG。**
 
 例如：
 
