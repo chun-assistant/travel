@@ -89,7 +89,7 @@ window.AURORA_SHOPPING_DATA={
     {country:'🇳🇴 挪威',category:'🐟 海味・保健',priority:'👍 推薦',item:'Kaviar 魚子抹醬',reason:'北歐日常感強的管狀魚子抹醬；購買時確認未開封保存方式與台灣最新入境規定。',place:'挪威各大超市',tag:'北歐抹醬',image:'../assets/shopping/norway/Kaviar 魚子抹醬.jpg'},
     {country:'🇳🇴 挪威',category:'🐟 海味・保健',priority:'👍 推薦',item:'挪威魚油',reason:'北歐代表性保健品，較適合自己或家人使用；購買前確認成分、劑量與需求。',place:'藥局／超市保健區',tag:'保健品',image:'../assets/shopping/norway/魚油.png'},
     {country:'🇳🇴 挪威',category:'🐟 海味・保健',priority:'👍 推薦',item:'魚油護膚膏（魚油凡士林）',reason:'具有挪威特色、實用度高，適合乾冷季節護膚。',place:'藥局／紀念品店',tag:'護膚品',image:'../assets/shopping/norway/魚油製作的【凡士林】.jpg'},
-    {country:'🇳🇴 挪威',category:'🧥 挪威服飾・設計',priority:'👍 推薦',item:'Helly Hansen 服飾',reason:'挪威戶外品牌，機能性高；適合挑外套、帽子或實用配件。',place:'品牌門市／戶外用品店',tag:'戶外機能',image:''},
+    {country:'🇳🇴 挪威',category:'🧥 挪威服飾・設計',priority:'👍 推薦',item:'Helly Hansen 服飾',reason:'挪威戶外品牌，機能性高；適合挑外套、帽子或實用配件。',place:'品牌門市／戶外用品店',tag:'戶外機能',image:'../assets/shopping/norway/Helly Hansen 服飾.webp'},
     {country:'🇳🇴 挪威',category:'🧥 挪威服飾・設計',priority:'⭐ 經典',item:'Dale of Norway 服飾',reason:'挪威傳統針織圖騰與羊毛工藝代表，紀念性最高，但價格較高。',place:'品牌門市／百貨／紀念品店',tag:'挪威羊毛',image:'../assets/shopping/norway/Dale of Norway 服飾.jpg'},
     {country:'🇳🇴 挪威',category:'🧥 挪威服飾・設計',priority:'👍 推薦',item:'Holzweiler 圍巾與服飾',reason:'挪威設計品牌，風格現代；圍巾兼具實穿與紀念價值。',place:'品牌門市／百貨',tag:'挪威設計',image:'../assets/shopping/norway/Holzweiler圍巾與服飾.jpg'},
     {country:'🇳🇱 阿姆斯特丹',item:'Stroopwafel',reason:'經典、好帶、超市與市場都容易買',place:'Albert Cuyp／超市',tag:'必買'},
