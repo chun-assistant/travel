@@ -14,7 +14,7 @@ body{color:var(--ink);background:radial-gradient(circle at 7% 1%,rgba(115,183,20
 .app-shell{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,253,248,.18))}
 
 /* Hero: same title, subtitle, route and three stat fields. */
-.hero{color:#123f5d;min-height:248px;background-image:linear-gradient(90deg,rgba(250,247,239,.73) 0%,rgba(250,247,239,.54) 45%,rgba(250,247,239,.12) 72%,rgba(250,247,239,.02) 100%),url("./skin/hero-watercolor.svg");background-size:cover;background-position:center center;border-radius:0 0 34px 34px;box-shadow:0 16px 38px rgba(42,83,96,.14)}
+.hero{color:#123f5d;min-height:248px;background-image:linear-gradient(90deg,rgba(250,247,239,.60) 0%,rgba(250,247,239,.43) 42%,rgba(250,247,239,.10) 69%,rgba(250,247,239,.01) 100%),url("./skin/hero-watercolor-v5.svg?v=20260907-1845");background-size:cover;background-position:center center;border-radius:0 0 34px 34px;box-shadow:0 16px 38px rgba(42,83,96,.14)}
 .hero::before{width:92%;height:82px;left:4%;top:10px;opacity:.18;filter:blur(22px);background:linear-gradient(90deg,transparent,rgba(87,221,188,.45),rgba(102,185,236,.42),rgba(177,226,154,.26),transparent)}
 .hero::after{width:76%;height:58px;right:-3%;top:74px;opacity:.13;filter:blur(18px);background:linear-gradient(90deg,transparent,rgba(105,210,185,.34),rgba(128,184,233,.28),transparent)}
 .stars{opacity:.24;background-size:50px 50px}
