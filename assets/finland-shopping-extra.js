@@ -2,13 +2,13 @@
   var data=window.AURORA_SHOPPING_DATA;
   if(!data)return;
 
-  /* 卡片維持使用既有小圖，避免手機載入整頁時一次下載大量高清圖片。 */
+  /* 商品卡圖片：指定商品優先使用 repo 內已上傳的本地圖片。 */
   var imageMap={
-    'pur Bio-Apfelchips geriffelt':'../assets/shopping/vienna/bio-apfelchips.webp',
+    'pur Bio-Apfelchips geriffelt':'../assets/shopping/norway/SPAR Bio Apfelchips.jpg',
     'BILLA Bio Schoko Haferkekse':'../assets/shopping/vienna/billa-bio-schoko-haferkekse.webp',
     'Bonne Premium Mustikkamehu':'../assets/shopping/finland/bonne-premium-mustikkamehu.webp',
     'Finnair Blueberry Juice Drink':'../assets/shopping/finland/finnair-blueberry-juice-drink.webp',
-    'Valio Hedelmätarha Luomu Puolukka-Karpalo':'../assets/shopping/finland/valio-puolukka-karpalo.webp',
+    'Valio Hedelmätarha Luomu Puolukka-Karpalo':'../assets/shopping/norway/Valio Hedelmätarha Luomu Puolukka-Karpalo.avif',
     'Froosh Smoothie':'../assets/shopping/finland/froosh-smoothie.webp',
     'Karl Fazer Blue':'../assets/shopping/finland/karl-fazer-blue.webp',
     'Karl Fazer Dark 70%':'../assets/shopping/finland/karl-fazer-dark-70.webp',
@@ -18,15 +18,14 @@
     'Paulig Juhla Mokka':'https://cdn.s-cloud.fi/v1/w720h720%40_q75/assets/dam-id/110bN8NA4gvB2pOkhk2fbB.webp',
     'Nordqvist Moomin Tea':'https://nordqvist.fi/cdn/shop/files/paeivaen-paras-hetki-pussitee-uusi-design-nordqvist-teekauppa-122.jpg?v=1757944728&width=1500',
     'Nordqvist SUOMI Blueberry Tea':'https://cdn.s-cloud.fi/v1/w720h720%40_q75/assets/dam-id/7IkephA2a4k8beGyMhiA6T.webp',
-    'Fazer Cacao':'https://fazerpro.fazer.com/globalassets/fc_fi_856230_fazer-cacao-200g_web.png'
+    'Fazer Cacao':'https://fazerpro.fazer.com/globalassets/fc_fi_856230_fazer-cacao-200g_web.png',
+    'Kamill Hand & Nagelcreme Classic':'../assets/shopping/norway/Kamill Hand & Nagelcreme Classic.jpg',
+    'Fazer Café 巧克力':'../assets/shopping/norway/Fazer Café 巧克力.jpg',
+    'Moomin 周邊／ARABIA・Iittala・Marimekko 聯名':'../assets/shopping/norway/Moomin 周邊／ARABIA・Iittala・Marimekko 聯名.jpg',
+    'Marttiini 馴鹿皮手套':'../assets/shopping/norway/Marttiini 馴鹿皮手套.webp'
   };
 
-  /*
-   * 高清圖只在使用者點擊商品時載入。
-   * imageFull 與 image 分離：image = 縮圖；imageFull = 燈箱高清圖。
-   * 後續若把高清 PNG 搬進 repo，只要把下列網址改成 ../assets/shopping/...-full.png 即可，
-   * 不需要再動燈箱程式。
-   */
+  /* 點擊商品圖時載入的較高解析來源。指定六款直接使用使用者上傳原圖。 */
   var fullImageMap={
     "Kelly's Chips Classic":'https://images.cdn.europe-west1.gcp.commercetools.com/723b2575-66c7-4d92-ae49-82bf1d168d26/00-288648-0238714879-r0x0DHnP.jpg',
     'Alnatura Dinkel Mini Brezeln':'https://images.cdn.europe-west1.gcp.commercetools.com/723b2575-66c7-4d92-ae49-82bf1d168d26/00-317554-0205337684-XwaPDwoj.jpg',
@@ -50,14 +49,16 @@
     'Darbo Rosenmarillen Konfitüre':'https://images.cdn.europe-west1.gcp.commercetools.com/723b2575-66c7-4d92-ae49-82bf1d168d26/00-878190-0471765227-Jcm0VeKV.jpg',
     'DEMEL Kandierte Veilchen 糖漬紫羅蘭':'https://www.demel.com/cdn/shop/products/Candied_Violets_04.webp?v=1681826075&width=1600',
     'Zotter 巧克力':'https://images.cdn.europe-west1.gcp.commercetools.com/723b2575-66c7-4d92-ae49-82bf1d168d26/00-899847-0105233692-_WstWtlg.jpg',
-    'Kamill Hand & Nagelcreme Classic':'https://images.cdn.europe-west1.gcp.commercetools.com/723b2575-66c7-4d92-ae49-82bf1d168d26/00-14242-1543629263-J1uohDim.jpg',
+    'Kamill Hand & Nagelcreme Classic':'../assets/shopping/norway/Kamill Hand & Nagelcreme Classic.jpg',
     'Clinical Melatonin Forte Original':'https://products.dm-static.com/images/f_auto%2Cq_auto%2Cc_fit%2Ch_1200%2Cw_1200/v1762776486/assets/pas/images/d3c134c5-39aa-4244-9f68-5b799f73edd7/clinical-melatonin-melatonin-forte-original',
     'Balea Hyaluron Konzentrat（藍色補水款）':'https://products.dm-static.com/images/f_auto%2Cq_auto%2Cc_fit%2Ch_1200%2Cw_1200/v1771941372/assets/pas/images/3611250c-02c3-4986-89b6-abc68aa1c8dc/balea-hyaluron-konzentrat',
     'Ferrero Giotto 榛果威化小球':'https://images.cdn.europe-west1.gcp.commercetools.com/723b2575-66c7-4d92-ae49-82bf1d168d26/00-407313-0160604677-CMrA_lkC.jpg',
-    'Fazer Café 巧克力':'https://en.fazer.com/cdn/shop/files/fazerxbalmuirbox-store_1600x.jpg?v=1743569771',
-    'Moomin 周邊／ARABIA・Iittala・Marimekko 聯名':'https://shop.moomin.com/cdn/shop/products/6411801005578moominfriendshipmug_1600x.jpg?v=1745917403',
+    'Fazer Café 巧克力':'../assets/shopping/norway/Fazer Café 巧克力.jpg',
+    'Moomin 周邊／ARABIA・Iittala・Marimekko 聯名':'../assets/shopping/norway/Moomin 周邊／ARABIA・Iittala・Marimekko 聯名.jpg',
     'Lumene 保養品':'https://lumene.com/cdn/shop/files/297_bca3ae5d-04e5-4369-be3b-e05ee01a19b3.jpg?v=1750739654&width=1600',
-    'Marttiini 馴鹿皮手套':'https://varuste.net/tiedostot/1/kuva/tuote/1200/13037701.png'
+    'Marttiini 馴鹿皮手套':'../assets/shopping/norway/Marttiini 馴鹿皮手套.webp',
+    'pur Bio-Apfelchips geriffelt':'../assets/shopping/norway/SPAR Bio Apfelchips.jpg',
+    'Valio Hedelmätarha Luomu Puolukka-Karpalo':'../assets/shopping/norway/Valio Hedelmätarha Luomu Puolukka-Karpalo.avif'
   };
 
   var sourceMap={
@@ -95,19 +96,15 @@
   var items=['Fazer Café 巧克力','Moomin 周邊／ARABIA・Iittala・Marimekko 聯名','Lumene 保養品','Marttiini 馴鹿皮手套'];
   data.souvenirs=data.souvenirs.filter(function(x){return items.indexOf(x.item)===-1});
   var rows=[
-    {country:'🇫🇮 芬蘭',category:'⭐ 芬蘭代表',priority:'⭐ 必買',item:'Fazer Café 巧克力',reason:'Fazer 巧克力始祖店／咖啡館相關商品，紀念性比一般超市巧克力更高；可現場挑限定包裝、禮盒或咖啡館款巧克力。',place:'Fazer Café／Fazer 商店',tag:'巧克力始祖店',image:'https://en.fazer.com/cdn/shop/files/fazerxbalmuirbox-store_large.jpg?v=1743569771',imageFull:fullImageMap['Fazer Café 巧克力'],source:'https://en.fazer.com/products/fazer-x-balmuir-box',sourceLabel:'Fazer Store 官方商品頁'},
-    {country:'🇫🇮 芬蘭',category:'🦛 嚕嚕米周邊',priority:'⭐ 必買',item:'Moomin 周邊／ARABIA・Iittala・Marimekko 聯名',reason:'芬蘭最具代表性的角色 IP；馬克杯、保溫杯、餐具、娃娃、明信片與文具都很適合收藏或送禮。',place:'Moomin Shop／Iittala／ARABIA／百貨／機場',tag:'收藏推薦',image:'https://shop.moomin.com/cdn/shop/products/6411801005578moominfriendshipmug_300x.jpg?v=1745917403',imageFull:fullImageMap['Moomin 周邊／ARABIA・Iittala・Marimekko 聯名'],source:'https://shop.moomin.com/products/moomin-friendship-mug-0-3l-moomin-arabia',sourceLabel:'Moomin 官方商店'},
+    {country:'🇫🇮 芬蘭',category:'⭐ 芬蘭代表',priority:'⭐ 必買',item:'Fazer Café 巧克力',reason:'Fazer 巧克力始祖店／咖啡館相關商品，紀念性比一般超市巧克力更高；可現場挑限定包裝、禮盒或咖啡館款巧克力。',place:'Fazer Café／Fazer 商店',tag:'巧克力始祖店',image:imageMap['Fazer Café 巧克力'],imageFull:fullImageMap['Fazer Café 巧克力'],source:'https://en.fazer.com/products/fazer-x-balmuir-box',sourceLabel:'Fazer Store 官方商品頁'},
+    {country:'🇫🇮 芬蘭',category:'🦛 嚕嚕米周邊',priority:'⭐ 必買',item:'Moomin 周邊／ARABIA・Iittala・Marimekko 聯名',reason:'芬蘭最具代表性的角色 IP；馬克杯、保溫杯、餐具、娃娃、明信片與文具都很適合收藏或送禮。',place:'Moomin Shop／Iittala／ARABIA／百貨／機場',tag:'收藏推薦',image:imageMap['Moomin 周邊／ARABIA・Iittala・Marimekko 聯名'],imageFull:fullImageMap['Moomin 周邊／ARABIA・Iittala・Marimekko 聯名'],source:'https://shop.moomin.com/products/moomin-friendship-mug-0-3l-moomin-arabia',sourceLabel:'Moomin 官方商店'},
     {country:'🇫🇮 芬蘭',category:'💙 芬蘭保養品牌',priority:'⭐ 必買',item:'Lumene 保養品',reason:'芬蘭國民保養品牌；Nordic Hydra 保濕系列、乳液、精華液與面膜很適合乾冷氣候保養。',place:'Lyko／藥妝店／百貨／部分超市',tag:'美妝推薦',image:'https://lumene.com/cdn/shop/files/297_bca3ae5d-04e5-4369-be3b-e05ee01a19b3.jpg?v=1750739654&width=720',imageFull:fullImageMap['Lumene 保養品'],source:'https://lumene.com/products/84907',sourceLabel:'Lumene 官方商品頁'},
-    {country:'🇫🇮 芬蘭',category:'🦌 拉普蘭特色',priority:'👍 推薦',item:'Marttiini 馴鹿皮手套',reason:'羅瓦涅米在地品牌，馴鹿皮手套兼具實用與拉普蘭紀念性；刀具類只作品牌認識，不建議列為主要購買品。',place:'Rovaniemi／Lappish shops／戶外或紀念品店',tag:'拉普蘭限定',image:'https://varuste.net/tiedostot/1/kuva/tuote/600/13037701.png',imageFull:fullImageMap['Marttiini 馴鹿皮手套'],source:'https://varuste.net/en/p137774/marttiini-reindeer-leather-gloves',sourceLabel:'Varuste.net 商品頁'}
+    {country:'🇫🇮 芬蘭',category:'🦌 拉普蘭特色',priority:'👍 推薦',item:'Marttiini 馴鹿皮手套',reason:'羅瓦涅米在地品牌，馴鹿皮手套兼具實用與拉普蘭紀念性；刀具類只作品牌認識，不建議列為主要購買品。',place:'Rovaniemi／Lappish shops／戶外或紀念品店',tag:'拉普蘭限定',image:imageMap['Marttiini 馴鹿皮手套'],imageFull:fullImageMap['Marttiini 馴鹿皮手套'],source:'https://varuste.net/en/p137774/marttiini-reindeer-leather-gloves',sourceLabel:'Varuste.net 商品頁'}
   ];
   var firstNorway=data.souvenirs.findIndex(function(x){return String(x.country||'').indexOf('挪威')>=0});
   if(firstNorway>=0)data.souvenirs.splice.apply(data.souvenirs,[firstNorway,0].concat(rows));
   else data.souvenirs=data.souvenirs.concat(rows);
 
-  /*
-   * shopping-data.js 先完成商品卡 render；本段在同一個 DOMContentLoaded 佇列的後段，
-   * 只把按鈕的「放大來源」換成高清圖，卡片 img src 完全不動。
-   */
   document.addEventListener('DOMContentLoaded',function(){
     document.querySelectorAll('.shopping-product-image-button[data-product-name]').forEach(function(button){
       var name=button.dataset.productName||'';
@@ -120,7 +117,6 @@
       if(full)button.dataset.productImage=full;
     });
 
-    /* 覆蓋原燈箱尺寸：手機接近滿版、桌面仍限制最大尺寸，永遠不裁切商品。 */
     var style=document.createElement('style');
     style.textContent=[
       '#productImageModal{padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom))}',
@@ -131,7 +127,6 @@
     ].join('');
     document.head.appendChild(style);
 
-    /* 高清來源臨時失敗時，自動退回原縮圖，避免燈箱出現破圖。 */
     var modal=document.getElementById('productImageModal');
     var modalImg=modal&&modal.querySelector('img');
     if(modalImg){
