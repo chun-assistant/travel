@@ -2,7 +2,6 @@
   var data=window.AURORA_SHOPPING_DATA;
   if(!data)return;
 
-  /* 商品卡圖片：指定商品優先使用 repo 內已上傳的本地圖片。 */
   var imageMap={
     'pur Bio-Apfelchips geriffelt':'../assets/shopping/norway/SPAR Bio Apfelchips.jpg',
     'BILLA Bio Schoko Haferkekse':'../assets/shopping/vienna/billa-bio-schoko-haferkekse.webp',
@@ -22,10 +21,10 @@
     'Kamill Hand & Nagelcreme Classic':'../assets/shopping/norway/Kamill Hand & Nagelcreme Classic.jpg',
     'Fazer Café 巧克力':'../assets/shopping/norway/Fazer Café 巧克力.jpg',
     'Moomin 周邊／ARABIA・Iittala・Marimekko 聯名':'../assets/shopping/norway/Moomin 周邊／ARABIA・Iittala・Marimekko 聯名.jpg',
-    'Marttiini 馴鹿皮手套':'../assets/shopping/norway/Marttiini 馴鹿皮手套.webp'
+    'Marttiini 馴鹿皮手套':'../assets/shopping/norway/Marttiini 馴鹿皮手套.webp',
+    'Darbo Naturrein Wildheidelbeere｜野生藍莓果醬':'../assets/shopping/finland/Darbo野生藍莓果醬.webp'
   };
 
-  /* 點擊商品圖時載入的較高解析來源。指定六款直接使用使用者上傳原圖。 */
   var fullImageMap={
     "Kelly's Chips Classic":'https://images.cdn.europe-west1.gcp.commercetools.com/723b2575-66c7-4d92-ae49-82bf1d168d26/00-288648-0238714879-r0x0DHnP.jpg',
     'Alnatura Dinkel Mini Brezeln':'https://images.cdn.europe-west1.gcp.commercetools.com/723b2575-66c7-4d92-ae49-82bf1d168d26/00-317554-0205337684-XwaPDwoj.jpg',
@@ -47,6 +46,7 @@
     'Fazer Cacao':'https://fazerpro.fazer.com/globalassets/fc_fi_856230_fazer-cacao-200g_web.png',
     'Manner Original Neapolitaner 威化餅':'https://images.cdn.europe-west1.gcp.commercetools.com/723b2575-66c7-4d92-ae49-82bf1d168d26/00-790860-0728303564-6RlkpIg_.jpg',
     'Darbo Rosenmarillen Konfitüre':'https://images.cdn.europe-west1.gcp.commercetools.com/723b2575-66c7-4d92-ae49-82bf1d168d26/00-878190-0471765227-Jcm0VeKV.jpg',
+    'Darbo Naturrein Wildheidelbeere｜野生藍莓果醬':'../assets/shopping/finland/Darbo野生藍莓果醬.webp',
     'DEMEL Kandierte Veilchen 糖漬紫羅蘭':'https://www.demel.com/cdn/shop/products/Candied_Violets_04.webp?v=1681826075&width=1600',
     'Zotter 巧克力':'https://images.cdn.europe-west1.gcp.commercetools.com/723b2575-66c7-4d92-ae49-82bf1d168d26/00-899847-0105233692-_WstWtlg.jpg',
     'Kamill Hand & Nagelcreme Classic':'../assets/shopping/norway/Kamill Hand & Nagelcreme Classic.jpg',
@@ -93,6 +93,47 @@
   patchFlatProducts(data.souvenirs);
 
   data.souvenirs=data.souvenirs||[];
+  var blueberryJamItem='Darbo Naturrein Wildheidelbeere｜野生藍莓果醬';
+
+  var viennaMarket=(data.supermarkets||[]).find(function(x){return String(x.city||'').indexOf('維也納')>=0;});
+  if(viennaMarket){
+    viennaMarket.items=viennaMarket.items||[];
+    if(viennaMarket.items.indexOf(blueberryJamItem)===-1)viennaMarket.items.push(blueberryJamItem);
+    viennaMarket.groups=viennaMarket.groups||[];
+    var jamGroup=viennaMarket.groups.find(function(g){return String(g.label||'').indexOf('果醬')>=0;});
+    if(!jamGroup){
+      jamGroup={label:'🫐 果醬／早餐抹醬',products:[]};
+      viennaMarket.groups.push(jamGroup);
+    }
+    if(!jamGroup.products.some(function(p){return p&&p.item===blueberryJamItem;})){
+      jamGroup.products.push({
+        item:blueberryJamItem,
+        detail:'Darbo Naturrein 野生藍莓果醬；適合早餐抹麵包、優格，也很適合當伴手禮。',
+        place:'BILLA／SPAR／大型超市',
+        priority:'👍 推薦｜🎁 可當伴手禮',
+        image:imageMap[blueberryJamItem],
+        imageFull:fullImageMap[blueberryJamItem]
+      });
+    }
+  }
+
+  if(!data.souvenirs.some(function(x){return x&&x.item===blueberryJamItem;})){
+    var jamRow={
+      country:'🇦🇹 維也納',
+      category:'⭐ 維也納代表',
+      priority:'👍 推薦',
+      item:blueberryJamItem,
+      reason:'Darbo Naturrein 野生藍莓果醬；莓果風味濃郁，適合抹麵包、優格，也很適合當伴手禮。',
+      place:'BILLA／SPAR／大型超市',
+      tag:'野生藍莓果醬',
+      image:imageMap[blueberryJamItem],
+      imageFull:fullImageMap[blueberryJamItem]
+    };
+    var existingDarbo=data.souvenirs.findIndex(function(x){return x&&x.item==='Darbo Rosenmarillen Konfitüre';});
+    if(existingDarbo>=0)data.souvenirs.splice(existingDarbo+1,0,jamRow);
+    else data.souvenirs.unshift(jamRow);
+  }
+
   var items=['Fazer Café 巧克力','Moomin 周邊／ARABIA・Iittala・Marimekko 聯名','Lumene 保養品','Marttiini 馴鹿皮手套'];
   data.souvenirs=data.souvenirs.filter(function(x){return items.indexOf(x.item)===-1});
   var rows=[
