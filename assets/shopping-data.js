@@ -208,3 +208,100 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('resize', positionModalOverlay);
   }
 });
+
+
+/* Consistent product image preview: near-viewport preload and explicit loading state. */
+document.addEventListener('DOMContentLoaded',function(){
+  var modal=document.getElementById('productImageModal');
+  if(!modal)return;
+  var modalImg=modal.querySelector('img');
+  var modalCard=modal.querySelector('.product-modal-card');
+  if(!modalImg||!modalCard)return;
+
+  var loader=document.createElement('div');
+  loader.className='product-modal-loader';
+  loader.setAttribute('role','status');
+  loader.setAttribute('aria-live','polite');
+  loader.innerHTML='<span class="product-modal-spinner" aria-hidden="true"></span><b>正在載入高清圖片…</b><small>第一次開啟可能需要幾秒</small>';
+  modalCard.insertBefore(loader,modalImg);
+
+  var style=document.createElement('style');
+  style.textContent=[
+    '#productImageModal .product-modal-loader{display:none;width:min(82vw,340px);min-height:190px;padding:24px;border-radius:18px;background:rgba(255,253,248,.98);color:#174a69;box-sizing:border-box;place-items:center;align-content:center;gap:9px;text-align:center;box-shadow:0 12px 34px rgba(0,0,0,.16)}',
+    '#productImageModal .product-modal-loader small{color:#71858d;font-size:12px;font-weight:600}',
+    '#productImageModal.is-loading .product-modal-loader,#productImageModal.is-error .product-modal-loader{display:grid}',
+    '#productImageModal.is-loading .product-modal-card>img,#productImageModal.is-error .product-modal-card>img{display:none}',
+    '#productImageModal .product-modal-spinner{width:28px;height:28px;border:3px solid #dbe8e8;border-top-color:#278dbb;border-radius:50%;animation:product-modal-spin .75s linear infinite}',
+    '#productImageModal.is-error .product-modal-spinner{display:none}',
+    '#productImageModal.is-error .product-modal-loader b{color:#a14c47}',
+    '@keyframes product-modal-spin{to{transform:rotate(360deg)}}',
+    '@media(prefers-reduced-motion:reduce){#productImageModal .product-modal-spinner{animation-duration:1.5s}}'
+  ].join('');
+  document.head.appendChild(style);
+
+  var warmed=new Map();
+  function warm(url){
+    if(!url||warmed.has(url))return warmed.get(url);
+    var image=new Image();
+    image.decoding='async';
+    var promise=new Promise(function(resolve){
+      image.onload=function(){resolve(true)};
+      image.onerror=function(){warmed.delete(url);resolve(false)};
+    });
+    warmed.set(url,promise);
+    image.src=url;
+    return promise;
+  }
+
+  var buttons=Array.prototype.slice.call(document.querySelectorAll('[data-product-image]'));
+  if('IntersectionObserver' in window){
+    var observer=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(!entry.isIntersecting)return;
+        warm(entry.target.dataset.productImage);
+        observer.unobserve(entry.target);
+      });
+    },{rootMargin:'700px 0px'});
+    buttons.forEach(function(button){observer.observe(button)});
+  }
+  buttons.forEach(function(button){
+    button.addEventListener('pointerenter',function(){warm(button.dataset.productImage)},{passive:true});
+    button.addEventListener('touchstart',function(){warm(button.dataset.productImage)},{passive:true});
+  });
+
+  document.addEventListener('click',function(event){
+    var button=event.target.closest('[data-product-image]');
+    if(!button||!button.dataset.productImage)return;
+    modal.classList.remove('is-error');
+    modal.classList.add('is-loading');
+    loader.querySelector('b').textContent='正在載入高清圖片…';
+    loader.querySelector('small').textContent='第一次開啟可能需要幾秒';
+    modalImg.removeAttribute('src');
+
+    var requested=button.dataset.productImage;
+    function ready(){
+      if(modalImg.getAttribute('src')!==requested)return;
+      modal.classList.remove('is-loading','is-error');
+    }
+    function failed(){
+      if(modalImg.getAttribute('src')!==requested)return;
+      modal.classList.remove('is-loading');
+      modal.classList.add('is-error');
+      loader.querySelector('b').textContent='圖片暫時載入失敗';
+      loader.querySelector('small').textContent='請關閉後再試一次';
+    }
+    modalImg.addEventListener('load',ready,{once:true});
+    modalImg.addEventListener('error',failed,{once:true});
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        if(modalImg.complete&&modalImg.naturalWidth>0)ready();
+      });
+    });
+  },true);
+
+  modal.addEventListener('click',function(event){
+    if(event.target===modal||event.target.closest('.image-modal-close')){
+      modal.classList.remove('is-loading','is-error');
+    }
+  });
+});
