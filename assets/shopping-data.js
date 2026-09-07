@@ -33,21 +33,14 @@ window.AURORA_SHOPPING_DATA={
         {item:'Nordqvist SUOMI Blueberry Tea',detail:'SUOMI 藍莓風味紅茶，藍莓＋芬蘭意象明顯。',place:'K-Citymarket／Prisma／S-market',priority:'👍 推薦｜🎁 可當伴手禮',image:''},
         {item:'Fazer Cacao',detail:'Fazer 可可粉／可可飲；喜歡熱可可或烘焙再買。',place:'芬蘭各大超市',priority:'👌 可買',image:''}]}
     ],note:'芬蘭先以 K-Citymarket／Prisma／S-market 為主；Smash、IFA 甘草糖先留到挪威頁，不放芬蘭。'},
-    {date:'10/2–10/8',city:'🇳🇴 挪威',use:'早餐／晚餐自理＋挪威特色食品體驗',stores:'KIWI／REMA 1000／Coop／Joker／MENY',items:['Bergensk Fiskesuppe','Kaviar 魚子抹醬','Freia 巧克力','Smash 巧克力牛角','IFA 甘草糖','Kvikk Lunsj','米布丁','秤重蝦子','SUNNIVA 蘋果汁','KIMS 洋芋片','魚餅魚丸','TORO 巧克力粉包','魚油','生食級鮭魚','棕色起司','啤酒','魚乾／肉乾','魚油護膚膏'],groups:[
-      {label:'🍲 挪威料理・抹醬',products:[
-        {item:'TORO Bergensk Fiskesuppe（卑爾根風味魚湯）',detail:'高 CP 值的挪威代表湯包。加入 800ml 水與 200ml 牛奶攪拌，加熱至沸騰後轉小火煮 5 分鐘，期間偶爾攪拌。',place:'KIWI／REMA 1000／Coop／MENY',priority:'⭐ 必買｜🎁 可當伴手禮',image:'../assets/shopping/norway/Bergensk Fiskesuppe（卑爾根風味魚湯）：.jpg'},
-        {item:'Kaviar 魚子抹醬',detail:'北歐常見管狀魚子抹醬，適合配麵包或水煮蛋；開封後需冷藏。',place:'KIWI／REMA 1000／Coop／MENY',priority:'👍 推薦',image:'../assets/shopping/norway/Kaviar 魚子抹醬.jpg'},
+    {date:'10/2–10/8',city:'🇳🇴 挪威',use:'早餐／晚餐自理＋挪威特色食品體驗',stores:'KIWI／REMA 1000／Coop／Joker／MENY',items:['Risengrynsgrøt 藍莓米布丁','TINE Rislunsj 米布丁','超市秤重蝦子','SUNNIVA 蘋果汁','KIMS 洋芋片','魚餅魚丸','生食級鮭魚','棕色起司','挪威啤酒','鱈魚乾／鹿肉乾／鯨魚乾'],groups:[
+      {label:'🍲 挪威料理・即食品',products:[
         {item:'魚餅／魚丸',detail:'挪威超市冷藏特色食品，適合旅途中加熱當晚餐。',place:'超市冷藏區',priority:'🍽️ 當地吃',image:'../assets/shopping/norway/魚餅魚丸.jpg'}]},
-      {label:'🍫 巧克力・糖果・零食',products:[
-        {item:'Freia 巧克力',detail:'挪威國民巧克力，代表性高、口味多，自己吃或送人都適合。',place:'挪威各大超市',priority:'⭐ 必買｜🎁 可當伴手禮',image:'../assets/shopping/norway/挪威Freia巧克力.jpg'},
-        {item:'Smash 巧克力牛角',detail:'鹹脆玉米角裹牛奶巧克力，甜鹹口感很有記憶點。',place:'挪威各大超市',priority:'⭐ 必買｜🎁 可當伴手禮',image:'../assets/shopping/norway/Smash巧克力牛角.jpg'},
-        {item:'IFA 甘草糖',detail:'挪威經典甘草喉糖，體積小、適合少量體驗。',place:'挪威各大超市／便利商店',priority:'👍 推薦｜🎁 可當伴手禮',image:'../assets/shopping/norway/IFA甘草糖.jpg'},
-        {item:'Kvikk Lunsj（挪威版 KitKat）',detail:'挪威戶外活動代表零食，酥脆威化巧克力方便隨身帶。',place:'挪威各大超市',priority:'⭐ 必買｜🎁 可當伴手禮',image:'../assets/shopping/norway/Kvikk Lunsj(挪威版kitkat).jpg'},
+      {label:'🥔 洋芋片・零食',products:[
         {item:'KIMS 洋芋片',detail:'挪威常見洋芋片，適合飯店宵夜或戶外活動備糧。',place:'挪威各大超市',priority:'👍 推薦',image:'../assets/shopping/norway/KIMS洋芋片.jpg'}]},
-      {label:'🥣 早餐・甜點・熱飲',products:[
+      {label:'🥣 早餐・甜點',products:[
         {item:'Risengrynsgrøt 藍莓米布丁',detail:'加了藍莓的挪威米布丁，適合早餐或甜點；冷藏品建議旅途中吃。',place:'超市冷藏區',priority:'🍽️ 當地吃',image:'../assets/shopping/norway/加了藍莓的米布丁Risengrynsgrøt.jpg'},
-        {item:'TINE Rislunsj 米布丁',detail:'方便即食的冷藏米布丁，適合早餐或移動途中。',place:'超市冷藏區',priority:'🍽️ 當地吃',image:'../assets/shopping/norway/TINE Rislunsj 米布丁.jpg'},
-        {item:'TORO 巧克力粉包',detail:'可沖泡挪威熱巧克力，適合冷天晚上飲用，也方便帶回。',place:'挪威各大超市',priority:'👍 推薦｜🎁 可當伴手禮',image:'../assets/shopping/norway/TORO巧克力粉包.jpg'}]},
+        {item:'TINE Rislunsj 米布丁',detail:'方便即食的冷藏米布丁，適合早餐或移動途中。',place:'超市冷藏區',priority:'🍽️ 當地吃',image:'../assets/shopping/norway/TINE Rislunsj 米布丁.jpg'}]},
       {label:'🥤 飲料',products:[
         {item:'SUNNIVA 蘋果汁',detail:'挪威常見果汁，適合早餐或移動途中直接喝。',place:'挪威各大超市',priority:'👍 推薦',image:'../assets/shopping/norway/SUNNIVA蘋果汁.jpg'},
         {item:'挪威啤酒',detail:'可挑當地品牌回飯店品飲；購買時留意販售時段與年齡規定。',place:'超市／Vinmonopolet（依酒精濃度）',priority:'🍺 當地喝',image:'../assets/shopping/norway/啤酒.jpg'}]},
@@ -55,9 +48,6 @@ window.AURORA_SHOPPING_DATA={
         {item:'超市秤重蝦子',detail:'即食海鮮，適合當日晚餐或宵夜；需全程冷藏。',place:'MENY／大型超市海鮮櫃',priority:'🍽️ 當地吃',image:'../assets/shopping/norway/超市賣的秤重蝦子.jpg'},
         {item:'生食級鮭魚',detail:'挪威當地體驗品，購買後儘快食用並維持冷藏，不建議長途攜帶。',place:'MENY／大型超市冷藏櫃',priority:'🍽️ 當地吃',image:'../assets/shopping/norway/生食級鮭魚.png'},
         {item:'棕色起司 Brunost',detail:'焦糖乳香是挪威代表風味，可配吐司或鬆餅；冷藏品建議旅途中吃。',place:'挪威各大超市冷藏區',priority:'⭐ 必吃',image:'../assets/shopping/norway/棕色起司.jpg'}]},
-      {label:'🧴 保健・實用好物',products:[
-        {item:'挪威魚油',detail:'常見北歐保健品；依自己需求選膠囊或液態，確認成分、劑量與保存方式。',place:'藥局／超市保健區',priority:'👍 推薦｜🎁 可自用',image:'../assets/shopping/norway/魚油.png'},
-        {item:'魚油護膚膏（魚油凡士林）',detail:'以魚油為特色的滋潤護膚品，適合乾冷天氣使用。',place:'藥局／紀念品店',priority:'👍 推薦｜🎁 可當伴手禮',image:'../assets/shopping/norway/魚油製作的【凡士林】.jpg'}]},
       {label:'⚠️ 入境前先確認',products:[
         {item:'鱈魚乾／鹿肉乾／鯨魚乾',detail:'可在挪威當地品嚐；其中肉類與動物產品帶回台灣限制較嚴，購買前務必查驗最新入境規定，鹿肉乾與鯨魚乾不建議帶回。',place:'超市／紀念品店',priority:'⚠️ 當地吃較安心',image:'../assets/shopping/norway/鱈魚乾、鹿肉乾、鯨魚乾.png'}]}
     ],note:'冷藏、生鮮與酒類以旅途中食用為主；肉類、海鮮、乳製品及動物產品帶回台灣前，請再確認最新檢疫與入境規定。'},
