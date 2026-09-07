@@ -9,34 +9,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Replace 10/10 Amsterdam van with train
+      - name: Replace 10/10 Amsterdam van with train and remove stale pickup
         run: |
           python3 - <<'PY'
           from pathlib import Path
           import re
-          p=Path('assets/common.js'); s=p.read_text(encoding='utf-8')
+
+          # Canonical 10/10 transport data: train only.
+          p=Path('assets/common.js')
+          s=p.read_text(encoding='utf-8')
           def repl(m):
             o=m.group(0)
-            if 'Amsterdam ID' not in o or not re.search(r'Schiphol|AMS', o, re.I): return o
+            if 'Amsterdam ID' not in o or not re.search(r'Schiphol|AMS', o, re.I):
+              return o
             return "{date:'10/10',type:'火車',route:'Amsterdam ID Aparthotel→Schiphol Airport',service:'步行＋NS Sprinter 8223 Hoofddorp',time:'06:45 從飯店出發；06:55 Amsterdam Sloterdijk搭車 → 07:05 Schiphol Airport',method:'步行約10分鐘／700公尺 → Sprinter 8223；約10分鐘、2站、11號月台',duration:'約20分鐘',currency:'EUR',cost:4.9,status:'尚未購票',note:'尚未購票。依路線：06:45 Amsterdam ID Aparthotel出發，步行約10分鐘／700公尺到Amsterdam Sloterdijk；06:55搭Sprinter 8223 Hoofddorp，07:05抵達Schiphol Airport。'}"
           s2=re.sub(r"\{[^{}]*date\s*:\s*['\"]10/10['\"][^{}]*\}",repl,s)
-          if s2==s: raise SystemExit('No 10/10 Amsterdam object found in common.js')
+          if s2==s:
+            raise SystemExit('No 10/10 Amsterdam object found in common.js')
           p.write_text(s2,encoding='utf-8')
-          PY
-      - name: Remove remaining 10/10 Amsterdam pickup card from transport page
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path('transport/index.html'); s=p.read_text(encoding='utf-8')
+
+          # Also remove any stale 10/10 Amsterdam pickup rendered by the
+          # transport page when it is sourced from older/generated data.
+          p=Path('transport/index.html')
+          s=p.read_text(encoding='utf-8')
           old="APP_DATA.transport = APP_DATA.transport.filter(t => !(String(t.date||'') === '10/10' && /Amsterdam ID.*Schiphol Airport/i.test(String(t.route||''))));"
-          new="APP_DATA.transport = APP_DATA.transport.filter(t => !(String(t.date||'') === '10/10' && /Amsterdam ID.*(?:Schiphol Airport|AMS)/i.test(String(t.route||''))));"
+          new="APP_DATA.transport = APP_DATA.transport.filter(t => !(String(t.date||'') === '10/10' && /Amsterdam ID/i.test(String(t.route||'')) && /(Schiphol Airport|AMS)/i.test(String(t.route||''))));"
           if old in s:
             s=s.replace(old,new)
           p.write_text(s,encoding='utf-8')
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/common.js transport/index.html
+          git add assets/common.js transport/index.html .github/workflows/fix-10-10-amsterdam.yml
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "fix: remove remaining 10/10 Amsterdam pickup"
+          git commit -m "fix: remove stale 10/10 Amsterdam pickup entry"
           git push
