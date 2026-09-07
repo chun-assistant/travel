@@ -1,0 +1,26 @@
+name: Sync upstream shopping changes
+on:
+  push:
+    branches: [sync-shopping-2026-09-07]
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Copy upstream shopping data and image assets
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add upstream https://github.com/yangchinghsuan955-web/europe-trip-2026.git
+          git fetch upstream main
+          git checkout upstream/main -- assets/shopping-data.js assets/finland-shopping-extra.js assets/shopping
+          git add assets/shopping-data.js assets/finland-shopping-extra.js assets/shopping
+          git commit -m "sync: adopt upstream shopping data and product images"
+          git rm .github/workflows/sync-shopping-upstream.yml
+          git commit -m "chore: remove temporary shopping sync workflow"
+          git push origin HEAD:sync-shopping-2026-09-07
