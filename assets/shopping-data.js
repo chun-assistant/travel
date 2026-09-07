@@ -51,7 +51,16 @@ window.AURORA_SHOPPING_DATA={
       {label:'⚠️ 入境前先確認',products:[
         {item:'鱈魚乾／鹿肉乾／鯨魚乾',detail:'可在挪威當地品嚐；其中肉類與動物產品帶回台灣限制較嚴，購買前務必查驗最新入境規定，鹿肉乾與鯨魚乾不建議帶回。',place:'超市／紀念品店',priority:'⚠️ 當地吃較安心',image:'../assets/shopping/norway/鱈魚乾、鹿肉乾、鯨魚乾.png'}]}
     ],note:'冷藏、生鮮與酒類以旅途中食用為主；肉類、海鮮、乳製品及動物產品帶回台灣前，請再確認最新檢疫與入境規定。'},
-    {date:'10/8–10/9',city:'🇳🇱 阿姆斯特丹',use:'自理餐＋回程零食＋最後伴手禮',stores:'Albert Heijn／HEMA／Albert Cuyp Market',items:['早餐食品','Stroopwafel／餅乾','巧克力與回程零食','飲用水'],groups:[{label:'🧺 先保留原有項目',products:[{item:'早餐食品',detail:'10/9、回程前可補早餐與簡單零食。',place:'Albert Heijn／HEMA',priority:'👍 推薦',image:''},{item:'Stroopwafel／餅乾',detail:'阿姆斯特丹最後採買與回台伴手禮。',place:'Albert Heijn／HEMA／Albert Cuyp',priority:'⭐ 必買',image:''}]}],note:'阿姆斯特丹區先保留既有方向，後續再補正式商品卡。'}
+    {date:'10/8–10/9',city:'🇳🇱 阿姆斯特丹',use:'旅途中試吃＋回程零食／飲品',stores:'Albert Heijn／Jumbo／HEMA／酒類通路',items:['Drop 甘草糖','Lindt 瑞士蓮巧克力','JOPPIE 薯條醬口味洋芋片','Bols 荷蘭琴酒'],groups:[
+      {label:'🍬 荷蘭特色糖果',products:[
+        {item:'各式甘草糖 Drop',detail:'荷蘭常見甘草糖，帶有濃烈甘草、鹹味或近似八角的風味，接受度很兩極；建議先買小包試吃。',place:'Albert Heijn／Jumbo／HEMA',priority:'👀 小包試吃',image:'../assets/shopping/amsterdam/各式各樣甘草糖Drop.webp'}]},
+      {label:'🍫 歐洲巧克力',products:[
+        {item:'Lindt 瑞士蓮巧克力',detail:'歐洲常見巧克力品牌，當地價格通常較台灣有優勢；但並非荷蘭品牌，適合看到喜歡的口味再買。',place:'Albert Heijn／Jumbo／巧克力店',priority:'👍 價格合適再買',image:'../assets/shopping/amsterdam/Lindt瑞士蓮巧克力.webp'}]},
+      {label:'🥔 荷蘭限定鹹食',products:[
+        {item:'JOPPIE 薯條醬口味洋芋片',detail:'把荷蘭人氣 Joppiesaus 薯條醬做成洋芋片口味，適合在飯店或回程途中品嚐。',place:'Albert Heijn／Jumbo／超市零食區',priority:'⭐ 必試',image:'../assets/shopping/amsterdam/JOPPIE薯條醬口味洋芋片.webp'}]},
+      {label:'🍸 荷蘭酒類',products:[
+        {item:'Bols 荷蘭琴酒／Genever',detail:'Bols 是歷史悠久的荷蘭酒品牌；可挑小瓶自用，購買及攜帶時留意航空公司與台灣酒類免稅規定。',place:'Gall & Gall／機場免稅店／酒類通路',priority:'👍 酒類愛好者',image:'../assets/shopping/amsterdam/荷蘭琴酒.webp'}]}
+    ],note:'此頁只放旅途中試吃或自用的超市品項；適合帶回送人的荷蘭代表商品已集中在「伴手禮推薦」，兩頁不重複。'}
   ],
   souvenirs:[
     {country:'🇦🇹 維也納',category:'⭐ 維也納代表',priority:'⭐ 必買',item:'Manner Original Neapolitaner 威化餅',reason:'粉紅包裝辨識度高，維也納代表性強、也適合分送。',place:'Manner Shop／BILLA／SPAR',tag:'維也納代表',image:'https://images.cdn.europe-west1.gcp.commercetools.com/723b2575-66c7-4d92-ae49-82bf1d168d26/00-790860-0728303564-6RlkpIg_-medium.jpg',source:'https://www.manner.com/de-at/sortiment/waffelprodukte/manner-original-neapolitaner-waffeln-75g/',sourceLabel:'Manner 官方商品頁'},
@@ -82,9 +91,15 @@ window.AURORA_SHOPPING_DATA={
     {country:'🇳🇴 挪威',category:'🧥 挪威服飾・設計',priority:'👍 推薦',item:'Helly Hansen 服飾',reason:'挪威戶外品牌，機能性高；適合挑外套、帽子或實用配件。',place:'品牌門市／戶外用品店',tag:'戶外機能',image:'../assets/shopping/norway/Helly Hansen 服飾.webp'},
     {country:'🇳🇴 挪威',category:'🧥 挪威服飾・設計',priority:'⭐ 經典',item:'Dale of Norway 服飾',reason:'挪威傳統針織圖騰與羊毛工藝代表，紀念性最高，但價格較高。',place:'品牌門市／百貨／紀念品店',tag:'挪威羊毛',image:'../assets/shopping/norway/Dale of Norway 服飾.jpg'},
     {country:'🇳🇴 挪威',category:'🧥 挪威服飾・設計',priority:'👍 推薦',item:'Holzweiler 圍巾與服飾',reason:'挪威設計品牌，風格現代；圍巾兼具實穿與紀念價值。',place:'品牌門市／百貨',tag:'挪威設計',image:'../assets/shopping/norway/Holzweiler圍巾與服飾.jpg'},
-    {country:'🇳🇱 阿姆斯特丹',item:'Stroopwafel',reason:'經典、好帶、超市與市場都容易買',place:'Albert Cuyp／超市',tag:'必買'},
-    {country:'🇳🇱 阿姆斯特丹',item:'荷蘭起司',reason:'口味選擇多，購買前確認攜帶與入境規定',place:'起司店／市場',tag:'食品'},
-    {country:'🇳🇱 阿姆斯特丹',item:'HEMA／Museum Shop 小物',reason:'文具、設計小物或博物館限定品，紀念性高',place:'HEMA／Museum Shop',tag:'小物'}
+    {country:'🇳🇱 阿姆斯特丹',category:'⭐ 荷蘭代表食品',priority:'⭐ 必買',item:'Tony’s Chocolonely 巧克力',reason:'荷蘭人氣巧克力品牌，口味多、單片份量較重；台灣也買得到，建議挑荷蘭限定或少見口味。',place:'Albert Heijn／Tony’s Store／機場',tag:'荷蘭巧克力',image:'../assets/shopping/amsterdam/TONY’S巧克力.webp'},
+    {country:'🇳🇱 阿姆斯特丹',category:'⭐ 荷蘭代表食品',priority:'⭐ 必買',item:'Speculaas 肉桂香料餅乾',reason:'荷蘭經典香料餅乾，帶肉桂與暖香料風味；部分品牌甜度較高，可先比較配方與包裝。',place:'Albert Heijn／Jumbo／HEMA',tag:'香料餅乾',image:'../assets/shopping/amsterdam/肉桂香料餅乾Speculaas.webp'},
+    {country:'🇳🇱 阿姆斯特丹',category:'⭐ 荷蘭代表食品',priority:'👍 推薦',item:'Wilhelmina 女王薄荷糖',reason:'以荷蘭女王命名的經典薄荷糖，包裝有辨識度、體積小，很適合分送。',place:'Albert Heijn／Jumbo／HEMA',tag:'女王薄荷糖',image:'../assets/shopping/amsterdam/Withelmina女王薄荷糖.webp'},
+    {country:'🇳🇱 阿姆斯特丹',category:'⭐ 荷蘭代表食品',priority:'⭐ 必買',item:'荷蘭起司 Gouda／Edam',reason:'高達與艾登是最具代表性的荷蘭起司。優先選原廠密封、成分不含肉的款式；乳酪屬無須申報動物檢疫品，但自用食品仍受海關與食藥規範，回台前請確認最新規定。',place:'起司專賣店／Albert Cuyp／超市',tag:'荷蘭起司',image:'../assets/shopping/amsterdam/起司.webp'},
+    {country:'🇳🇱 阿姆斯特丹',category:'⭐ 荷蘭代表食品',priority:'👍 推薦',item:'PICKWICK 茶',reason:'歷史悠久的荷蘭茶品牌，口味選擇多、包裝輕巧；適合挑荷蘭限定或特色風味。',place:'Albert Heijn／Jumbo／超市茶區',tag:'荷蘭茶品牌',image:'../assets/shopping/amsterdam/PICKWICK茶品牌.webp'},
+    {country:'🇳🇱 阿姆斯特丹',category:'⭐ 荷蘭代表食品',priority:'⭐ 必買',item:'Stroopwafel 焦糖煎餅',reason:'荷蘭最經典伴手禮之一，超市盒裝方便帶；想現吃則可到 Albert Cuyp Market 買現做款。',place:'Albert Heijn／HEMA／Albert Cuyp Market',tag:'焦糖煎餅',image:'../assets/shopping/amsterdam/焦糖煎餅 Stroopwafel.webp'},
+    {country:'🇳🇱 阿姆斯特丹',category:'⭐ 荷蘭代表食品',priority:'👍 推薦',item:'Hopjes 咖啡糖',reason:'帶咖啡與焦糖風味的荷蘭傳統硬糖，歷史可追溯至 18 世紀末，輕巧適合分送。',place:'超市／糖果店／紀念品店',tag:'咖啡糖',image:'../assets/shopping/amsterdam/咖啡糖 Hopjes.webp'},
+    {country:'🇳🇱 阿姆斯特丹',category:'🐰 荷蘭限定紀念品',priority:'⭐ 必買',item:'Miffy 米菲兔荷蘭限定',reason:'荷蘭代表角色；史基浦機場可留意穿著專屬制服的空服員限定版，紀念性很高。',place:'史基浦機場／de winkel van nijntje／博物館商店',tag:'機場限定',image:'../assets/shopping/amsterdam/Miffy 荷蘭限定.jpg'},
+    {country:'🇳🇱 阿姆斯特丹',category:'🏠 荷蘭生活設計',priority:'👍 推薦',item:'Dille & Kamille',reason:'像荷蘭版無印良品，主打天然材質的廚房用品、居家擺設與清潔用品；適合挑木製廚具、茶巾或小型生活雜貨。',place:'Dille & Kamille 門市',tag:'生活雜貨',image:''}
   ]
 };
 
