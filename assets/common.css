@@ -1,6 +1,6 @@
 @import url("./common-base.css");
 @import url("./skin-nordic.css?v=20260907-moomin2");
-@import url("./skin-hero-approved.css?v=20260907-v7");
+@import url("./skin-hero-approved.css?v=20260907-photo1");
 
 /* Flight online check-in highlight — overlay only, never changes day-chip height. */
 .day-chip[data-day="1"],.day-chip[data-day="9"],.day-chip[data-day="14"],.day-chip[data-day="15"]{position:relative;box-shadow:0 0 0 2px rgba(197,90,83,.28),0 6px 16px rgba(197,90,83,.10)}
