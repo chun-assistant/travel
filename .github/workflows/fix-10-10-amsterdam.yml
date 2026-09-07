@@ -9,38 +9,64 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Replace 10/10 Amsterdam van with train and remove stale pickup
+      - name: Synchronize canonical 10/10 train data everywhere
         run: |
           python3 - <<'PY'
           from pathlib import Path
           import re
 
-          # Canonical 10/10 transport data: train only.
-          p=Path('assets/common.js')
-          s=p.read_text(encoding='utf-8')
-          def repl(m):
-            o=m.group(0)
-            if 'Amsterdam ID' not in o or not re.search(r'Schiphol|AMS', o, re.I):
-              return o
-            return "{date:'10/10',type:'火車',route:'Amsterdam ID Aparthotel→Schiphol Airport',service:'步行＋NS Sprinter 8223 Hoofddorp',time:'06:45 從飯店出發；06:55 Amsterdam Sloterdijk搭車 → 07:05 Schiphol Airport',method:'步行約10分鐘／700公尺 → Sprinter 8223；約10分鐘、2站、11號月台',duration:'約20分鐘',currency:'EUR',cost:4.9,status:'尚未購票',note:'尚未購票。依路線：06:45 Amsterdam ID Aparthotel出發，步行約10分鐘／700公尺到Amsterdam Sloterdijk；06:55搭Sprinter 8223 Hoofddorp，07:05抵達Schiphol Airport。'}"
-          s2=re.sub(r"\{[^{}]*date\s*:\s*['\"]10/10['\"][^{}]*\}",repl,s)
-          if s2==s:
-            raise SystemExit('No 10/10 Amsterdam object found in common.js')
-          p.write_text(s2,encoding='utf-8')
+          p = Path('assets/common.js')
+          s = p.read_text(encoding='utf-8')
 
-          # Also remove any stale 10/10 Amsterdam pickup rendered by the
-          # transport page when it is sourced from older/generated data.
-          p=Path('transport/index.html')
-          s=p.read_text(encoding='utf-8')
-          old="APP_DATA.transport = APP_DATA.transport.filter(t => !(String(t.date||'') === '10/10' && /Amsterdam ID.*Schiphol Airport/i.test(String(t.route||''))));"
-          new="APP_DATA.transport = APP_DATA.transport.filter(t => !(String(t.date||'') === '10/10' && /Amsterdam ID/i.test(String(t.route||'')) && /(Schiphol Airport|AMS)/i.test(String(t.route||''))));"
-          if old in s:
-            s=s.replace(old,new)
-          p.write_text(s,encoding='utf-8')
+          train = '''{"date":"10/10","type":"火車","route":"Amsterdam ID Aparthotel→Schiphol Airport","service":"步行＋NS Sprinter 8223 Hoofddorp","time":"06:45 從飯店出發；06:55 Amsterdam Sloterdijk搭車 → 07:05 Schiphol Airport","method":"步行約10分鐘／700公尺 → Sprinter 8223；約10分鐘、2站、11號月台","duration":"約20分鐘","currency":"EUR","cost":4.9,"status":"尚未購票","map":"https://www.google.com/maps/search/?api=1&query=Amsterdam%20ID%20Aparthotel%20Sloterdijk%20NS%20Sprinter%208223%20Schiphol","note":"尚未購票。依路線：06:45 Amsterdam ID Aparthotel出發，步行約10分鐘／700公尺到Amsterdam Sloterdijk；06:55搭Sprinter 8223 Hoofddorp，07:05抵達Schiphol Airport。"}'''
+
+          # Replace the canonical APP_DATA.transport 10/10 entry, regardless of its old type/name.
+          pat = re.compile(r'\{"date"\s*:\s*"10/10"\s*,\s*"type"\s*:\s*"[^"]*"\s*,\s*"route"\s*:\s*"Amsterdam ID[^{}]*?\}')
+          s, n = pat.subn(train, s)
+          if n == 0:
+              raise SystemExit('10/10 Amsterdam transport entry not found')
+
+          # Daily overview: 10/10 is train, not van.
+          overview_pat = re.compile(r'\{"day":17,"date":"2026-10-10"[^{}]*?\}')
+          overview = '{"day":17,"date":"2026-10-10","city":"阿姆斯特丹→台北","highlight":"AMS退稅；06:45出發、NS Sprinter 8223；11:00 CI0074","transport":"步行＋NS火車＋直飛","hotel":"機上","status":"火車待購","effort":"低","original":0,"extra":1283,"estimate":1283,"note":"取消7人van；06:45飯店出發，06:55 Sloterdijk搭車，07:05抵達Schiphol"}'
+          s, n2 = overview_pat.subn(overview, s)
+          if n2 == 0:
+              raise SystemExit('10/10 daily overview not found')
+
+          # Remove old 10/10 van event and replace the luggage event with train timing.
+          old_van_event = re.compile(r'\{"day":17,"date":"2026-10-10"[^{}]*?"title":"7人van前往AMS；原表不辦退稅版本可最晚07:40出發"[^{}]*?\}')
+          s, n3 = old_van_event.subn('', s)
+          if n3 == 0:
+              raise SystemExit('old 10/10 van daily event not found')
+
+          old_luggage = re.compile(r'\{"day":17,"date":"2026-10-10"[^{}]*?"title":"退房、7人行李裝車"[^{}]*?\}')
+          new_luggage = '{"day":17,"date":"2026-10-10","city":"阿姆斯特丹","start":"07:00","end":"07:15","type":"住宿","title":"退房、整理行李與最後確認退稅品","place":"Amsterdam ID Aparthotel","map":"https://www.google.com/maps/search/?api=1&query=Amsterdam%20ID%20Aparthotel","transport":"原地","duration":"15分鐘","currency":"EUR","cost":0,"costNote":"—","status":"已確認","ticket":"—","note":"不裝車；07:15前往車站"}'
+          s, n4 = old_luggage.subn(new_luggage, s)
+          if n4 == 0:
+              raise SystemExit('old 10/10 luggage event not found')
+
+          # Insert the actual walk + train events immediately before the 08:05 airport event.
+          marker = '{"day":17,"date":"2026-10-10","city":"阿姆斯特丹","start":"08:05"'
+          events = '{"day":17,"date":"2026-10-10","city":"阿姆斯特丹","start":"06:45","end":"06:55","type":"交通","title":"Amsterdam ID Aparthotel步行至Amsterdam Sloterdijk","place":"Amsterdam Sloterdijk Station","map":"https://www.google.com/maps/search/?api=1&query=Amsterdam%20ID%20Aparthotel%20Amsterdam%20Sloterdijk","transport":"步行","duration":"約10分鐘／700公尺","currency":"EUR","cost":0,"costNote":"—","status":"已排定","ticket":"—","note":"06:45離店，拖行李步行至Sloterdijk"},{"day":17,"date":"2026-10-10","city":"阿姆斯特丹","start":"06:55","end":"07:05","type":"交通","title":"Amsterdam Sloterdijk搭NS Sprinter 8223 Hoofddorp前往Schiphol","place":"Amsterdam Sloterdijk Station → Schiphol Airport","map":"https://www.google.com/maps/search/?api=1&query=Amsterdam%20Sloterdijk%20Schiphol%20NS%20Sprinter%208223","transport":"NS Sprinter 8223 Hoofddorp","duration":"約10分鐘／2站","currency":"EUR","cost":4.9,"costNote":"約€4.9／人","status":"尚未購票","ticket":"NS／OVpay","note":"11號月台；07:05抵達Schiphol Airport"},'
+          if marker not in s:
+              raise SystemExit('08:05 Schiphol event marker not found')
+          s = s.replace(marker, events + marker, 1)
+
+          # Remove stale booking/prep entries that still promise a 7-person van.
+          s = re.sub(r'\{"category":"接送","date":"10/10","item":"Amsterdam ID→AMS 07:15"[^{}]*?\},', '', s)
+          s = re.sub(r'\{"phase":"出發前30天","category":"接送","item":"預訂KKN接送與AMS 7人van"[^{}]*?\},', '{"phase":"出發前7天","category":"交通","item":"確認AMS 10/10 NS Sprinter 8223與退稅動線","status":"待確認","owner":"團長","note":"06:45離開Amsterdam ID；06:55 Sloterdijk；07:05 Schiphol"},', s)
+
+          p.write_text(s, encoding='utf-8')
+
+          # Keep the transport page's defensive filter aligned with the canonical data.
+          p = Path('transport/index.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace("APP_DATA.transport = APP_DATA.transport.filter(t => !(String(t.date||'') === '10/10' && /Amsterdam ID.*Schiphol Airport/i.test(String(t.route||''))));", "APP_DATA.transport = APP_DATA.transport.filter(t => !(String(t.date||'') === '10/10' && /Amsterdam ID/i.test(String(t.route||'')) && /(Schiphol Airport|AMS)/i.test(String(t.route||''))));")
+          p.write_text(s, encoding='utf-8')
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/common.js transport/index.html .github/workflows/fix-10-10-amsterdam.yml
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "fix: remove stale 10/10 Amsterdam pickup entry"
+          git commit -m "fix: make 10/10 Amsterdam train consistent"
           git push
