@@ -80,3 +80,30 @@ body .bottom-nav .nav-btn svg{position:absolute!important;width:1px!important;he
     text-shadow:0 1px 0 rgba(255,255,255,.72)!important
   }
 }
+
+/* Full-bleed uploaded artwork for the five bottom navigation items. */
+body .bottom-nav{
+  padding-top:6px!important
+}
+body .bottom-nav .nav-btn{
+  min-height:70px!important;
+  padding:1px!important;
+  font-size:0!important;
+  overflow:hidden!important
+}
+body .bottom-nav .nav-btn::before{
+  width:clamp(54px,17vw,68px)!important;
+  height:clamp(54px,17vw,68px)!important;
+  margin:0 auto!important;
+  border-radius:15px!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  background-size:contain!important;
+  filter:drop-shadow(0 3px 7px rgba(47,83,93,.10))!important
+}
+body .bottom-nav .nav-btn::after{content:none!important}
+body .bottom-nav .nav-btn:nth-child(1)::before{background-image:url("./skin/CEAC510F-7333-464B-A71A-9A98324A0347.png?v=20260908-fullnav1")!important}
+body .bottom-nav .nav-btn:nth-child(2)::before{background-image:url("./skin/5CB28D8D-8530-43BD-A822-2122162B9225.png?v=20260908-fullnav1")!important}
+body .bottom-nav .nav-btn:nth-child(3)::before{background-image:url("./skin/9A402E72-D080-448D-B7E2-BA94C7BDCD87.png?v=20260908-fullnav1")!important}
+body .bottom-nav .nav-btn:nth-child(4)::before{background-image:url("./skin/4F81B1FA-E781-4604-B7FF-7387BB719789.png?v=20260908-fullnav1")!important}
+body .bottom-nav .nav-btn:nth-child(5)::before{background-image:url("./skin/E54BF95C-E31A-4067-B470-A61AFDBF7954.png?v=20260908-fullnav1")!important}
