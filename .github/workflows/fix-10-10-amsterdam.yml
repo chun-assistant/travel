@@ -1,72 +1,58 @@
-name: Fix 10-10 Amsterdam transport
+name: Sync upstream Europe trip changes
 on:
   push:
     branches: [europe-trip-2026]
 permissions:
   contents: write
 jobs:
-  fix:
+  sync:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Synchronize 10/10 daily itinerary and transport
+        with:
+          fetch-depth: 0
+      - name: Cherry-pick today's upstream commits
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add upstream https://github.com/yangchinghsuan955-web/europe-trip-2026.git
+          git fetch upstream main
+          mapfile -t commits < <(git log --reverse --since="2026-09-07 00:00:00 UTC" --format=%H upstream/main)
+          echo "Upstream commits today: ${#commits[@]}"
+          for sha in "${commits[@]}"; do
+            echo "Cherry-picking $sha"
+            if git cherry-pick "$sha"; then
+              continue
+            fi
+            if git diff --name-only --diff-filter=U | grep -qx 'assets/common.js'; then
+              git checkout --ours -- assets/common.js
+              git add assets/common.js
+              if git diff --name-only --diff-filter=U | grep -q .; then
+                echo 'Unresolved conflicts remain outside common.js'
+                git cherry-pick --abort
+                exit 1
+              fi
+              GIT_EDITOR=true git cherry-pick --continue
+            else
+              echo 'Unexpected conflict; aborting rather than guessing.'
+              git cherry-pick --abort
+              exit 1
+            fi
+          done
+      - name: Verify 10/10 train correction survived
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          import json, re
-
           p = Path('assets/common.js')
           s = p.read_text(encoding='utf-8')
-          m = re.search(r'const APP_DATA = (\{.*?\});\s*\n\s*const \$ =', s, re.S)
-          if not m:
-              raise SystemExit('APP_DATA block not found')
-          data = json.loads(m.group(1))
-
-          # Canonical Day 17 overview.
-          for d in data['overview']:
-              if d.get('day') == 17 and d.get('date') == '2026-10-10':
-                  d.update({
-                      'city':'阿姆斯特丹→台北',
-                      'highlight':'AMS退稅；06:45出發、NS Sprinter 8223；11:00 CI0074',
-                      'transport':'步行＋NS火車＋直飛',
-                      'status':'火車待購',
-                      'extra':1283,
-                      'estimate':1283,
-                      'note':'取消7人van；06:45飯店出發，06:55 Sloterdijk搭車，07:05抵達Schiphol'
-                  })
-                  break
-          else:
-              raise SystemExit('10/10 daily overview not found')
-
-          # Keep all later Day 17 airport/flight events, but rebuild the morning sequence in exact time order.
-          later = [e for e in data['events'] if e.get('day') == 17 and e.get('date') == '2026-10-10' and e.get('start') not in ('06:00','06:30','06:45','06:55','07:00','07:05')]
-          other = [e for e in data['events'] if not (e.get('day') == 17 and e.get('date') == '2026-10-10')]
-          morning = [
-              {'day':17,'date':'2026-10-10','city':'阿姆斯特丹','start':'06:00','end':'06:30','type':'早餐','title':'房內簡單早餐、最後整理隨身行李','place':'Amsterdam ID Aparthotel','map':'https://www.google.com/maps/search/?api=1&query=Amsterdam%20ID%20Aparthotel','transport':'飯店內','duration':'30分鐘','currency':'EUR','cost':0,'costNote':'前晚採買','status':'已排定','ticket':'—','note':'護照、退稅文件、手機與充電設備隨身','source':'2026歐洲之旅.xlsx'},
-              {'day':17,'date':'2026-10-10','city':'阿姆斯特丹','start':'06:30','end':'06:45','type':'住宿','title':'退房、確認房卡與行李','place':'Amsterdam ID Aparthotel','map':'https://www.google.com/maps/search/?api=1&query=Amsterdam%20ID%20Aparthotel','transport':'原地','duration':'15分鐘','currency':'EUR','cost':0,'costNote':'—','status':'已確認','ticket':'—','note':'06:45準時離開飯店；不裝車、不安排接送車','source':'2026歐洲之旅.xlsx'},
-              {'day':17,'date':'2026-10-10','city':'阿姆斯特丹','start':'06:45','end':'06:55','type':'交通','title':'Amsterdam ID Aparthotel步行至Amsterdam Sloterdijk','place':'Amsterdam Sloterdijk Station','map':'https://www.google.com/maps/search/?api=1&query=Amsterdam%20ID%20Aparthotel%20Amsterdam%20Sloterdijk','transport':'步行','duration':'約10分鐘／700公尺','currency':'EUR','cost':0,'costNote':'—','status':'已排定','ticket':'—','note':'拖行李步行至Sloterdijk；預留月台找車時間','source':'2026歐洲之旅.xlsx'},
-              {'day':17,'date':'2026-10-10','city':'阿姆斯特丹','start':'06:55','end':'07:05','type':'交通','title':'Amsterdam Sloterdijk搭NS Sprinter 8223 Hoofddorp前往Schiphol','place':'Amsterdam Sloterdijk Station → Schiphol Airport','map':'https://www.google.com/maps/search/?api=1&query=Amsterdam%20Sloterdijk%20Schiphol%20NS%20Sprinter%208223','transport':'NS Sprinter 8223 Hoofddorp','duration':'約10分鐘／2站','currency':'EUR','cost':4.9,'costNote':'約€4.9／人','status':'尚未購票','ticket':'NS／OVpay','note':'11號月台；07:05抵達Schiphol Airport','source':'2026歐洲之旅.xlsx'},
-              {'day':17,'date':'2026-10-10','city':'阿姆斯特丹','start':'07:05','end':'08:05','type':'機場／交通','title':'Schiphol抵達、前往退稅與CI0074報到區','place':'Amsterdam Airport Schiphol','map':'https://www.google.com/maps/search/?api=1&query=Amsterdam%20Sloterdijk%20Schiphol%20Airport','transport':'步行／機場動線','duration':'60分鐘','currency':'EUR','cost':0,'costNote':'—','status':'已排定','ticket':'CI0074','note':'抵達後依指標前往退稅與報到區；需查驗商品先不要托運','source':'2026歐洲之旅.xlsx'}
-          ]
-          data['events'] = other + morning + later
-
-          # Canonical transport list: exactly one 10/10 train entry.
-          data['transport'] = [t for t in data['transport'] if not (t.get('date')=='10/10' and ('Amsterdam ID' in str(t.get('route','')) or '7人van' in str(t.get('service',''))))]
-          data['transport'].append({'date':'10/10','type':'火車','route':'Amsterdam ID Aparthotel→Schiphol Airport','service':'步行＋NS Sprinter 8223 Hoofddorp','time':'06:45 從飯店出發；06:55 Amsterdam Sloterdijk搭車 → 07:05 Schiphol Airport','method':'步行約10分鐘／700公尺 → Sprinter 8223；約10分鐘、2站、11號月台','duration':'約20分鐘','currency':'EUR','cost':4.9,'status':'尚未購票','map':'https://www.google.com/maps/search/?api=1&query=Amsterdam%20ID%20Aparthotel%20Sloterdijk%20NS%20Sprinter%208223%20Schiphol','note':'尚未購票。依路線：06:45 Amsterdam ID Aparthotel出發，步行約10分鐘／700公尺到Amsterdam Sloterdijk；06:55搭Sprinter 8223 Hoofddorp，07:05抵達Schiphol Airport。'})
-
-          # Remove stale 10/10 van booking/prep references.
-          data['bookings'] = [b for b in data['bookings'] if not (b.get('date')=='10/10' and ('Amsterdam ID→AMS' in str(b.get('item','')) or '7人van' in str(b.get('item',''))))]
-          for i,b in enumerate(data['prep']):
-              if b.get('phase')=='出發前30天' and b.get('category')=='接送' and 'AMS 7人van' in str(b.get('item','')):
-                  data['prep'][i] = {'phase':'出發前7天','category':'交通','item':'確認AMS 10/10 NS Sprinter 8223與退稅動線','status':'待確認','owner':'團長','note':'06:45離開Amsterdam ID；06:55 Sloterdijk；07:05 Schiphol'}
-
-          new_json = json.dumps(data, ensure_ascii=False, separators=(',',':'))
-          s = s[:m.start(1)] + new_json + s[m.end(1):]
-          p.write_text(s, encoding='utf-8')
+          if '06:55 Amsterdam Sloterdijk搭車' not in s or 'NS Sprinter 8223 Hoofddorp' not in s:
+              raise SystemExit('10/10 train correction was lost during cherry-pick')
+          if 'Amsterdam ID→AMS' in s or '7人van' in s:
+              raise SystemExit('stale 10/10 van data detected after cherry-pick')
+          print('10/10 train correction verified')
           PY
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/common.js .github/workflows/fix-10-10-amsterdam.yml
+          git add -A
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "fix: order 10/10 daily itinerary correctly"
+          git commit -m "chore: sync upstream changes while preserving itinerary fixes"
           git push
