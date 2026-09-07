@@ -59,3 +59,24 @@ body .bottom-nav .nav-btn svg{position:absolute!important;width:1px!important;he
   .hero{min-height:0!important;padding-bottom:16px!important}
   .hero-stats{margin-top:11px!important}
 }
+
+
+/* Mobile hero subtitle contrast over the watercolor image. */
+@media(max-width:640px){
+  .hero-sub{
+    display:table!important;
+    max-width:100%!important;
+    margin-top:6px!important;
+    padding:5px 10px!important;
+    border:1px solid rgba(255,255,255,.62)!important;
+    border-radius:999px!important;
+    color:#153f58!important;
+    background:rgba(255,253,248,.78)!important;
+    box-shadow:0 4px 13px rgba(27,68,84,.09)!important;
+    backdrop-filter:blur(3px)!important;
+    -webkit-backdrop-filter:blur(3px)!important;
+    font-weight:800!important;
+    line-height:1.35!important;
+    text-shadow:0 1px 0 rgba(255,255,255,.72)!important
+  }
+}
