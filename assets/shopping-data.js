@@ -33,7 +33,34 @@ window.AURORA_SHOPPING_DATA={
         {item:'Nordqvist SUOMI Blueberry Tea',detail:'SUOMI 藍莓風味紅茶，藍莓＋芬蘭意象明顯。',place:'K-Citymarket／Prisma／S-market',priority:'👍 推薦｜🎁 可當伴手禮',image:''},
         {item:'Fazer Cacao',detail:'Fazer 可可粉／可可飲；喜歡熱可可或烘焙再買。',place:'芬蘭各大超市',priority:'👌 可買',image:''}]}
     ],note:'芬蘭先以 K-Citymarket／Prisma／S-market 為主；Smash、IFA 甘草糖先留到挪威頁，不放芬蘭。'},
-    {date:'10/2–10/8',city:'🇳🇴 挪威',use:'早餐／晚餐自理與戶外活動備糧',stores:'KIWI／REMA 1000／Coop／Joker',items:['麵包、優格、水果','可快速加熱食品','巧克力、能量零食','水／熱飲','挪威零食'],groups:[{label:'🧺 先保留原有項目',products:[{item:'早餐／晚餐補貨',detail:'麵包、優格、水果、可快速加熱食品。',place:'KIWI／REMA 1000／Coop',priority:'👍 推薦',image:''},{item:'戶外活動備糧',detail:'巧克力、能量零食、水與熱飲。',place:'KIWI／REMA 1000／Coop',priority:'👍 推薦',image:''}]}],note:'挪威區先保留既有方向，後續再補正式商品卡。'},
+    {date:'10/2–10/8',city:'🇳🇴 挪威',use:'早餐／晚餐自理＋挪威特色食品體驗',stores:'KIWI／REMA 1000／Coop／Joker／MENY',items:['Bergensk Fiskesuppe','Kaviar 魚子抹醬','Freia 巧克力','Smash 巧克力牛角','IFA 甘草糖','Kvikk Lunsj','米布丁','秤重蝦子','SUNNIVA 蘋果汁','KIMS 洋芋片','魚餅魚丸','TORO 巧克力粉包','魚油','生食級鮭魚','棕色起司','啤酒','魚乾／肉乾','魚油護膚膏'],groups:[
+      {label:'🍲 挪威料理・抹醬',products:[
+        {item:'TORO Bergensk Fiskesuppe（卑爾根風味魚湯）',detail:'高 CP 值的挪威代表湯包。加入 800ml 水與 200ml 牛奶攪拌，加熱至沸騰後轉小火煮 5 分鐘，期間偶爾攪拌。',place:'KIWI／REMA 1000／Coop／MENY',priority:'⭐ 必買｜🎁 可當伴手禮',image:'../assets/shopping/norway/Bergensk Fiskesuppe（卑爾根風味魚湯）：.jpg'},
+        {item:'Kaviar 魚子抹醬',detail:'北歐常見管狀魚子抹醬，適合配麵包或水煮蛋；開封後需冷藏。',place:'KIWI／REMA 1000／Coop／MENY',priority:'👍 推薦',image:'../assets/shopping/norway/Kaviar 魚子抹醬.jpg'},
+        {item:'魚餅／魚丸',detail:'挪威超市冷藏特色食品，適合旅途中加熱當晚餐。',place:'超市冷藏區',priority:'🍽️ 當地吃',image:'../assets/shopping/norway/魚餅魚丸.jpg'}]},
+      {label:'🍫 巧克力・糖果・零食',products:[
+        {item:'Freia 巧克力',detail:'挪威國民巧克力，代表性高、口味多，自己吃或送人都適合。',place:'挪威各大超市',priority:'⭐ 必買｜🎁 可當伴手禮',image:'../assets/shopping/norway/挪威Freia巧克力.jpg'},
+        {item:'Smash 巧克力牛角',detail:'鹹脆玉米角裹牛奶巧克力，甜鹹口感很有記憶點。',place:'挪威各大超市',priority:'⭐ 必買｜🎁 可當伴手禮',image:'../assets/shopping/norway/Smash巧克力牛角.jpg'},
+        {item:'IFA 甘草糖',detail:'挪威經典甘草喉糖，體積小、適合少量體驗。',place:'挪威各大超市／便利商店',priority:'👍 推薦｜🎁 可當伴手禮',image:'../assets/shopping/norway/IFA甘草糖.jpg'},
+        {item:'Kvikk Lunsj（挪威版 KitKat）',detail:'挪威戶外活動代表零食，酥脆威化巧克力方便隨身帶。',place:'挪威各大超市',priority:'⭐ 必買｜🎁 可當伴手禮',image:'../assets/shopping/norway/Kvikk Lunsj(挪威版kitkat).jpg'},
+        {item:'KIMS 洋芋片',detail:'挪威常見洋芋片，適合飯店宵夜或戶外活動備糧。',place:'挪威各大超市',priority:'👍 推薦',image:'../assets/shopping/norway/KIMS洋芋片.jpg'}]},
+      {label:'🥣 早餐・甜點・熱飲',products:[
+        {item:'Risengrynsgrøt 藍莓米布丁',detail:'加了藍莓的挪威米布丁，適合早餐或甜點；冷藏品建議旅途中吃。',place:'超市冷藏區',priority:'🍽️ 當地吃',image:'../assets/shopping/norway/加了藍莓的米布丁Risengrynsgrøt.jpg'},
+        {item:'TINE Rislunsj 米布丁',detail:'方便即食的冷藏米布丁，適合早餐或移動途中。',place:'超市冷藏區',priority:'🍽️ 當地吃',image:'../assets/shopping/norway/TINE Rislunsj 米布丁.jpg'},
+        {item:'TORO 巧克力粉包',detail:'可沖泡挪威熱巧克力，適合冷天晚上飲用，也方便帶回。',place:'挪威各大超市',priority:'👍 推薦｜🎁 可當伴手禮',image:'../assets/shopping/norway/TORO巧克力粉包.jpg'}]},
+      {label:'🥤 飲料',products:[
+        {item:'SUNNIVA 蘋果汁',detail:'挪威常見果汁，適合早餐或移動途中直接喝。',place:'挪威各大超市',priority:'👍 推薦',image:'../assets/shopping/norway/SUNNIVA蘋果汁.jpg'},
+        {item:'挪威啤酒',detail:'可挑當地品牌回飯店品飲；購買時留意販售時段與年齡規定。',place:'超市／Vinmonopolet（依酒精濃度）',priority:'🍺 當地喝',image:'../assets/shopping/norway/啤酒.jpg'}]},
+      {label:'🦐 海鮮・乳製品',products:[
+        {item:'超市秤重蝦子',detail:'即食海鮮，適合當日晚餐或宵夜；需全程冷藏。',place:'MENY／大型超市海鮮櫃',priority:'🍽️ 當地吃',image:'../assets/shopping/norway/超市賣的秤重蝦子.jpg'},
+        {item:'生食級鮭魚',detail:'挪威當地體驗品，購買後儘快食用並維持冷藏，不建議長途攜帶。',place:'MENY／大型超市冷藏櫃',priority:'🍽️ 當地吃',image:'../assets/shopping/norway/生食級鮭魚.png'},
+        {item:'棕色起司 Brunost',detail:'焦糖乳香是挪威代表風味，可配吐司或鬆餅；冷藏品建議旅途中吃。',place:'挪威各大超市冷藏區',priority:'⭐ 必吃',image:'../assets/shopping/norway/棕色起司.jpg'}]},
+      {label:'🧴 保健・實用好物',products:[
+        {item:'挪威魚油',detail:'常見北歐保健品；依自己需求選膠囊或液態，確認成分、劑量與保存方式。',place:'藥局／超市保健區',priority:'👍 推薦｜🎁 可自用',image:'../assets/shopping/norway/魚油.png'},
+        {item:'魚油護膚膏（魚油凡士林）',detail:'以魚油為特色的滋潤護膚品，適合乾冷天氣使用。',place:'藥局／紀念品店',priority:'👍 推薦｜🎁 可當伴手禮',image:'../assets/shopping/norway/魚油製作的【凡士林】.jpg'}]},
+      {label:'⚠️ 入境前先確認',products:[
+        {item:'鱈魚乾／鹿肉乾／鯨魚乾',detail:'可在挪威當地品嚐；其中肉類與動物產品帶回台灣限制較嚴，購買前務必查驗最新入境規定，鹿肉乾與鯨魚乾不建議帶回。',place:'超市／紀念品店',priority:'⚠️ 當地吃較安心',image:'../assets/shopping/norway/鱈魚乾、鹿肉乾、鯨魚乾.png'}]}
+    ],note:'冷藏、生鮮與酒類以旅途中食用為主；肉類、海鮮、乳製品及動物產品帶回台灣前，請再確認最新檢疫與入境規定。'},
     {date:'10/8–10/9',city:'🇳🇱 阿姆斯特丹',use:'自理餐＋回程零食＋最後伴手禮',stores:'Albert Heijn／HEMA／Albert Cuyp Market',items:['早餐食品','Stroopwafel／餅乾','巧克力與回程零食','飲用水'],groups:[{label:'🧺 先保留原有項目',products:[{item:'早餐食品',detail:'10/9、回程前可補早餐與簡單零食。',place:'Albert Heijn／HEMA',priority:'👍 推薦',image:''},{item:'Stroopwafel／餅乾',detail:'阿姆斯特丹最後採買與回台伴手禮。',place:'Albert Heijn／HEMA／Albert Cuyp',priority:'⭐ 必買',image:''}]}],note:'阿姆斯特丹區先保留既有方向，後續再補正式商品卡。'}
   ],
   souvenirs:[
@@ -53,9 +80,18 @@ window.AURORA_SHOPPING_DATA={
     {country:'🇫🇮 芬蘭',category:'🫐 芬蘭莓果',priority:'👍 推薦',item:'Nordqvist SUOMI Blueberry Tea',reason:'藍莓風味紅茶，比果汁更輕、更方便帶回台灣。',place:'K-Citymarket／Prisma／S-market',tag:'藍莓茶',image:''},
     {country:'🇫🇮 芬蘭',category:'🍫 巧克力／糖果',priority:'👍 推薦',item:'Karl Fazer Dark 70%',reason:'70% 黑巧克力，適合長輩、主管或不嗜甜者。',place:'芬蘭各大超市／Fazer',tag:'黑巧克力',image:''},
     {country:'🇫🇮 芬蘭',category:'🍫 巧克力／糖果',priority:'👍 推薦',item:'Moomin Liquorice',reason:'嚕嚕米甘草糖，包裝可愛且有芬蘭特色，但甘草味比較挑人。',place:'超市／Moomin 商店',tag:'甘草糖',image:''},
-    {country:'🇳🇴 挪威',item:'Freia 巧克力',reason:'當地常見、價格相對容易入手',place:'超市',tag:'食品'},
-    {country:'🇳🇴 挪威',item:'挪威羊毛商品',reason:'保暖實用、北歐特色強',place:'市區戶外／紀念品店',tag:'高單價'},
-    {country:'🇳🇴 挪威',item:'Tromsø／北極圈紀念品',reason:'旅程紀念性高',place:'Tromsø 市區商店',tag:'紀念品'},
+    {country:'🇳🇴 挪威',category:'⭐ 挪威代表食品',priority:'⭐ 必買',item:'TORO Bergensk Fiskesuppe（卑爾根風味魚湯）',reason:'挪威代表性高、常溫好帶又實用。加入 800ml 水與 200ml 牛奶，煮沸後以小火煮 5 分鐘即可。',place:'KIWI／REMA 1000／Coop／MENY',tag:'挪威料理',image:'../assets/shopping/norway/Bergensk Fiskesuppe（卑爾根風味魚湯）：.jpg'},
+    {country:'🇳🇴 挪威',category:'⭐ 挪威代表食品',priority:'⭐ 必買',item:'Freia 巧克力',reason:'挪威國民巧克力，辨識度高、口味多，最適合分送親友。',place:'挪威各大超市',tag:'挪威巧克力',image:'../assets/shopping/norway/挪威Freia巧克力.jpg'},
+    {country:'🇳🇴 挪威',category:'⭐ 挪威代表食品',priority:'⭐ 必買',item:'Smash 巧克力牛角',reason:'甜鹹酥脆、口味有記憶點，是很受歡迎的挪威零食。',place:'挪威各大超市',tag:'甜鹹零食',image:'../assets/shopping/norway/Smash巧克力牛角.jpg'},
+    {country:'🇳🇴 挪威',category:'⭐ 挪威代表食品',priority:'⭐ 必買',item:'Kvikk Lunsj（挪威版 KitKat）',reason:'與挪威戶外文化連結很深，輕巧、好帶、適合分送。',place:'挪威各大超市',tag:'戶外代表零食',image:'../assets/shopping/norway/Kvikk Lunsj(挪威版kitkat).jpg'},
+    {country:'🇳🇴 挪威',category:'🍫 糖果・熱飲',priority:'👍 推薦',item:'IFA 甘草糖',reason:'挪威經典甘草喉糖，小盒裝方便帶，但甘草風味較挑人。',place:'挪威各大超市／便利商店',tag:'甘草糖',image:'../assets/shopping/norway/IFA甘草糖.jpg'},
+    {country:'🇳🇴 挪威',category:'🍫 糖果・熱飲',priority:'👍 推薦',item:'TORO 巧克力粉包',reason:'常溫、輕巧又有北歐冬日感，適合送給喜歡熱可可的人。',place:'挪威各大超市',tag:'熱巧克力',image:'../assets/shopping/norway/TORO巧克力粉包.jpg'},
+    {country:'🇳🇴 挪威',category:'🐟 海味・保健',priority:'👍 推薦',item:'Kaviar 魚子抹醬',reason:'北歐日常感強的管狀魚子抹醬；購買時確認未開封保存方式與台灣最新入境規定。',place:'挪威各大超市',tag:'北歐抹醬',image:'../assets/shopping/norway/Kaviar 魚子抹醬.jpg'},
+    {country:'🇳🇴 挪威',category:'🐟 海味・保健',priority:'👍 推薦',item:'挪威魚油',reason:'北歐代表性保健品，較適合自己或家人使用；購買前確認成分、劑量與需求。',place:'藥局／超市保健區',tag:'保健品',image:'../assets/shopping/norway/魚油.png'},
+    {country:'🇳🇴 挪威',category:'🐟 海味・保健',priority:'👍 推薦',item:'魚油護膚膏（魚油凡士林）',reason:'具有挪威特色、實用度高，適合乾冷季節護膚。',place:'藥局／紀念品店',tag:'護膚品',image:'../assets/shopping/norway/魚油製作的【凡士林】.jpg'},
+    {country:'🇳🇴 挪威',category:'🧥 挪威服飾・設計',priority:'👍 推薦',item:'Helly Hansen 服飾',reason:'挪威戶外品牌，機能性高；適合挑外套、帽子或實用配件。',place:'品牌門市／戶外用品店',tag:'戶外機能',image:''},
+    {country:'🇳🇴 挪威',category:'🧥 挪威服飾・設計',priority:'⭐ 經典',item:'Dale of Norway 服飾',reason:'挪威傳統針織圖騰與羊毛工藝代表，紀念性最高，但價格較高。',place:'品牌門市／百貨／紀念品店',tag:'挪威羊毛',image:'../assets/shopping/norway/Dale of Norway 服飾.jpg'},
+    {country:'🇳🇴 挪威',category:'🧥 挪威服飾・設計',priority:'👍 推薦',item:'Holzweiler 圍巾與服飾',reason:'挪威設計品牌，風格現代；圍巾兼具實穿與紀念價值。',place:'品牌門市／百貨',tag:'挪威設計',image:'../assets/shopping/norway/Holzweiler圍巾與服飾.jpg'},
     {country:'🇳🇱 阿姆斯特丹',item:'Stroopwafel',reason:'經典、好帶、超市與市場都容易買',place:'Albert Cuyp／超市',tag:'必買'},
     {country:'🇳🇱 阿姆斯特丹',item:'荷蘭起司',reason:'口味選擇多，購買前確認攜帶與入境規定',place:'起司店／市場',tag:'食品'},
     {country:'🇳🇱 阿姆斯特丹',item:'HEMA／Museum Shop 小物',reason:'文具、設計小物或博物館限定品，紀念性高',place:'HEMA／Museum Shop',tag:'小物'}
