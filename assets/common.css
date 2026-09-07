@@ -63,3 +63,7 @@
 /* Day 2 hotel luggage/rest: both rail options arrive at the hotel at 08:59 / 09:11, so rest starts at 09:11. */
 #eventTimeline>.event-card:nth-child(5) .event-time{font-size:0!important}
 #eventTimeline>.event-card:nth-child(5) .event-time::after{content:"◷ 09:11–09:40";font-size:14px}
+
+/* Keep the final bottom-navigation label consistent on every page. */
+.bottom-nav .nav-btn:last-child{font-size:0!important}
+.bottom-nav .nav-btn:last-child::after{content:"餐食與購物";font-size:10px;line-height:1.2;font-weight:750}
