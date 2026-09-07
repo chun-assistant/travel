@@ -1,0 +1,397 @@
+/* Nordic watercolor skin — presentation only.
+   This file intentionally changes no HTML structure, text, links, data, or JS behavior. */
+
+:root {
+  --navy:#0d4262;
+  --navy-2:#185f78;
+  --ink:#163b50;
+  --muted:#6f8792;
+  --paper:#f7f4ec;
+  --card:rgba(255,253,248,.95);
+  --line:#dfe8e4;
+  --orange:#e58f61;
+  --orange-soft:#fff0e7;
+  --blue:#3b94bd;
+  --blue-soft:#e8f5fb;
+  --green:#6b9f8e;
+  --green-soft:#eaf4ef;
+  --pink:#dc7e95;
+  --pink-soft:#fcecf1;
+  --yellow:#dca23a;
+  --yellow-soft:#fff4d9;
+  --red:#c65b55;
+  --red-soft:#fdebe8;
+  --shadow:0 12px 30px rgba(36,78,92,.10);
+}
+
+html {
+  background:#f7f4ec;
+}
+
+body {
+  background:
+    radial-gradient(circle at 8% 3%, rgba(119,186,204,.13), transparent 24rem),
+    radial-gradient(circle at 95% 18%, rgba(111,165,149,.10), transparent 23rem),
+    radial-gradient(circle at 45% 78%, rgba(229,143,97,.055), transparent 26rem),
+    repeating-linear-gradient(0deg, rgba(97,118,112,.018) 0 1px, transparent 1px 5px),
+    #f7f4ec;
+  color:var(--ink);
+}
+
+.app-shell {
+  background:linear-gradient(180deg,rgba(255,255,255,.17),rgba(255,253,248,.34));
+}
+
+/* Watercolor hero. Existing content/route/stats remain untouched. */
+.hero {
+  min-height:248px;
+  color:#123f5d;
+  background-image:
+    linear-gradient(90deg, rgba(248,247,240,.91) 0%, rgba(248,247,240,.74) 44%, rgba(248,247,240,.18) 72%, rgba(248,247,240,.05) 100%),
+    url("data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTIwMCA1MjAiPgo8ZGVmcz4KICA8bGluZWFyR3JhZGllbnQgaWQ9InNreSIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZGZmMWY2Ii8+CiAgICA8c3RvcCBvZmZzZXQ9Ii4zOCIgc3RvcC1jb2xvcj0iI2I3ZGNmMCIvPgogICAgPHN0b3Agb2Zmc2V0PSIuNyIgc3RvcC1jb2xvcj0iIzhlY2VkMCIvPgogICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZjZlN2Q0Ii8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8bGluZWFyR3JhZGllbnQgaWQ9ImF1ciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9Ii40Ij4KICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzYzZDdiOSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8c3RvcCBvZmZzZXQ9Ii4zIiBzdG9wLWNvbG9yPSIjNjNkN2I5IiBzdG9wLW9wYWNpdHk9Ii45Ii8+CiAgICA8c3RvcCBvZmZzZXQ9Ii41NSIgc3RvcC1jb2xvcj0iIzc0YzdlZiIgc3RvcC1vcGFjaXR5PSIuNjIiLz4KICAgIDxzdG9wIG9mZnNldD0iLjc1IiBzdG9wLWNvbG9yPSIjYjJlMjhmIiBzdG9wLW9wYWNpdHk9Ii42OCIvPgogICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZmZmMGJkIiBzdG9wLW9wYWNpdHk9IjAiLz4KICA8L2xpbmVhckdyYWRpZW50PgogIDxsaW5lYXJHcmFkaWVudCBpZD0ibGFrZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmZlMGVhIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNlOWYzZWYiLz4KICA8L2xpbmVhckdyYWRpZW50PgogIDxmaWx0ZXIgaWQ9InNvZnQiPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjE0Ii8+PC9maWx0ZXI+CiAgPGZpbHRlciBpZD0icGFwZXIiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIuMDIiIG51bU9jdGF2ZXM9IjMiIHNlZWQ9IjgiLz48ZmVDb2xvck1hdHJpeCB2YWx1ZXM9IjEgMCAwIDAgMCAwIDEgMCAwIDAgMCAwIDEgMCAwIDAgMCAwIC4wOCAwIi8+PC9maWx0ZXI+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iNTIwIiBmaWxsPSIjZjdmM2VhIi8+CjxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjM1MCIgZmlsbD0idXJsKCNza3kpIi8+CjxwYXRoIGQ9Ik0tNzAgODAgQzE3MCAxMCAzMjAgMTIwIDUxMCA1OCBTODQwIDggMTI4MCA5NSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2F1cikiIHN0cm9rZS13aWR0aD0iNzAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgZmlsdGVyPSJ1cmwoI3NvZnQpIi8+CjxjaXJjbGUgY3g9Ijg5MCIgY3k9Ijc2IiByPSIzIiBmaWxsPSIjZmZmIi8+PGNpcmNsZSBjeD0iOTI1IiBjeT0iNTIiIHI9IjIiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSIxMDIwIiBjeT0iOTIiIHI9IjIiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSIxMTAwIiBjeT0iNDgiIHI9IjMiIGZpbGw9IiNmZmYiLz4KPHBhdGggZD0iTTAgMjkwIEwxMjAgMjA1IDIwOCAyNTIgMzE1IDE2OCA0MTAgMjU1IDUyMCAxOTAgNjQwIDI2NCA3NjAgMTgzIDg0MiAyNDQgOTUwIDE3MCAxMDYwIDI1MiAxMjAwIDE4OCAxMjAwIDM2MCAwIDM2MFoiIGZpbGw9IiNlOWYwZjAiLz4KPHBhdGggZD0iTTAgMzIwIEwxNjAgMjUwIDIzMCAzMDAgMzQwIDIyMCA0MzAgMzA1IDU2MCAyMzYgNjc1IDMxMCA4MTUgMjMwIDkwMCAzMDAgMTAzMCAyMjMgMTEyMCAyOTUgMTIwMCAyNTAgMTIwMCAzNzAgMCAzNzBaIiBmaWxsPSIjYjlkMGQ3IiBvcGFjaXR5PSIuNyIvPgo8cmVjdCB5PSIzMzMiIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjE4NyIgZmlsbD0idXJsKCNsYWtlKSIvPgo8cGF0aCBkPSJNMCAzODUgQzE4MCAzNTggMjYwIDQyMCA0MzAgMzg2IFM3MzUgMzQ4IDkxMCAzODkgMTA4MCA0MTAgMTIwMCAzNzgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLW9wYWNpdHk9Ii43NSIgc3Ryb2tlLXdpZHRoPSI3Ii8+CjxnIGZpbGw9IiMzMTVmNjQiPgogPHBhdGggZD0iTTgwIDM3MCBsMjYtOTUgMjYgOTVoLTE2bDIwIDUwSDc2bDIwLTUweiIvPjxwYXRoIGQ9Ik0xNjUgMzkwIGwyMC03MCAyMCA3MGgtMTJsMTUgMzhoLTQ4bDE1LTM4eiIvPgogPHBhdGggZD0iTTEwMTUgMzgyIGwyNi0xMDAgMjYgMTAwaC0xNmwyMiA0OGgtNjRsMjItNDh6Ii8+PHBhdGggZD0iTTEwOTAgNDAwIGwxOC02MiAxOCA2MmgtMTBsMTMgMzRoLTQybDEzLTM0eiIvPgo8L2c+CjxnPgogPHBhdGggZD0iTTExOCAzNDAgaDEwMCB2NjUgSDExOHoiIGZpbGw9IiNkODc4NWMiLz48cGF0aCBkPSJNMTA1IDM0MiBsNjItNTIgNjMgNTJ6IiBmaWxsPSIjNWY2ZjcyIi8+PHJlY3QgeD0iMTQwIiB5PSIzNjAiIHdpZHRoPSIyMCIgaGVpZ2h0PSI0NSIgZmlsbD0iI2Y3ZGViMyIvPjxyZWN0IHg9IjE3NiIgeT0iMzU1IiB3aWR0aD0iMTkiIGhlaWdodD0iMTgiIGZpbGw9IiNmOWU3YmYiLz4KIDxwYXRoIGQ9Ik05NTIgMzQ2IGg5NCB2NjJoLTk0eiIgZmlsbD0iI2Q5YTI1ZiIvPjxwYXRoIGQ9Ik05MzggMzUwIGw2MS01MSA2MCA1MXoiIGZpbGw9IiM2Yjc0NzUiLz48cmVjdCB4PSI5ODEiIHk9IjM2NiIgd2lkdGg9IjE4IiBoZWlnaHQ9IjQyIiBmaWxsPSIjZjdlNWJmIi8+CjwvZz4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoODgwIDI3NSkiPgogPHBhdGggZD0iTTAgODIgQy04IDQ1IDIgMTQgMzEgMyBDNTMgLTYgNzUgOCA3OCAzMSBDODAgNDkgNzAgNTcgNjEgNjIgQzcyIDY4IDc5IDc5IDc1IDk0IEM3MCAxMTEgNTIgMTE4IDMyIDExMSBDMTQgMTA1IDQgOTYgMCA4MloiIGZpbGw9IiNmZmZhZjIiIHN0cm9rZT0iIzMxNTM2YSIgc3Ryb2tlLXdpZHRoPSIzIi8+CiA8cGF0aCBkPSJNMjYgMTEgQzI0IC03IDM0IC0xOSA0NCAtNiIgZmlsbD0iI2ZmZmFmMiIgc3Ryb2tlPSIjMzE1MzZhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogPGNpcmNsZSBjeD0iNTQiIGN5PSIyOSIgcj0iMi41IiBmaWxsPSIjMzE1MzZhIi8+CiA8cGF0aCBkPSJNNjUgNDAgQzc1IDQzIDgyIDQxIDg3IDM2IiBmaWxsPSJub25lIiBzdHJva2U9IiMzMTUzNmEiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiA8cGF0aCBkPSJNMTIgOTEgQy0zIDkzIC0xNCA4OSAtMTcgODAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzMxNTM2YSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KIDxwYXRoIGQ9Ik03IDU2IEMyNSA0OCA0MiA1MCA2NyA2MiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDQ2ZDVmIiBzdHJva2Utd2lkdGg9IjkiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L2c+CjxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjUyMCIgZmlsdGVyPSJ1cmwoI3BhcGVyKSIgb3BhY2l0eT0iLjkiLz4KPC9zdmc+");
+  background-size:cover;
+  background-position:center center;
+  border-radius:0 0 34px 34px;
+  box-shadow:0 16px 38px rgba(42,83,96,.14);
+}
+
+.hero::before {
+  width:92%;
+  height:86px;
+  left:4%;
+  top:12px;
+  opacity:.20;
+  filter:blur(22px);
+  background:linear-gradient(90deg,transparent,rgba(86,220,187,.48),rgba(95,183,234,.46),rgba(179,225,149,.30),transparent);
+}
+
+.hero::after {
+  width:74%;
+  height:62px;
+  right:-4%;
+  top:72px;
+  opacity:.14;
+  filter:blur(18px);
+  background:linear-gradient(90deg,transparent,rgba(111,211,187,.38),rgba(136,188,235,.34),transparent);
+}
+
+.stars {
+  opacity:.30;
+  background-size:48px 48px;
+}
+
+.eyebrow {
+  color:#204e67;
+  opacity:1;
+  font-weight:700;
+}
+
+.eyebrow-badge {
+  color:#17425d;
+  border-color:rgba(42,94,106,.18);
+  background:rgba(255,255,255,.78);
+  box-shadow:0 5px 16px rgba(36,78,92,.08);
+  backdrop-filter:blur(12px);
+}
+
+.hero h1 {
+  color:#0e456a;
+  text-shadow:0 1px 0 rgba(255,255,255,.75);
+  font-family:"Kaiti TC","DFKai-SB","PingFang TC","Noto Sans TC",sans-serif;
+  font-weight:900;
+  letter-spacing:-.035em;
+}
+
+.hero-sub {
+  color:#31566a;
+  font-weight:650;
+}
+
+.route-stop {
+  color:#17445e;
+  background:rgba(255,253,248,.84);
+  border-color:rgba(48,96,106,.13);
+  box-shadow:0 4px 12px rgba(45,83,93,.06);
+}
+
+.route-arrow {
+  color:#386b7f;
+  opacity:.75;
+}
+
+.hero-stat {
+  color:#123f5d;
+  background:rgba(255,253,248,.88);
+  border-color:rgba(62,105,110,.12);
+  box-shadow:0 8px 20px rgba(44,85,97,.08);
+  backdrop-filter:blur(12px);
+}
+
+.hero-stat b {
+  color:#0d4164;
+}
+
+.hero-stat small {
+  color:#687f89;
+}
+
+/* Japanese stationery / watercolor typography */
+.section-head h2 {
+  color:#0d4467;
+  font-family:"Kaiti TC","DFKai-SB","PingFang TC","Noto Sans TC",sans-serif;
+  font-weight:900;
+}
+
+.section-head p {
+  color:#738891;
+}
+
+.small-action {
+  color:#2587b5;
+  border-radius:999px;
+}
+
+.small-action:active {
+  background:rgba(232,245,251,.8);
+}
+
+.country-track::before {
+  background:linear-gradient(90deg,#e39163 0 20%,#79aaa0 20% 54%,#7097bd 54% 83%,#8d9ed0 83% 100%);
+  height:3px;
+  box-shadow:0 1px 0 rgba(255,255,255,.9);
+}
+
+.country-stage b {
+  border:1px solid rgba(255,255,255,.64);
+  box-shadow:0 3px 8px rgba(46,79,89,.12);
+}
+
+.country-stage.active b {
+  box-shadow:0 0 0 2px rgba(255,253,248,.95),0 0 0 4px var(--navy),0 5px 11px rgba(31,67,85,.16);
+}
+
+/* Date chips: same dimensions/contents, softer storybook finish. */
+.day-chip {
+  border-color:color-mix(in srgb,var(--day-color,var(--line)) 34%,#e7ece9);
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.92),rgba(255,250,243,.88)),
+    color-mix(in srgb,var(--day-color,#fff) 8%,#fff);
+  box-shadow:0 5px 14px rgba(43,75,84,.055);
+}
+
+.day-chip.active {
+  background:
+    linear-gradient(145deg,color-mix(in srgb,var(--day-color,var(--navy)) 94%,#fff),color-mix(in srgb,var(--day-color,var(--navy)) 78%,#224f69));
+  box-shadow:0 9px 20px color-mix(in srgb,var(--day-color,var(--navy)) 20%,transparent);
+}
+
+/* Existing day summary fields are untouched; only the paint treatment changes. */
+.day-summary {
+  background:
+    linear-gradient(135deg,rgba(20,83,108,.98),rgba(52,132,128,.94)),
+    radial-gradient(circle at 88% 25%,rgba(255,255,255,.13),transparent 14rem);
+  border:1px solid rgba(255,255,255,.32);
+  box-shadow:0 14px 32px rgba(28,78,92,.14);
+}
+
+.day-summary::after {
+  content:"";
+  right:0;
+  top:auto;
+  bottom:-8px;
+  width:138px;
+  height:112px;
+  opacity:.30;
+  transform:none;
+  background:url("data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMjIwIDE3MCI+CjxnIG9wYWNpdHk9Ii45NiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDUgMjgpIj4KPHBhdGggZD0iTTAgOTBDLTkgNDkgNSAxNSAzOSAzYzI4LTEwIDU0IDggNTggMzYgMyAyMC04IDMxLTIwIDM4IDEzIDYgMjQgMTkgMTkgMzgtNiAyMy0yOSAzMy01MyAyM0MyMSAxMzAgNSAxMTUgMCA5MHoiIGZpbGw9IiNmZmZhZjIiIHN0cm9rZT0iI2RjZTllOCIgc3Ryb2tlLXdpZHRoPSIzIi8+CjxwYXRoIGQ9Ik0zMCA4QzI4LTEwIDQwLTI1IDUyLTgiIGZpbGw9IiNmZmZhZjIiIHN0cm9rZT0iI2RjZTllOCIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPGNpcmNsZSBjeD0iNjciIGN5PSIzNSIgcj0iMi41IiBmaWxsPSIjNmY4NzkwIi8+CjxwYXRoIGQ9Ik04MiA0OWMxMSAyIDE4LTEgMjQtNyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNmY4NzkwIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8cGF0aCBkPSJNIDggODBjMjQtOCA0OC03IDc4IDExIiBmaWxsPSJub25lIiBzdHJva2U9IiM3ZGE3OWUiIHN0cm9rZS13aWR0aD0iMTIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L2c+CjxwYXRoIGQ9Ik00IDE0NGMyOC0yMyA1Mi0yNiA3Mi02IDI0LTIyIDQ5LTE5IDczIDUgMTgtMjAgMzgtMTcgNjcgNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYmRkN2RjIiBzdHJva2Utd2lkdGg9IjYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4=") right bottom/contain no-repeat;
+}
+
+.day-summary .day-kicker,
+.day-summary p {
+  text-shadow:0 1px 1px rgba(8,46,60,.10);
+}
+
+.day-summary-meta span {
+  background:rgba(255,255,255,.15);
+  border-color:rgba(255,255,255,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10);
+}
+
+/* Search and chips retain behavior. */
+.search-input {
+  background:rgba(255,253,249,.94);
+  border-color:#dce6e3;
+  box-shadow:0 6px 18px rgba(42,78,88,.055);
+}
+
+.filter-chip,
+.segment {
+  background:rgba(255,253,249,.92);
+  border-color:#dce6e3;
+  box-shadow:0 3px 9px rgba(48,76,82,.035);
+}
+
+.filter-chip.active,
+.segment.active {
+  background:#0e4669;
+  border-color:#0e4669;
+  box-shadow:0 7px 16px rgba(16,70,103,.16);
+}
+
+/* Full itinerary card data stays visible: time, title, place, transport,
+   duration, cost, ticket/meeting and details. */
+.timeline::before {
+  background:linear-gradient(#3b95bd,rgba(107,159,142,.26));
+}
+
+.event-card {
+  background:
+    linear-gradient(180deg,rgba(255,254,251,.97),rgba(255,252,246,.94));
+  border-color:#dce7e3;
+  box-shadow:0 8px 22px rgba(42,78,88,.065);
+}
+
+.event-card::before {
+  border-color:#f7f4ec;
+}
+
+.meta-box {
+  background:linear-gradient(145deg,#f3f7f4,#faf8f2);
+  border:1px solid rgba(220,231,227,.70);
+}
+
+.event-actions .ghost-btn,
+.event-actions .map-btn,
+.two-actions a,
+.two-actions button {
+  border-radius:13px;
+}
+
+/* Other pages: same content, softer paper cards. */
+.info-card,
+.notice,
+.progress-card,
+.practical-card,
+.check-item,
+.budget-day,
+.food-card {
+  background:linear-gradient(180deg,rgba(255,254,251,.97),rgba(255,252,246,.94));
+  border-color:#dce7e3;
+  box-shadow:0 8px 22px rgba(42,78,88,.06);
+}
+
+.transport-card {
+  border-left-color:#6ba7c5;
+}
+
+.hotel-card {
+  border-left-color:#456e87;
+}
+
+.hotel-city {
+  background:#e9f4f7;
+  color:#3f809c;
+}
+
+.status.confirmed {
+  background:#e8f4ed;
+  color:#4b876f;
+}
+
+.status.pending {
+  background:#fff3d9;
+  color:#9a6d1e;
+}
+
+.status.alert {
+  background:#fbe9e5;
+  color:#a14b46;
+}
+
+/* Bottom navigation: existing labels/links stay exactly as-is.
+   Original SVG occupies the same layout space but is visually replaced
+   by small Nordic storybook illustrations. */
+body .bottom-nav {
+  background:rgba(255,253,248,.96);
+  border-top-color:rgba(205,220,216,.82);
+  box-shadow:0 -10px 30px rgba(35,75,87,.10);
+  backdrop-filter:blur(18px);
+}
+
+body .nav-btn {
+  position:relative;
+  color:#607883;
+  border-radius:16px;
+  background:transparent;
+}
+
+body .nav-btn svg {
+  opacity:0;
+}
+
+body .nav-btn::before {
+  content:"";
+  display:block;
+  width:40px;
+  height:30px;
+  margin:0 auto 1px;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:contain;
+}
+
+body .nav-btn:nth-child(1)::before {
+  background-image:url("data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNjQgNDgiPgo8cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iNjAiIGhlaWdodD0iNDQiIHJ4PSIxNiIgZmlsbD0iI2VhZjZmNiIvPgo8cGF0aCBkPSJNMTEgMzRjLTEzLTI1IDE0LTI4IDEwLTEzIDItMTAgMy0zLTExSDIxYy01LTEtOC00LTEwLTl6IiBmaWxsPSIjZmZmYWYxIiBzdHJva2U9IiMzMTUzNmEiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNMjMgOGMwLTggNi0xMCA5LTMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzMxNTM2YSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPGNpcmNsZSBjeD0iMzUiIGN5PSIxNyIgcj0iMS41IiBmaWxsPSIjMzE1MzZhIi8+PHBhdGggZD0iTTQwIDIyYzUgMSA4IDAgMTEtMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMzE1MzZhIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8cGF0aCBkPSJNMTIgMzVsMTAtOSA5IDggOC02IDExIDkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2U1OWE3MiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+");
+}
+
+body .nav-btn:nth-child(2)::before {
+  background-image:url("data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNjQgNDgiPgo8cmVjdCB4PSI0IiB5PSI1IiB3aWR0aD0iNTYiIGhlaWdodD0iMzYiIHJ4PSIxMyIgZmlsbD0iI2U4ZjRmYiIvPgo8cmVjdCB4PSIxNCIgeT0iMTEiIHdpZHRoPSIzNiIgaGVpZ2h0PSIyNSIgcng9IjciIGZpbGw9IiM4ZmM3ZGYiIHN0cm9rZT0iIzMxNTM2YSIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxyZWN0IHg9IjE5IiB5PSIxNSIgd2lkdGg9IjEyIiBoZWlnaHQ9IjgiIHJ4PSIyIiBmaWxsPSIjZjhmYmY3Ii8+PHJlY3QgeD0iMzQiIHk9IjE1IiB3aWR0aD0iMTEiIGhlaWdodD0iOCIgcng9IjIiIGZpbGw9IiNmOGZiZjciLz4KPGNpcmNsZSBjeD0iMjMiIGN5PSIzNiIgcj0iNCIgZmlsbD0iIzMxNTM2YSIvPjxjaXJjbGUgY3g9IjQyIiBjeT0iMzYiIHI9IjQiIGZpbGw9IiMzMTUzNmEiLz4KPHBhdGggZD0iTTEwIDMwaC00TTU0IDMwaDQiIHN0cm9rZT0iIzMxNTM2YSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPHBhdGggZD0iTTggNDBsLTUgNE01NiA0MGw1IDQiIHN0cm9rZT0iIzdjYTk5YiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+");
+}
+
+body .nav-btn:nth-child(3)::before {
+  background-image:url("data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNjQgNDgiPgo8cmVjdCB4PSIzIiB5PSI0IiB3aWR0aD0iNTgiIGhlaWdodD0iMzkiIHJ4PSIxNCIgZmlsbD0iI2Y1ZjFlOSIvPgo8cGF0aCBkPSJNMTIgMzRWMTloNDB2MTVNMTUgMzRoMzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzMxNTM2YSIgc3Ryb2tlLXdpZHRoPSIyLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8cmVjdCB4PSIxNSIgeT0iMjEiIHdpZHRoPSIxNCIgaGVpZ2h0PSI4IiByeD0iMyIgZmlsbD0iI2Q3ZTllZiIvPgo8cGF0aCBkPSJNMzQgMzFjLTItOCAxLTE1IDgtMTcgNi0yIDExIDIgMTIgNyAxIDQtMiA2LTUgNyAzIDIgNCA0IDMgN0g0MGMtMy0xLTUtMi02LTR6IiBmaWxsPSIjZmZmYWYxIiBzdHJva2U9IiMzMTUzNmEiIHN0cm9rZS13aWR0aD0iMS44Ii8+CjxjaXJjbGUgY3g9IjQ4IiBjeT0iMjAiIHI9IjEuMiIgZmlsbD0iIzMxNTM2YSIvPgo8cGF0aCBkPSJNMzkgMzVjMyAzIDYgNCAxMCA0IiBmaWxsPSJub25lIiBzdHJva2U9IiM4YjlmYjAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPg==");
+}
+
+body .nav-btn:nth-child(4)::before {
+  background-image:url("data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNjQgNDgiPgo8cmVjdCB4PSI3IiB5PSI0IiB3aWR0aD0iNTAiIGhlaWdodD0iNDAiIHJ4PSIxNCIgZmlsbD0iI2VmZjRlOCIvPgo8cmVjdCB4PSIyMSIgeT0iMTIiIHdpZHRoPSIyNSIgaGVpZ2h0PSIyNyIgcng9IjQiIGZpbGw9IiNmZmZhZjIiIHN0cm9rZT0iIzMxNTM2YSIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxyZWN0IHg9IjI4IiB5PSI4IiB3aWR0aD0iMTEiIGhlaWdodD0iNyIgcng9IjMiIGZpbGw9IiNkOTljNjciIHN0cm9rZT0iIzMxNTM2YSIgc3Ryb2tlLXdpZHRoPSIxLjYiLz4KPHBhdGggZD0iTTI2IDIxaDE0TTI2IDI2aDExTTI2IDMxaDkiIHN0cm9rZT0iIzdhOGY5NyIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPHBhdGggZD0iTTEyIDE4bDgtMTAgNyA4LTYgMSAzIDV6IiBmaWxsPSIjN2Y5YzZjIiBzdHJva2U9IiMzMTUzNmEiIHN0cm9rZS13aWR0aD0iMS41Ii8+Cjwvc3ZnPg==");
+}
+
+body .nav-btn:nth-child(5)::before {
+  background-image:url("data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNjQgNDgiPgo8cmVjdCB4PSI0IiB5PSI0IiB3aWR0aD0iNTYiIGhlaWdodD0iNDAiIHJ4PSIxNCIgZmlsbD0iI2ZmZjBlNyIvPgo8cGF0aCBkPSJNMTUgMjhoMzRsLTQgMTBIMTl6IiBmaWxsPSIjZTlhMzZkIiBzdHJva2U9IiMzMTUzNmEiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNMjIgMjhjMS04IDUtMTMgMTAtMTNzOSA1IDEwIDEzIiBmaWxsPSJub25lIHN0cm9rZT0iIzMxNTM2YSIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxwYXRoIGQ9Ik00NyAxNWM2LTQgMTAtMiAxMSAyLTUgMi04IDItMTEtMnoiIGZpbGw9IiM3Y2E5OWIiLz4KPHBhdGggZD0iTTEzIDEyaDd2MTFoLTd6IiBmaWxsPSIjZjlmYmY3IiBzdHJva2U9IiMzMTUzNmEiIHN0cm9rZS13aWR0aD0iMS44Ii8+PHBhdGggZD0iTTIwIDE1aDRhNCA0IDAgMCAxIDAgN2gtNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMzE1MzZhIiBzdHJva2Utd2lkdGg9IjEuOCIvPgo8L3N2Zz4=");
+}
+
+body .nav-btn.active {
+  color:#0d4568;
+  background:linear-gradient(180deg,#eef8f8,#edf4ef);
+  box-shadow:inset 0 0 0 1px rgba(141,184,182,.10);
+}
+
+body .nav-btn.active::before {
+  transform:translateY(-1px) scale(1.04);
+}
+
+/* Preserve last navigation label override from common.css while giving it
+   the same visual rhythm as the other four labels. */
+body .bottom-nav .nav-btn:last-child::after {
+  color:inherit;
+  font-size:10px;
+  line-height:1.2;
+  font-weight:750;
+}
+
+/* Light paper edges on phones without altering component geometry. */
+@media (max-width:640px) {
+  body {
+    background:
+      radial-gradient(circle at 6% 2%,rgba(120,190,207,.12),transparent 18rem),
+      radial-gradient(circle at 96% 22%,rgba(118,168,153,.08),transparent 16rem),
+      #f7f4ec;
+  }
+  .hero {
+    background-position:52% center;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .hero::before,.hero::after { animation:none!important; }
+}
