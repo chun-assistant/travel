@@ -7,68 +7,6 @@
 .day-chip[data-day="1"]::after,.day-chip[data-day="9"]::after,.day-chip[data-day="14"]::after,.day-chip[data-day="15"]::after{content:"✈ 報到";position:absolute;top:6px;right:6px;z-index:3;display:block;padding:2px 5px;border-radius:999px;color:var(--red);background:var(--red-soft);border:1px solid rgba(197,90,83,.28);font-size:8px;line-height:1.1;font-weight:850;white-space:nowrap;pointer-events:none}
 .day-chip.active[data-day="1"]::after,.day-chip.active[data-day="9"]::after,.day-chip.active[data-day="14"]::after,.day-chip.active[data-day="15"]::after{color:#fff;background:rgba(197,90,83,.84);border-color:rgba(255,255,255,.30)}
 
-/* Day 2 / 9-25: the first event is airport arrival, so the two public-transport cards are children 2 and 3. */
-#eventTimeline>.event-card.kind-transit:nth-child(2) .event-time{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .event-time::after{content:"◷ 08:16–08:36／08:34–08:48";font-size:14px}
-#eventTimeline>.event-card.kind-transit:nth-child(2) h4{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(2) h4::after{content:"VIE→Südtiroler Platz";font-size:17px;line-height:1.35;font-weight:800;color:var(--ink)}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .event-place span{font-size:0}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .event-place span::after{content:"Flughafen Wien Bahnhof → Südtiroler Platz";font-size:13px;color:var(--muted)}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .meta-box:nth-child(1) b{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .meta-box:nth-child(1) b::after{content:"REX 7／IC";font-size:13px}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .meta-box:nth-child(2) b{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .meta-box:nth-child(2) b::after{content:"20分鐘／14分鐘";font-size:13px}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .meta-box:nth-child(3) b{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .meta-box:nth-child(3) b::after{content:"EUR 4.4／人";font-size:13px}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .meta-box:nth-child(4) b{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .meta-box:nth-child(4) b::after{content:"ÖBB App／機台";font-size:13px}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .more .detail-note span:nth-child(2){font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .more .detail-note span:nth-child(2)::after{content:"尚未購票。兩個可選班次：08:16 REX 7→08:36抵達；08:34 IC→08:48抵達。之後步行約6分鐘至Südtiroler Platz轉U1。";font-size:13px}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .status{font-size:0!important;color:var(--red)!important;background:var(--red-soft)!important;border-color:rgba(197,90,83,.28)!important}
-#eventTimeline>.event-card.kind-transit:nth-child(2) .status::after{content:"尚未購票";font-size:11px;color:var(--red)}
-
-#eventTimeline>.event-card.kind-transit:nth-child(3) .event-time{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .event-time::after{content:"◷ 08:55–09:07";font-size:14px}
-#eventTimeline>.event-card.kind-transit:nth-child(3) h4{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(3) h4::after{content:"Südtiroler Platz→Stephansplatz";font-size:17px;line-height:1.35;font-weight:800;color:var(--ink)}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .event-place span{font-size:0}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .event-place span::after{content:"Südtiroler Platz → Stephansplatz";font-size:13px;color:var(--muted)}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(1) b{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(1) b::after{content:"U1 Leopoldau方向";font-size:13px}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(2) b{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(2) b::after{content:"約6分鐘";font-size:13px}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(3) b{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(3) b::after{content:"已含於前段票價";font-size:13px}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(4) b{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .meta-box:nth-child(4) b::after{content:"同一張ÖBB票";font-size:13px}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .more .detail-note span:nth-child(2){font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .more .detail-note span:nth-child(2)::after{content:"尚未購票。REX 7方案約08:49到Südtiroler Platz、08:55抵Stephansplatz；IC方案約09:01到Südtiroler Platz、09:07抵Stephansplatz。";font-size:13px}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .status{font-size:0!important;color:var(--red)!important;background:var(--red-soft)!important;border-color:rgba(197,90,83,.28)!important}
-#eventTimeline>.event-card.kind-transit:nth-child(3) .status::after{content:"尚未購票";font-size:11px;color:var(--red)}
-
-/* Walking leg to the hotel: update the times and distance, but keep it as a confirmed walking segment. */
-#eventTimeline>.event-card.kind-transit:nth-child(4) .event-time{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(4) .event-time::after{content:"◷ 08:55–08:59／09:07–09:11";font-size:14px}
-#eventTimeline>.event-card.kind-transit:nth-child(4) h4{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(4) h4::after{content:"Stephansplatz→飯店";font-size:17px;line-height:1.35;font-weight:800;color:var(--ink)}
-#eventTimeline>.event-card.kind-transit:nth-child(4) .event-place span{font-size:0}
-#eventTimeline>.event-card.kind-transit:nth-child(4) .event-place span::after{content:"Stephansplatz → Austria Trend Hotel Europa Wien";font-size:13px;color:var(--muted)}
-#eventTimeline>.event-card.kind-transit:nth-child(4) .meta-box:nth-child(1) b{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(4) .meta-box:nth-child(1) b::after{content:"步行350公尺";font-size:13px}
-#eventTimeline>.event-card.kind-transit:nth-child(4) .meta-box:nth-child(2) b{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(4) .meta-box:nth-child(2) b::after{content:"約4分鐘";font-size:13px}
-#eventTimeline>.event-card.kind-transit:nth-child(4) .meta-box:nth-child(3) b{font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(4) .meta-box:nth-child(3) b::after{content:"EUR 0";font-size:13px}
-#eventTimeline>.event-card.kind-transit:nth-child(4) .more .detail-note span:nth-child(2){font-size:0!important}
-#eventTimeline>.event-card.kind-transit:nth-child(4) .more .detail-note span:nth-child(2)::after{content:"REX 7方案08:55離開Stephansplatz，08:59抵達飯店；IC方案09:07離開Stephansplatz，09:11抵達飯店。步行約350公尺。";font-size:13px}
-
-/* Day 2 hotel luggage/rest: both rail options arrive at the hotel at 08:59 / 09:11, so rest starts at 09:11. */
-#eventTimeline>.event-card:nth-child(5) .event-time{font-size:0!important}
-#eventTimeline>.event-card:nth-child(5) .event-time::after{content:"◷ 09:11–09:40";font-size:14px}
-
-/* Keep the final bottom-navigation label consistent on every page. */
 .bottom-nav .nav-btn:last-child{font-size:0!important}
 .bottom-nav .nav-btn:last-child::after{content:"餐食與購物";font-size:10px;line-height:1.2;font-weight:750}
-
-/* Skin-only icon replacement: remove the old SVG from layout without touching DOM. */
 body .bottom-nav .nav-btn svg{position:absolute!important;width:1px!important;height:1px!important;margin:0!important;opacity:0!important;pointer-events:none!important}
