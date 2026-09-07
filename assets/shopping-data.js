@@ -98,8 +98,7 @@ window.AURORA_SHOPPING_DATA={
     {country:'🇳🇱 阿姆斯特丹',category:'⭐ 荷蘭代表食品',priority:'👍 推薦',item:'PICKWICK 茶',reason:'歷史悠久的荷蘭茶品牌，口味選擇多、包裝輕巧；適合挑荷蘭限定或特色風味。',place:'Albert Heijn／Jumbo／超市茶區',tag:'荷蘭茶品牌',image:'../assets/shopping/amsterdam/PICKWICK茶品牌.webp'},
     {country:'🇳🇱 阿姆斯特丹',category:'⭐ 荷蘭代表食品',priority:'⭐ 必買',item:'Stroopwafel 焦糖煎餅',reason:'荷蘭最經典伴手禮之一，超市盒裝方便帶；想現吃則可到 Albert Cuyp Market 買現做款。',place:'Albert Heijn／HEMA／Albert Cuyp Market',tag:'焦糖煎餅',image:'../assets/shopping/amsterdam/焦糖煎餅 Stroopwafel.webp'},
     {country:'🇳🇱 阿姆斯特丹',category:'⭐ 荷蘭代表食品',priority:'👍 推薦',item:'Hopjes 咖啡糖',reason:'帶咖啡與焦糖風味的荷蘭傳統硬糖，歷史可追溯至 18 世紀末，輕巧適合分送。',place:'超市／糖果店／紀念品店',tag:'咖啡糖',image:'../assets/shopping/amsterdam/咖啡糖 Hopjes.webp'},
-    {country:'🇳🇱 阿姆斯特丹',category:'🐰 荷蘭限定紀念品',priority:'⭐ 必買',item:'Miffy 米菲兔荷蘭限定',reason:'荷蘭代表角色；史基浦機場可留意穿著專屬制服的空服員限定版，紀念性很高。',place:'史基浦機場／de winkel van nijntje／博物館商店',tag:'機場限定',image:'../assets/shopping/amsterdam/Miffy 荷蘭限定.jpg'},
-    {country:'🇳🇱 阿姆斯特丹',category:'🏠 荷蘭生活設計',priority:'👍 推薦',item:'Dille & Kamille',reason:'像荷蘭版無印良品，主打天然材質的廚房用品、居家擺設與清潔用品；適合挑木製廚具、茶巾或小型生活雜貨。',place:'Dille & Kamille 門市',tag:'生活雜貨',image:''}
+    {country:'🇳🇱 阿姆斯特丹',category:'🐰 荷蘭限定紀念品',priority:'⭐ 必買',item:'Miffy 米菲兔荷蘭限定',reason:'荷蘭代表角色；史基浦機場可留意穿著專屬制服的空服員限定版，紀念性很高。',place:'史基浦機場／de winkel van nijntje／博物館商店',tag:'機場限定',image:'../assets/shopping/amsterdam/Miffy 荷蘭限定.jpg'}
   ]
 };
 
