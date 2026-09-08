@@ -1,0 +1,24 @@
+name: Sync exact upstream tree
+on:
+  push:
+    paths:
+      - '.github/workflows/sync-exact-upstream.yml'
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Replace working tree with upstream main
+        run: |
+          git remote add upstream https://github.com/yangchinghsuan955-web/europe-trip-2026.git
+          git fetch upstream main
+          git read-tree -m -u upstream/main
+          git add -A
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: overwrite branch with upstream main" || true
+          git push origin HEAD:europe-trip-2026
