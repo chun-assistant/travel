@@ -22,6 +22,7 @@
   if (document.readyState === "loading" && document.write) {
     document.write('<script src="' + packingDataSrc + '"><\/script>');
     document.write('<script src="' + coreDataSrc + '"><\/script>');
+    document.write('<script src="' + base + 'modules/flight-badges.js' + '"><\/script>');
     document.write('<script src="' + printDataSrc + '"><\/script>');
     document.write('<script src="' + legacySrc.replace(/"/g, "&quot;") + '"><\/script>');
 
@@ -39,7 +40,7 @@
     return;
   }
 
-  var scripts = [packingDataSrc, printDataSrc, coreDataSrc, legacySrc];
+  var scripts = [packingDataSrc, printDataSrc, coreDataSrc, legacySrc, base + "modules/flight-badges.js"];
   if (isDailyPage) {
     scripts.push(
       base + "modules/runtime-utils.js",
