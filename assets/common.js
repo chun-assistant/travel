@@ -14,11 +14,13 @@
   var src = current && current.src;
   var base = src ? src.slice(0, src.lastIndexOf("/") + 1) : "";
   var packingDataSrc = base + "data/packing.js";
+  var printDataSrc = base + "data/print.js";
   var legacySrc = base + "common-legacy.js";
   var isDailyPage = document.body && document.body.getAttribute("data-page") === "days";
 
   if (document.readyState === "loading" && document.write) {
     document.write('<script src="' + packingDataSrc + '"><\/script>');
+    document.write('<script src="' + printDataSrc + '"><\/script>');
     document.write('<script src="' + legacySrc.replace(/"/g, "&quot;") + '"><\/script>');
 
     if (isDailyPage) {
@@ -35,7 +37,7 @@
     return;
   }
 
-  var scripts = [packingDataSrc, legacySrc];
+  var scripts = [packingDataSrc, printDataSrc, legacySrc];
   if (isDailyPage) {
     scripts.push(
       base + "modules/runtime-utils.js",
