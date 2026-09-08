@@ -74,12 +74,79 @@ budget/
 **不要再把大型功能內容塞回根目錄 `index.html`。**
 
 如果只是修改每日行程，改 `daily/index.html`。
-如果只是修改交通，改 `transport/index.html`。
-如果只是修改住宿，改 `stay/index.html`。
+如果只是修改交通，改 `transport/index.html` 或交通專用的 `assets/modules/transport-*` / `assets/data/transport.js`。
+如果只是修改住宿，改 `stay/index.html` 或住宿專用模組。
 如果只是修改行前工具，改 `prep-tools/` 裡對應的 HTML。
 如果只是修改餐食與購物，改 `budget/index.html`。
 
-## 4. `prep-tools/` 已拆成 5 個獨立子頁
+## 4. 交通 Transport：專用修改範圍（重要）
+
+> **這一節是未來 AI / 協作者修改交通時的強制規則。**
+
+交通功能已開始從大型 `common.js` 拆出專用模組。**之後修改交通相關內容，預設不得修改 `assets/common.js`。**
+
+目前交通相關檔案責任如下：
+
+```text
+assets/data/transport.js
+    ↓ 交通資料邊界
+
+assets/data/flights.js
+    ↓ 航班資料邊界
+
+assets/modules/transport-data-enhancements.js
+    ↓ 交通資料修正 / 補充 / normalization
+
+assets/modules/transport-renderer.js
+    ↓ 交通卡片與原本交通篩選器的 renderer
+
+assets/modules/transport-enhancements.js
+    ↓ 交通頁初始化與模組串接
+
+assets/modules/transport-filters.js
+    ↓ 「尚未購票」篩選功能
+
+transport/index.html
+    ↓ 交通頁 HTML / page-level 結構
+```
+
+### 交通修改優先順序
+
+- 修改交通資料（日期、路線、車次、時間、價格、狀態、提醒等）
+  → 優先修改 `assets/data/transport.js` 或 `assets/modules/transport-data-enhancements.js`
+- 修改交通卡片 / renderer / 顯示邏輯
+  → 優先修改 `assets/modules/transport-renderer.js`
+- 修改「尚未購票」篩選
+  → 修改 `assets/modules/transport-filters.js`
+- 修改交通頁初始化 / 串接
+  → 修改 `assets/modules/transport-enhancements.js`
+- 修改交通頁 HTML 結構
+  → 修改 `transport/index.html`
+
+### `common.js` 特別規則
+
+`assets/common.js` **目前仍保留舊版 `renderTransport()` 與部分 legacy transport logic**，但這些是歷史相容程式碼。
+
+因此：
+
+1. **不要因為看到 `common.js` 裡有 `renderTransport()` 就直接修改它。**
+2. 交通的新修改一律先放到上述 transport 專用檔案。
+3. 只有在確認專用模組無法安全處理、且確實需要修改 shared runtime 時，才可以考慮碰 `common.js`。
+4. 如果真的需要修改 `common.js`，必須先說明原因，並把它視為 **高風險 / 高影響範圍修改**。
+5. 不要用「整個替換 `common.js`」或 loader 方式進行交通拆分。
+6. 修改後至少確認 `daily/`、`transport/` 的主要功能沒有被破壞。
+
+### 目前已知的安全經驗
+
+曾經嘗試把 `common.js` 改成 loader / legacy 分離方式，造成 `daily/` 頁面空白。之後已恢復原本可正常工作的 `common.js`。
+
+因此本專案採取：
+
+> **Incremental migration：小步拆分、每次只移動一個責任、確認正常後再進下一步。**
+
+**不要重演整包替換 `common.js` 的方式。**
+
+## 5. `prep-tools/` 已拆成 5 個獨立子頁
 
 「行前與工具」是目前最需要多人協作的功能，因此進一步拆成：
 
@@ -127,7 +194,7 @@ prep-tools/
 
 不要為了修改其中一個子頁，把其他四個頁面一起重做。
 
-## 5. 頁面拆分的核心原則
+## 6. 頁面拆分的核心原則
 
 ### 小功能
 
@@ -154,7 +221,7 @@ feature/
 
 **同一功能的子頁必須放在同一個 folder，不要散落在根目錄。**
 
-## 6. UI / Design Source of Truth
+## 7. UI / Design Source of Truth
 
 ### 最重要規則
 
@@ -175,7 +242,7 @@ feature/
 
 如果要新增內容，應該使用現有 CSS class 與現有元件風格。
 
-## 7. 底部導覽列規範
+## 8. 底部導覽列規範
 
 全站底部導覽列是重要的共用視覺元件。
 
@@ -213,7 +280,7 @@ feature/
 
 如果需要修正導覽列，第一步應先拿 `daily/index.html` 的標準結構與 `common.css` 比對，而不是直接加一堆 page-specific CSS。
 
-## 8. 共用 CSS / JavaScript
+## 9. 共用 CSS / JavaScript
 
 全站共用視覺主要放在：
 
@@ -259,7 +326,7 @@ assets/subpage-runtime.js
 - 不影響 `budget/`
 - 不改變標準 UI
 
-## 9. 圖片規範：統一 PNG
+## 10. 圖片規範：統一 PNG
 
 新增或修改網站圖片：
 
@@ -298,7 +365,7 @@ hotel-map-amsterdam.png
 
 避免空白、中文檔名與特殊字元。
 
-## 10. Responsive Design
+## 11. Responsive Design
 
 網站必須同時維持手機與桌面版。
 
@@ -321,7 +388,7 @@ hotel-map-amsterdam.png
 - bottom navigation 是否位置一致
 - segmented navigation 是否仍可橫向滑動
 
-## 11. 相對路徑規範
+## 12. 相對路徑規範
 
 GitHub Pages 是資料夾式部署，因此所有跨頁連結必須依實際 folder 層級使用相對路徑。
 
@@ -358,7 +425,7 @@ GitHub Pages 是資料夾式部署，因此所有跨頁連結必須依實際 fol
 
 修改 folder 結構後，必須同步檢查所有導覽連結。
 
-## 12. 多人 / 多 AI 協作規則
+## 13. 多人 / 多 AI 協作規則
 
 本專案的拆分架構主要就是為了降低 merge conflict。
 
@@ -387,7 +454,7 @@ AI #9 → budget/index.html
 
 如果修改 `common.css` / `common.js`，要視為高影響範圍修改，完成後應檢查所有主要頁面。
 
-## 13. 修改既有功能前的標準流程
+## 14. 修改既有功能前的標準流程
 
 ```text
 1. 先讀 README.md
@@ -411,7 +478,7 @@ AI #9 → budget/index.html
 10. Commit
 ```
 
-## 14. 新增功能的標準流程
+## 15. 新增功能的標準流程
 
 ```text
 1. 判斷功能分類
@@ -428,67 +495,41 @@ AI #9 → budget/index.html
         ↓
 7. 共用互動使用 common.js
         ↓
-8. 必要時使用 subpage-runtime.js
+8. 功能專屬邏輯優先放功能自己的 module
         ↓
-9. 補上跨頁導覽
+9. 檢查 responsive
         ↓
-10. 檢查手機 / 桌面版
+10. 檢查 bottom nav
         ↓
-11. 確認沒有破壞其他功能
+11. Commit
 ```
 
-## 15. AI 修改網站時必須遵守
+## 16. Refactor 原則
 
-### 必須
+本專案的 refactor 目標是：
 
-- **先讀 README.md，再修改網站。**
-- 先確認目前實際檔案結構，不要根據舊架構猜檔案位置。
-- 優先修改正確的功能 folder / HTML。
-- 大型功能拆成同一 folder 的 sub HTML。
-- 新增圖片使用 PNG 並放進 `assets/`。
-- 共用 CSS / JS 優先使用 `assets/common.css` / `assets/common.js`。
-- Split page 優先參考 `daily/index.html` 的標準 DOM 與 `common.css`。
-- 保留既有 UI / UX，除非使用者明確要求重新設計。
-- 修改後檢查所有受影響的相對路徑。
-- 修改後確認 GitHub Pages 路徑正確。
-- 修改 bottom navigation 前，先比對標準頁面的 HTML 結構與 CSS。
+> **降低大型檔案耦合、降低多人 / 多 AI 修改衝突，同時 100% 保留既有 UI / UX / 行為。**
 
-### 禁止
+因此：
 
-- 不要把大型功能塞回根目錄 `index.html`。
-- 不要把 `prep-tools` 五個子功能重新合併回一個巨大 HTML。
-- 不要複製一整份 common CSS 到每個頁面。
-- 不要為了修一個 split page 的問題，任意改全站 UI。
-- 不要把 segmented navigation 改成另一種 UI。
-- 不要任意改 bottom navigation 的高度、位置、padding 或圖示。
-- 不要把圖片放在各功能 folder 裡亂散。
-- 不要新增 JPG / JPEG 取代 PNG 規範，除非有明確技術原因並獲得同意。
-- 不要任意刪除既有內容。
-- 不要為了「整理」而順手重做整個 UI。
-- 不要修改與目前任務無關的功能。
+- 可以拆檔
+- 可以建立 data boundary
+- 可以建立 renderer module
+- 可以建立 page-specific module
+- **不要為了架構漂亮而改 UI**
+- **不要一次大改 `common.js`**
+- 每一步都應該能獨立驗證
+- 如果某次拆分造成 Daily / Transport / Stay 等頁面異常，先回復該步驟，不要繼續疊加修改
 
-## 16. 完成修改前 Checklist
+### Current migration status
 
-- [ ] 有先閱讀 README.md
-- [ ] 使用目前的新架構，而不是舊的單一 index 架構
-- [ ] 修改的是正確功能 folder / HTML
-- [ ] `prep-tools` 子功能維持獨立 HTML
-- [ ] 新功能沒有全部塞進根目錄 `index.html`
-- [ ] 圖片是 PNG
-- [ ] 圖片放在 `assets/`
-- [ ] HTML / CSS 圖片路徑正確
-- [ ] 共用 CSS / JS 沒有重複複製
-- [ ] 保留既有 UI / UX
-- [ ] segmented navigation 沒有被改成另一種版型
-- [ ] bottom navigation 與標準頁面視覺一致
-- [ ] 手機版正常
-- [ ] 桌面版正常
-- [ ] 跨頁相對路徑正常
-- [ ] 沒有誤刪既有內容
-- [ ] 沒有修改與本次任務無關的功能
+| 區域 | 目前進度 |
+|---|---:|
+| 🚌 交通 Transport | 約 80% |
+| 📅 每日行程 Daily | 約 15% |
+| 🏨 住宿 Stay | 約 10% |
+| 🧳 行前工具 | 約 20% |
+| 🍽️ 餐食與購物 / Budget | 約 5–10% |
+| 🧩 共用 Runtime | 約 10% |
 
----
-
-## 一句話規則
-
-> **架構可以拆，視覺不能亂。根目錄 `index.html` 只做入口；五大功能各自獨立；`prep-tools` 再拆成 5 個子 HTML；共用 UI 放 `common.css / common.js`；圖片統一 PNG 放 `assets/`；任何 split page 都先以 `daily/index.html` + `common.css` 為標準答案。**
+交通目前已完成一輪安全拆分並確認頁面正常。後續交通修改應延續 incremental migration 原則，**不要回頭直接修改 `common.js`**。
