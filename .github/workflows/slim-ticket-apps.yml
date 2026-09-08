@@ -1,0 +1,96 @@
+name: One-shot ticket apps migration
+
+on:
+  push:
+    branches: [refactor-transport-safe-v2]
+    paths:
+      - .github/workflows/slim-ticket-apps.yml
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refactor-transport-safe-v2
+          fetch-depth: 0
+
+      - name: Extract ticket apps and remove legacy runtime ownership
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          root = Path('.')
+          runtime_path = root / 'assets/common-runtime.js'
+          runtime = runtime_path.read_text(encoding='utf-8')
+
+          marker = re.compile(r'const TICKET_APPS = \[(.*?)\];\n    const COUNTRY_STAGES', re.S)
+          match = marker.search(runtime)
+          if not match:
+              raise SystemExit('Expected TICKET_APPS block was not found; refusing to modify runtime.')
+
+          ticket_items = match.group(1).strip()
+          apps_data = '''/*\n * Ticket-app data boundary.\n *\n * Extracted from the legacy runtime without changing the data itself.\n */\n(function (root) {\n  var items = [%s];\n  root.TravelAppsData = Object.freeze({\n    getItems: function () {\n      return items.slice();\n    }\n  });\n})(window);\n''' % ticket_items
+          (root / 'assets/data/apps.js').write_text(apps_data, encoding='utf-8')
+
+          runtime = runtime[:match.start()] + 'const COUNTRY_STAGES' + runtime[match.end():]
+
+          render_pattern = re.compile(r'\n    function renderTicketApps\(\) \{.*?\n    \}\n    function renderPractical', re.S)
+          render_match = render_pattern.search(runtime)
+          if not render_match:
+              raise SystemExit('Expected renderTicketApps function was not found; refusing to modify runtime.')
+          runtime = runtime[:render_match.start()] + '\n    function renderPractical' + runtime[render_match.end():]
+
+          if runtime.count('renderTicketApps();') != 1:
+              raise SystemExit('Expected exactly one legacy renderTicketApps invocation; refusing to modify runtime.')
+          runtime = runtime.replace(' renderTicketApps();', '', 1)
+          runtime_path.write_text(runtime, encoding='utf-8')
+
+          apps_module = '''/*\n * Ticket-app module boundary.\n *\n * Rendering is now owned by the extracted renderer; this module only exposes\n * the stable feature API and keeps the migration surface small.\n */\n(function (root) {\n  root.TravelApps = Object.freeze({\n    getData: function () {\n      return root.TravelAppsData && typeof root.TravelAppsData.getItems === "function"\n        ? root.TravelAppsData.getItems()\n        : [];\n    },\n    render: function () {\n      if (!root.TravelAppsRenderer) return;\n      return root.TravelAppsRenderer.create({ data: this.getData() })();\n    }\n  });\n})(window);\n'''
+          (root / 'assets/modules/apps.js').write_text(apps_module, encoding='utf-8')
+
+          renderer = '''/*\n * Ticket-app renderer.\n *\n * Pure DOM renderer for the ticket / transport app section.\n */\n(function (root) {\n  function createRenderer(deps) {\n    deps = deps || {};\n    var utils = root.TravelRuntimeUtils || {};\n    var data = deps.data || [];\n    var $ = deps.$ || function (selector) { return document.querySelector(selector); };\n    var escapeHtml = deps.escapeHtml || utils.escapeHtml || function (value) {\n      return String(value == null ? "" : value).replace(/[&<>'\"]/g, function (ch) {\n        return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '\"': "&quot;" })[ch];\n      });\n    };\n\n    return function renderTicketApps() {\n      var host = $("#ticketAppList");\n      if (!host) return;\n      host.innerHTML = data.map(function (a) {\n        var priorityClass = a.priority === "必裝" ? "confirmed" : "neutral";\n        return '<article class="info-card">' +\n          '<div class="event-top"><div><span class="event-type">' + escapeHtml(a.country) + ' · 購票工具</span><h3>' + escapeHtml(a.name) + '</h3></div>' +\n          '<span class="status ' + priorityClass + '">' + escapeHtml(a.priority) + '</span></div>' +\n          '<p class="subtitle">' + escapeHtml(a.use) + '</p>' +\n          '<div class="info-card-row"><span>本行程用在哪裡</span><b>' + escapeHtml(a.trip) + '</b></div>' +\n          '<div class="info-card-row"><span>出發前設定</span><b>' + escapeHtml(a.setup) + '</b></div>' +\n          '<div class="info-card-row"><span>購票／使用步驟</span><b>' + escapeHtml(a.steps) + '</b></div>' +\n          '<div class="info-card-row"><span>避免出錯</span><b>' + escapeHtml(a.warning) + '</b></div>' +\n          '<div class="event-actions"><a class="map-btn" href="' + escapeHtml(a.source) + '" target="_blank" rel="noopener">查看官方說明 ↗</a></div>' +\n          '</article>';\n      }).join("");\n    };\n  }\n\n  root.TravelAppsRenderer = Object.freeze({ create: createRenderer });\n})(window);\n'''
+          (root / 'assets/modules/apps-renderer.js').write_text(renderer, encoding='utf-8')
+
+          bootstrap = '''/*\n * Ticket-app page bootstrap.\n *\n * Runs after the legacy runtime so the feature can be removed from the legacy\n * initializer without changing page timing for unrelated sections.\n */\n(function (root) {\n  function boot() {\n    if (!root.TravelApps || typeof root.TravelApps.render !== "function") return;\n    if (!document.getElementById("ticketAppList")) return;\n    root.TravelApps.render();\n  }\n\n  if (document.readyState === "loading") {\n    document.addEventListener("DOMContentLoaded", boot, { once: true });\n  } else {\n    boot();\n  }\n})(window);\n'''
+          (root / 'assets/modules/apps-bootstrap.js').write_text(bootstrap, encoding='utf-8')
+
+          common_path = root / 'assets/common.js'
+          common = common_path.read_text(encoding='utf-8')
+          old = '''      base + "modules/runtime-utils.js",\n      base + "data/stay.js",'''
+          new = '''      base + "modules/runtime-utils.js",\n      base + "data/apps.js",\n      base + "modules/apps-renderer.js",\n      base + "modules/apps.js",\n      base + "modules/apps-bootstrap.js",\n      base + "data/stay.js",'''
+          if common.count(old) != 1:
+              raise SystemExit('Expected common.js loading sequence was not found; refusing to modify it.')
+          common = common.replace(old, new, 1)
+          old2 = '''      base + "modules/runtime-utils.js",\n      base + "data/stay.js",\n      base + "modules/stay-renderer.js",'''
+          new2 = '''      base + "modules/runtime-utils.js",\n      base + "data/apps.js",\n      base + "modules/apps-renderer.js",\n      base + "modules/apps.js",\n      base + "modules/apps-bootstrap.js",\n      base + "data/stay.js",\n      base + "modules/stay-renderer.js",'''
+          if common.count(old2) != 1:
+              raise SystemExit('Expected common.js script list was not found; refusing to modify it.')
+          common = common.replace(old2, new2, 1)
+          common_path.write_text(common, encoding='utf-8')
+
+          registry_path = root / 'assets/modules/registry.js'
+          registry = registry_path.read_text(encoding='utf-8')
+          registry = registry.replace('      stay: "assets/data/stay.js"\n', '      stay: "assets/data/stay.js",\n      apps: "assets/data/apps.js"\n')
+          registry = registry.replace('      apps: "assets/modules/apps.js",\n', '      apps: "assets/modules/apps.js",\n      appsRenderer: "assets/modules/apps-renderer.js",\n      appsBootstrap: "assets/modules/apps-bootstrap.js",\n')
+          registry_path.write_text(registry, encoding='utf-8')
+
+          if 'const TICKET_APPS' in runtime or 'function renderTicketApps' in runtime or 'renderTicketApps();' in runtime:
+              raise SystemExit('Legacy ticket-app ownership still exists after rewrite; refusing to commit.')
+
+          print('Ticket apps extracted; legacy runtime ownership removed.')
+
+      - name: Commit migration and remove one-shot workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/slim-ticket-apps.yml
+          git add assets/common-runtime.js assets/common.js assets/data/apps.js assets/modules/apps.js assets/modules/apps-renderer.js assets/modules/apps-bootstrap.js assets/modules/registry.js
+          git diff --cached --check
+          git commit -m "refactor: extract ticket apps from runtime [skip ci]"
+          git push origin refactor-transport-safe-v2
