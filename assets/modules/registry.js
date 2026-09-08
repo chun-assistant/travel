@@ -7,7 +7,7 @@
  */
 (function (root) {
   root.TravelModules = Object.freeze({
-    version: 7,
+    version: 8,
     data: Object.freeze({
       itinerary: "assets/data/itinerary.js",
       transport: "assets/data/transport.js",
@@ -22,6 +22,7 @@
       transportEnhancements: "assets/modules/transport-enhancements.js",
       transportFilters: "assets/modules/transport-filters.js",
       stay: "assets/modules/stay.js",
+      stayRenderer: "assets/modules/stay-renderer.js",
       navigation: "assets/modules/navigation.js",
       reminders: "assets/modules/reminders.js",
       apps: "assets/modules/apps.js",
