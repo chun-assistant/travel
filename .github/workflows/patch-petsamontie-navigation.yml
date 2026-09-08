@@ -1,0 +1,123 @@
+name: Patch Petsamontie navigation
+
+on:
+  push:
+    branches:
+      - europe-trip-2026
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+
+      - name: Patch daily navigation
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          import subprocess
+
+          path = Path('assets/common.js')
+          text = path.read_text(encoding='utf-8')
+
+          marker = 'Petsamontie 7'
+          if marker not in text:
+              raise SystemExit('Petsamontie 7 not found in assets/common.js')
+
+          # Find the flat JS object containing the Petsamontie marker.
+          pos = text.index(marker)
+          start = text.rfind('{', 0, pos)
+          if start < 0:
+              raise SystemExit('Could not locate event object start')
+
+          depth = 0
+          quote = None
+          escape = False
+          end = None
+          for i in range(start, len(text)):
+              ch = text[i]
+              if quote:
+                  if escape:
+                      escape = False
+                  elif ch == '\\':
+                      escape = True
+                  elif ch == quote:
+                      quote = None
+                  continue
+              if ch in ('"', "'"):
+                  quote = ch
+              elif ch == '{':
+                  depth += 1
+              elif ch == '}':
+                  depth -= 1
+                  if depth == 0:
+                      end = i
+                      break
+          if end is None:
+              raise SystemExit('Could not locate event object end')
+
+          event = text[start:end+1]
+          if 'navigable:' not in event:
+              event = event[:-1] + ',navigable:true}'
+              text = text[:start] + event + text[end+1:]
+
+          # Transport events are normally excluded from the existing navigation
+          # helper. Let an explicit navigable:true opt them in without changing
+          # navigation behavior for other event types.
+          patterns = [
+              r'(function\\s+isNavigableEvent\\s*\\(\\s*e\\s*\\)\\s*\\{\\s*return\\s+)([^;]+)(;)',
+              r'(const\\s+isNavigableEvent\\s*=\\s*\\(\\s*e\\s*\\)\\s*=>\\s*)([^;]+)(;)',
+          ]
+          patched_helper = False
+          for pat in patterns:
+              m = re.search(pat, text)
+              if m:
+                  expr = m.group(2)
+                  if 'e?.navigable' not in expr and 'e.navigable' not in expr:
+                      expr = '!!e?.navigable || (' + expr + ')'
+                      text = text[:m.start(2)] + expr + text[m.end(2):]
+                  patched_helper = True
+                  break
+
+          if not patched_helper:
+              # Also support a helper written as a function declaration with a
+              # multiline return statement.
+              m = re.search(r'(function\\s+isNavigableEvent\\s*\\(\\s*e\\s*\\)\\s*\\{\\s*return\\s+)(.*?)(;)', text, re.S)
+              if m:
+                  expr = m.group(2)
+                  if 'e?.navigable' not in expr and 'e.navigable' not in expr:
+                      expr = '!!e?.navigable || (' + expr + ')'
+                      text = text[:m.start(2)] + expr + text[m.end(2):]
+                  patched_helper = True
+
+          if not patched_helper:
+              raise SystemExit('isNavigableEvent helper not found; refusing to make an unsafe partial change')
+
+          path.write_text(text, encoding='utf-8')
+
+          subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
+          subprocess.run(['git', 'add', 'assets/common.js'], check=True)
+          result = subprocess.run(['git', 'diff', '--cached', '--quiet'])
+          if result.returncode == 0:
+              print('No change needed')
+              raise SystemExit(0)
+          subprocess.run(['git', 'commit', '-m', 'feat: add navigation for Petsamontie 7'], check=True)
+          subprocess.run(['git', 'push', 'origin', 'HEAD:europe-trip-2026'], check=True)
+
+      - name: Remove patch workflow
+        if: success()
+        shell: bash
+        run: |
+          git rm .github/workflows/patch-petsamontie-navigation.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'chore: remove temporary navigation patch workflow'
+          git push origin HEAD:europe-trip-2026
