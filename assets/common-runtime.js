@@ -156,13 +156,20 @@ const COUNTRY_STAGES = window.TravelCoreData.getCountryStages();
       const d = APP_DATA.overview.find(x => x.day === state.day);
       if (!d) return;
       $("#daySummary").innerHTML = `<article class="day-summary"><div class="day-kicker">DAY ${d.day} · ${escapeHtml(dateLabel(d.date))}</div><h3>${escapeHtml(d.city)}</h3><p>${escapeHtml(d.highlight)}</p><div class="day-summary-meta"><span>🚉 ${escapeHtml(d.transport)}</span><span>🛏️ ${escapeHtml(d.hotel)}</span><span>🚶 體力 ${escapeHtml(d.effort)}</span><span>💰 ${fmtTwd(d.estimate)}</span></div></article>`;
-      renderEventFilters();
+      if (window.TravelDailyEventFilters) {
+        if (!window.TravelDailyEventFiltersRenderer) {
+          window.TravelDailyEventFiltersRenderer = window.TravelDailyEventFilters.init({ $, $$, state, renderEvents });
+        }
+        window.TravelDailyEventFiltersRenderer.render();
+      } else {
+        renderEventFiltersFallback();
+      }
       renderEvents();
     }
-    function renderEventFilters() {
+    function renderEventFiltersFallback() {
       const labels = ["全部","交通","景點","餐飲","住宿","其他"];
       $("#eventFilters").innerHTML = labels.map(v => `<button class="filter-chip ${state.eventFilter===v?"active":""}" data-filter="${v}">${v}</button>`).join("");
-      $$("#eventFilters .filter-chip").forEach(btn => btn.addEventListener("click",()=>{state.eventFilter=btn.dataset.filter; renderEventFilters(); renderEvents();}));
+      $$("#eventFilters .filter-chip").forEach(btn => btn.addEventListener("click",()=>{state.eventFilter=btn.dataset.filter; renderEventFiltersFallback(); renderEvents();}));
     }
     function eventCard(e) {
       const kind = eventKind(e.type);
@@ -173,108 +180,3 @@ const COUNTRY_STAGES = window.TravelCoreData.getCountryStages();
         <div class="event-top"><div><span class="event-time">◷ ${escapeHtml(e.start)}${e.end?`–${escapeHtml(e.end)}`:""}</span><span class="event-type"> · ${escapeHtml(e.type)}</span></div><span class="status ${statusClass(e.status)}">${escapeHtml(e.status||"行程")}</span></div>
         <h4>${escapeHtml(e.title)}</h4>
         ${e.place?`<div class="event-place">${pinIcon}<span>${escapeHtml(e.place)}</span></div>`:""}
-        <div class="meta-grid">
-          <div class="meta-box"><small>交通／方式</small><b>${escapeHtml(e.transport||"—")}</b></div>
-          <div class="meta-box"><small>移動／停留</small><b>${escapeHtml(e.duration||"—")}</b></div>
-          <div class="meta-box"><small>費用／人</small><b>${escapeHtml(cost)}</b></div>
-          <div class="meta-box"><small>票券／集合</small><b>${escapeHtml(e.ticket||"—")}</b></div>
-        </div>
-        <div class="event-actions">${mapButton}${e.place?`<button class="ghost-btn copy-place" data-copy="${escapeHtml(e.place)}">${copyIcon}</button>`:""}</div>
-        <details class="more"><summary>費用與舒適提醒</summary><div class="detail-note"><span><b>費用：</b>${escapeHtml(e.costNote||"—")}</span><span><b>提醒：</b>${escapeHtml(e.note||"—")}</span><span><b>依據：</b>${escapeHtml(e.source||"—")}</span></div></details>
-      </article>`;
-    }
-    function renderEvents() {
-      const q = state.eventSearch.trim().toLowerCase();
-      const rows = APP_DATA.events.filter(e => e.day === state.day).filter(e => state.eventFilter === "全部" || filterKind(e.type) === state.eventFilter).filter(e => !q || [e.title,e.place,e.type,e.transport,e.note].join(" ").toLowerCase().includes(q));
-      $("#eventTimeline").innerHTML = rows.length ? rows.map(eventCard).join("") : `<div class="empty"><b>找不到符合項目</b>請更換類別或搜尋文字</div>`;
-      $$(".copy-place", $("#eventTimeline")).forEach(btn => btn.addEventListener("click",()=>copyText(btn.dataset.copy)));
-    }
-
-    function renderTransport() {
-      const cats = ["全部",...new Set(APP_DATA.transport.map(t=>t.type))];
-      $("#transportFilters").innerHTML = cats.map(v=>`<button class="filter-chip ${state.transportFilter===v?"active":""}" data-filter="${escapeHtml(v)}">${escapeHtml(v)}</button>`).join("");
-      $$("#transportFilters .filter-chip").forEach(btn=>btn.addEventListener("click",()=>{state.transportFilter=btn.dataset.filter;renderTransport();}));
-      const rows = APP_DATA.transport.filter(t=>state.transportFilter==="全部"||t.type===state.transportFilter);
-      $("#transportList").innerHTML = rows.map(t=>`<article class="info-card transport-card"><div class="event-top"><div><span class="event-type">${escapeHtml(t.date)} · ${escapeHtml(t.type)}</span><h3>${escapeHtml(t.route)}</h3></div><span class="status ${statusClass(t.status)}">${escapeHtml(t.status)}</span></div><p class="subtitle">${escapeHtml(t.service)}</p><div class="info-card-row"><span>時間</span><b>${escapeHtml(t.time)}</b></div><div class="info-card-row"><span>方式</span><b>${escapeHtml(t.method)}</b></div><div class="info-card-row"><span>時長</span><b>${escapeHtml(t.duration)}</b></div><div class="info-card-row"><span>費用／人</span><b>${escapeHtml(fmtCost(t.currency,t.cost))}</b></div><div class="info-card-row"><span>提醒</span><b>${escapeHtml(t.note)}</b></div></article>`).join("");
-    }
-
-    function renderHotels() {
-      $("#hotelList").innerHTML = APP_DATA.hotels.map(h=>{
-        const isHotel = !/night train|夜臥火車|機上/i.test(`${h.name} ${h.city}`) && !isAirportPlace(h.address);
-        const hotelNav = isHotel ? `<a class="map-btn" href="${escapeHtml(buildDirections(h.address))}" target="_blank" rel="noopener">${mapIcon}開始導航</a>` : "";
-        return `<article class="info-card hotel-card"><span class="hotel-city">${escapeHtml(h.city)} · ${escapeHtml(h.date)}</span><div class="event-top"><h3>${escapeHtml(h.name)}</h3><span class="status ${statusClass(h.status)}">${escapeHtml(h.status)}</span></div><p class="hotel-address">${escapeHtml(h.address)}</p><div class="info-card-row"><span>入住／退房</span><b>${escapeHtml(h.time)}</b></div><div class="info-card-row"><span>早餐／餐食</span><b>${escapeHtml(h.meal)}</b></div><div class="info-card-row"><span>分攤／人</span><b>${fmtTwd(h.cost)}</b></div><div class="info-card-row"><span>提醒</span><b>${escapeHtml(h.note)}</b></div><div class="two-actions">${hotelNav}<button class="ghost-btn hotel-copy" data-copy="${escapeHtml(h.address)}">${copyIcon}複製地址</button></div></article>`;
-      }).join("");
-      $$(".hotel-copy").forEach(btn=>btn.addEventListener("click",()=>copyText(btn.dataset.copy)));
-    }
-
-    function initChecks() {
-      APP_DATA.prep.forEach((item,i)=>{ const id=`p${i}`; if (!(id in state.checks) && /已完成|已裝/.test(item.status||"")) state.checks[id]=true; });
-      APP_DATA.bookings.forEach((item,i)=>{ const id=`b${i}`; if (!(id in state.checks) && /已完成|已購票|已確認/.test(item.status||"")) state.checks[id]=true; });
-      save("aurora-checks",state.checks);
-    }
-    function renderChecklist() {
-      initChecks();
-      const packing = PACKING_GROUPS.flatMap((group,groupIndex)=>group.items.map((item,itemIndex)=>({...item,group:group.group,id:`pack-${groupIndex}-${itemIndex}`})));
-      $("#checklist").innerHTML = PACKING_GROUPS.map((group,groupIndex)=>`<section class="check-group"><h3>${escapeHtml(group.group)}</h3>${group.items.map((item,itemIndex)=>{const id=`pack-${groupIndex}-${itemIndex}`;return `<label class="check-item ${state.checks[id]?"done":""}"><input type="checkbox" data-check="${id}" ${state.checks[id]?"checked":""}><span class="fake-check">✓</span><span class="check-copy"><b>${escapeHtml(item.item)}</b><small>${escapeHtml([item.owner,item.note].filter(Boolean).join(" · "))}</small></span><span class="status neutral">未裝</span></label>`;}).join("")}</section>`).join("");
-      $$("[data-check]",$("#checklist")).forEach(input=>input.addEventListener("change",()=>{state.checks[input.dataset.check]=input.checked;save("aurora-checks",state.checks);renderChecklist();}));
-      const total=packing.length, done=packing.filter(item=>state.checks[item.id]).length, pct=total?Math.round(done/total*100):0;
-      $("#checkPercent").textContent=`${pct}%`; $("#checkCount").textContent=`${done} / ${total}`; $("#progressFill").style.width=`${pct}%`;
-    }
-    function renderPractical() {
-      $("#practicalList").innerHTML = APP_DATA.practical.map(p=>`<article class="practical-card"><span class="topic">${escapeHtml(p.topic)}</span><h4>${escapeHtml(p.item)}</h4><p><b>${escapeHtml(p.value||"")}</b>${p.value&&p.guide?"\n":""}${escapeHtml(p.guide||"")}</p>${p.source&&/^https?:/.test(p.source)?`<a class="source-link" href="${escapeHtml(p.source)}" target="_blank" rel="noopener">查看官方資料 ↗</a>`:p.source?`<span class="source-link">${escapeHtml(p.source)}</span>`:""}</article>`).join("");
-    }
-    function renderBookings() {
-      initChecks();
-      const prepTodos=APP_DATA.prep.map((item,i)=>({...item,id:`p${i}`})).filter(item=>item.phase!=="行李").map(item=>item.category==="網路"?{...item,item:"準備eSIM或實體SIM卡",note:"eSIM先安裝並離線保存QR／APN；實體SIM帶退卡針，抵達VIE前確認漫遊設定"}:item);
-      const bookingTodos=APP_DATA.bookings.map((item,i)=>({...item,id:`b${i}`}));
-      const printChecklist=`<div class="section-head inner-head"><div><h2>紙本列印分工</h2><p>個人與團長分開準備；重要資料保留第二套備援</p></div></div>${PRINT_GROUPS.map((group,groupIndex)=>`<section class="check-group"><h3>${escapeHtml(group.group)}</h3>${group.items.map((item,itemIndex)=>{const id=`print-${groupIndex}-${itemIndex}`;return `<label class="check-item ${state.checks[id]?"done":""}"><input type="checkbox" data-todo="${id}" ${state.checks[id]?"checked":""}><span class="fake-check">✓</span><span class="check-copy"><b>${escapeHtml(item.item)}</b><small>${escapeHtml(item.note)}</small></span><span class="status neutral">${escapeHtml(group.tag)}</span></label>`;}).join("")}</section>`).join("")}`;
-      const checklist=`<div class="section-head inner-head"><div><h2>行前執行清單</h2><p>不含紙本列印與訂位缺漏</p></div></div><section class="check-group">${prepTodos.map(item=>`<label class="check-item ${state.checks[item.id]?"done":""}"><input type="checkbox" data-todo="${item.id}" ${state.checks[item.id]?"checked":""}><span class="fake-check">✓</span><span class="check-copy"><b>${escapeHtml(item.item)}</b><small>${escapeHtml([item.phase,item.owner,item.note].filter(Boolean).join(" · "))}</small></span><span class="status ${statusClass(item.status)}">${escapeHtml(item.status||"待辦")}</span></label>`).join("")}</section>`;
-      const bookings=`<div class="section-head inner-head"><div><h2>訂位／付款缺漏</h2><p>完成後可直接勾選，紀錄保存在這台裝置</p></div></div>${bookingTodos.map(b=>`<label class="check-item ${state.checks[b.id]?"done":""}"><input type="checkbox" data-todo="${b.id}" ${state.checks[b.id]?"checked":""}><span class="fake-check">✓</span><span class="check-copy"><b>${escapeHtml(b.item)}</b><small>${escapeHtml([b.category,b.date,b.deadline,b.missing,b.note].filter(Boolean).join(" · "))}</small></span><span class="status ${statusClass(b.status)}">${escapeHtml(b.status)}</span></label>`).join("")}`;
-      $("#bookingList").innerHTML=printChecklist+checklist+bookings;
-      $$("[data-todo]",$("#bookingList")).forEach(input=>input.addEventListener("change",()=>{state.checks[input.dataset.todo]=input.checked;save("aurora-checks",state.checks);renderBookings();}));
-    }
-    function renderTax() {
-      $("#taxList").innerHTML = APP_DATA.tax.map(t=>`<article class="info-card"><div class="event-top"><div><span class="event-type">退稅地區</span><h3>${escapeHtml(t.country||"退稅步驟")}</h3></div>${t.threshold?`<span class="status neutral">門檻 ${escapeHtml(t.threshold)}</span>`:""}</div><div class="info-card-row"><span>VAT／表單</span><b>${escapeHtml([t.vat,t.form].filter(Boolean).join(" · ")||"—")}</b></div><div class="info-card-row"><span>本行程驗證點</span><b>${escapeHtml(t.checkpoint||"—")}</b></div><div class="info-card-row"><span>攜帶物品</span><b>${escapeHtml(t.bring||"—")}</b></div><div class="info-card-row"><span>操作</span><b>${escapeHtml(t.action||"—")}</b></div><div class="info-card-row"><span>避免失敗</span><b>${escapeHtml(t.failure||"—")}</b></div>${t.source&&/^https?:/.test(t.source)?`<div class="event-actions"><a class="map-btn" href="${escapeHtml(t.source)}" target="_blank" rel="noopener">查看官方來源</a></div>`:""}</article>`).join("");
-    }
-
-    function renderBudget() {
-      const max=Math.max(...APP_DATA.budgets.map(b=>Number(b.total)||0));
-      $("#budgetSummary").innerHTML=`<article class="budget-total"><small>目前每人預估總額</small><span class="amount">${fmtTwd(APP_DATA.budgetSummary.final)}</span><p>原表 ${fmtTwd(APP_DATA.budgetSummary.original)} ＋ 新增生活／交通調整 ${fmtTwd(APP_DATA.budgetSummary.adjustment)}。仍不含SAS主欄缺漏、未報價van及部分待購活動。</p></article>`;
-      $("#budgetList").innerHTML=APP_DATA.budgets.map(b=>`<details class="budget-day"><summary><div class="budget-line"><div class="budget-day-label"><b>Day ${b.day}</b><small>${escapeHtml(dateLabel(b.date))}</small></div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(2,Number(b.total)/max*100)}%"></div></div><span class="budget-amount">${fmtTwd(b.total)}</span></div></summary><div class="budget-detail"><div><small>住宿</small><b>${fmtTwd(b.hotel)}</b></div><div><small>長途交通／機票</small><b>${fmtTwd(b.transport)}</b></div><div><small>活動／保險</small><b>${fmtTwd(b.activity)}</b></div><div><small>餐飲</small><b>${fmtTwd((Number(b.norwayMeal)||0)+(Number(b.food)||0))}</b></div><div><small>市區交通</small><b>${fmtTwd(b.local)}</b></div><div><small>雜支／購物</small><b>${fmtTwd(b.misc)}</b></div></div><p class="subtitle">${escapeHtml(b.city)} · ${escapeHtml(b.note)}</p></details>`).join("");
-    }
-    function renderFood() {
-      $("#foodList").innerHTML=APP_DATA.food.map(f=>`<article class="info-card food-card"><div class="event-top"><div><span class="event-type">${escapeHtml(f.date)} · ${escapeHtml(f.city)} · ${escapeHtml(f.category)}</span><h3>${escapeHtml(f.shop)}</h3></div><span class="status ${statusClass(f.status)}">${escapeHtml(f.status)}</span></div><p class="subtitle">${escapeHtml(f.recommendation)}</p><div class="info-card-row"><span>預估價格</span><b class="food-price">${escapeHtml(f.price||"現場支付")}</b></div><div class="info-card-row"><span>提醒</span><b>${escapeHtml(f.note||"—")}</b></div></article>`).join("");
-    }
-    function renderMeals() {
-      $("#mealList").innerHTML=APP_DATA.mealReminders.map(m=>`<article class="info-card food-card"><div class="event-top"><div><span class="event-type">${escapeHtml(m.date)} · ${escapeHtml(m.city)}</span><h3>${escapeHtml(m.meals.join("／"))}</h3></div><span class="status pending">需自理</span></div><p class="subtitle">${escapeHtml(m.note)}</p></article>`).join("");
-    }
-
-    function bindGuideImages() {
-      const modal=$("#imageModal"), content=$("#imageModalContent"), caption=$("#imageModalCaption");
-      const closeModal=()=>{ modal.hidden=true; content.removeAttribute("src"); document.body.style.overflow=""; };
-      $$('[data-zoom-image]').forEach(button=>button.addEventListener("click",()=>{
-        const img=$("img",button), figure=button.closest("figure"), label=$("figcaption",figure)?.textContent.replace("點圖放大","").trim()||img.alt;
-        content.src=img.src; content.alt=img.alt; caption.textContent=label; modal.hidden=false; document.body.style.overflow="hidden";
-      }));
-      $("#imageModalClose").addEventListener("click",closeModal);
-      modal.addEventListener("click",event=>{ if(event.target===modal) closeModal(); });
-      document.addEventListener("keydown",event=>{ if(event.key==="Escape"&&!modal.hidden) closeModal(); });
-    }
-
-    function bindSegments(rootSelector, panelPrefix) {
-      $$(".segment",$(rootSelector)).forEach(btn=>btn.addEventListener("click",()=>{
-        $$(".segment",$(rootSelector)).forEach(x=>x.classList.toggle("active",x===btn));
-        const root=$(rootSelector).parentElement;
-        $$(".subview",root).forEach(x=>x.classList.toggle("active",x.id===`${panelPrefix}${btn.dataset.sub}`));
-      }));
-    }
-    function init() {
-      renderCountdown(); renderNetwork(); renderNotices(); renderDayView(); renderTransport(); renderHotels(); renderChecklist(); renderPractical(); renderBookings(); renderTax(); renderBudget(); renderFood(); renderMeals(); bindGuideImages();
-      $("#jumpToday").addEventListener("click",()=>{state.day=currentTripDay();save("aurora-day",state.day);renderDayView();toast(`已切換 Day ${state.day}`);});
-      $("#eventSearch").addEventListener("input",e=>{state.eventSearch=e.target.value;renderEvents();});
-      $("#clearSearch").addEventListener("click",()=>{$("#eventSearch").value="";state.eventSearch="";renderEvents();});
-      $("#resetChecks").addEventListener("click",()=>{if(confirm("確定要清除所有行李與待辦勾選紀錄嗎？")){state.checks={};save("aurora-checks",state.checks);renderChecklist();renderBookings();toast("行李與待辦已重設");}});
-      bindSegments("#luggageSegments","sub-"); bindSegments("#budgetSegments","budget-");
-      window.addEventListener("online",renderNetwork); window.addEventListener("offline",renderNetwork);
-    }
-    init();
