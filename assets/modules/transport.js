@@ -1,18 +1,30 @@
 /*
  * Transport module boundary.
  *
- * Phase 1 keeps rendering in common.js. Consumers can migrate to this module
- * incrementally while the visible transport UI remains unchanged.
+ * Phase 2 keeps the legacy runtime as a compatibility fallback while allowing
+ * consumers to use the extracted data boundary and renderer incrementally.
  */
 (function (root) {
   root.TravelTransport = Object.freeze({
     getData: function () {
-      return root.TravelTransportData
-        ? root.TravelTransportData.items
+      return root.TravelTransportData && typeof root.TravelTransportData.getItems === "function"
+        ? root.TravelTransportData.getItems()
         : [];
     },
+    createRenderer: function () {
+      if (!root.TravelTransportRenderer) return null;
+      return root.TravelTransportRenderer.create({
+        data: this.getData(),
+        state: root.state,
+        $: root.$,
+        $$: root.$$, 
+        escapeHtml: root.escapeHtml,
+        statusClass: root.statusClass,
+        fmtCost: root.fmtCost
+      });
+    },
     render: function () {
-      if (typeof renderTransport === "function") renderTransport();
+      if (typeof root.renderTransport === "function") return root.renderTransport();
     }
   });
 })(window);
