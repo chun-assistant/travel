@@ -153,38 +153,6 @@ const COUNTRY_STAGES = window.TravelCoreData.getCountryStages();
       renderCountryTrack();
       enableHorizontalDrag("#dayScroller");
       enableHorizontalDrag("#countryScroll");
-      const dayScroller = $("#dayScroller");
-      const countryScroll = $("#countryScroll");
-      if (dayScroller && countryScroll && !dayScroller.dataset.syncReady) {
-        dayScroller.dataset.syncReady = "1";
-        countryScroll.dataset.syncReady = "1";
-        let syncingScroll = false;
-        const syncScroll = (source, target) => {
-          if (syncingScroll) return;
-          const sourceMax = Math.max(1, source.scrollWidth - source.clientWidth);
-          const targetMax = Math.max(0, target.scrollWidth - target.clientWidth);
-          const progress = Math.max(0, Math.min(1, source.scrollLeft / sourceMax));
-          syncingScroll = true;
-          target.scrollLeft = progress * targetMax;
-          requestAnimationFrame(() => { syncingScroll = false; });
-        };
-        const syncCountryActive = () => {
-          const dayCount = APP_DATA.overview.length;
-          const step = 126 + 8;
-          const day = Math.max(1, Math.min(dayCount, Math.round(dayScroller.scrollLeft / step) + 1));
-          $$(".country-stage", countryScroll).forEach(btn => {
-            const startDay = Number(btn.style.getPropertyValue("--stage-start"));
-            const endDay = Number(btn.style.getPropertyValue("--stage-end")) - 1;
-            btn.classList.toggle("active", day >= startDay && day <= endDay);
-          });
-        };
-        dayScroller.addEventListener("scroll", () => {
-          syncScroll(dayScroller, countryScroll);
-          syncCountryActive();
-        }, {passive:true});
-        countryScroll.addEventListener("scroll", () => syncScroll(countryScroll, dayScroller), {passive:true});
-        syncCountryActive();
-      }
       const d = APP_DATA.overview.find(x => x.day === state.day);
       if (!d) return;
       $("#daySummary").innerHTML = `<article class="day-summary"><div class="day-kicker">DAY ${d.day} · ${escapeHtml(dateLabel(d.date))}</div><h3>${escapeHtml(d.city)}</h3><p>${escapeHtml(d.highlight)}</p><div class="day-summary-meta"><span>🚉 ${escapeHtml(d.transport)}</span><span>🛏️ ${escapeHtml(d.hotel)}</span><span>🚶 體力 ${escapeHtml(d.effort)}</span><span>💰 ${fmtTwd(d.estimate)}</span></div></article>`;
