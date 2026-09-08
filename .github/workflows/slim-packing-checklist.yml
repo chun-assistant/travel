@@ -61,7 +61,6 @@ jobs:
                           return start, end
               raise SystemExit(f'Unbalanced declaration for {name}; refusing to modify runtime.')
 
-          # PACKING_GROUPS is a top-level array declaration.
           p_start, p_end = extract_decl(runtime, 'const PACKING_GROUPS', '[')
           p_decl = runtime[p_start:p_end]
           array_start = p_decl.find('[')
@@ -118,10 +117,8 @@ jobs:
 
           r_start, r_end, render_fn = extract_function(runtime, 'renderChecklist')
           runtime = runtime[:r_start] + runtime[r_end:]
-
           s_start, s_end, reset_fn = extract_function(runtime, 'resetChecks')
           runtime = runtime[:s_start] + runtime[s_end:]
-
           if runtime.count('renderChecklist();') != 1:
               raise SystemExit('Expected exactly one legacy renderChecklist invocation; refusing to modify runtime.')
           runtime = runtime.replace(' renderChecklist();', '', 1)
@@ -207,10 +204,20 @@ jobs:
               reg = reg.replace('      checklist: "assets/modules/checklist.js",', '      checklist: "assets/modules/checklist.js",\n      checklistRenderer: "assets/modules/checklist-renderer.js",\n      checklistBootstrap: "assets/modules/checklist-bootstrap.js",')
           reg_path.write_text(reg, encoding='utf-8')
 
-          # Make the legacy wrapper globally visible for any old page references.
-          (root / 'assets/modules/packing.js').write_text('''/*\n * Packing module boundary.\n */\n(function (root) {\n  root.TravelPacking = Object.freeze({\n    getGroups: function () {\n      return root.TravelPackingData && typeof root.TravelPackingData.getGroups === "function"\n        ? root.TravelPackingData.getGroups()\n        : [];\n    }\n  });\n})(window);\n''', encoding='utf-8')
+          (root / 'assets/modules/packing.js').write_text('''/*
+ * Packing module boundary.
+ */
+(function (root) {
+  root.TravelPacking = Object.freeze({
+    getGroups: function () {
+      return root.TravelPackingData && typeof root.TravelPackingData.getGroups === "function"
+        ? root.TravelPackingData.getGroups()
+        : [];
+    }
+  });
+})(window);
+''', encoding='utf-8')
 
-          # Strong postconditions: old ownership must be gone.
           final_runtime = runtime_path.read_text(encoding='utf-8')
           for token in ('const PACKING_GROUPS', 'function renderChecklist', 'function resetChecks', 'renderChecklist();'):
               if token in final_runtime:
@@ -230,3 +237,5 @@ jobs:
           git rm .github/workflows/slim-packing-checklist.yml
           git commit -m "chore: remove one-shot packing checklist workflow [skip ci]"
           git push origin refactor-transport-safe-v2
+
+# trigger migration
