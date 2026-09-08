@@ -1,0 +1,61 @@
+name: Migrate flight badges
+
+on:
+  push:
+    branches:
+      - refactor-transport-safe-v2
+    paths:
+      - 'assets/common-runtime.js'
+      - 'assets/common.js'
+      - '.github/workflows/migrate-flight-badges.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: "!contains(github.event.head_commit.message, '[flight-badges-migrated]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract flight badge module
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('assets/common-runtime.js')
+          s=p.read_text(encoding='utf-8')
+          marker='    /* FLIGHT_CHECKIN_HIGHLIGHT */'
+          start=s.find(marker)
+          if start<0: raise SystemExit('flight badge block not found')
+          block=s[start:]
+          # Keep the existing implementation byte-for-byte apart from its wrapper comment.
+          Path('assets/modules/flight-badges.js').write_text(block+'\n',encoding='utf-8')
+          p.write_text(s[:start].rstrip()+'\n',encoding='utf-8')
+
+          c=Path('assets/common.js')
+          cs=c.read_text(encoding='utf-8')
+          old='var scripts = [packingDataSrc, printDataSrc, coreDataSrc, legacySrc];'
+          new='var scripts = [packingDataSrc, printDataSrc, coreDataSrc, legacySrc, base + "modules/flight-badges.js"];'
+          if old not in cs: raise SystemExit('script loader marker not found')
+          cs=cs.replace(old,new,1)
+          # In the document.write path, append after legacy so initialization order is preserved.
+          old2="document.write('<script src=\"' + coreDataSrc + '\"><\\/script>');"
+          new2=old2+"\n    document.write('<script src=\"' + base + 'modules/flight-badges.js' + '\"><\\/script>');"
+          if old2 not in cs: raise SystemExit('document.write loader marker not found')
+          cs=cs.replace(old2,new2,1)
+          c.write_text(cs,encoding='utf-8')
+          PY
+      - name: Verify
+        run: |
+          test -s assets/modules/flight-badges.js
+          ! grep -q 'FLIGHT_CHECKIN_HIGHLIGHT' assets/common-runtime.js
+          grep -q 'modules/flight-badges.js' assets/common.js
+      - name: Commit and remove workflow
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/modules/flight-badges.js assets/common-runtime.js assets/common.js .github/workflows/migrate-flight-badges.yml
+          git commit -m 'refactor: extract flight badges from common runtime [flight-badges-migrated]'
+          git rm .github/workflows/migrate-flight-badges.yml
+          git commit -m 'chore: remove flight badge migration workflow'
+          git push
