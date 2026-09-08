@@ -6,8 +6,7 @@
  * into assets/data and assets/modules.
  *
  * The legacy runtime is always loaded first and synchronously. On the daily page,
- * Stay modules are then loaded in dependency order and take over only the Stay
- * panel. This preserves the legacy initialization order for every other feature.
+ * Daily modules are then loaded in dependency order without changing legacy timing.
  */
 (function () {
   var current = document.currentScript;
@@ -22,9 +21,9 @@
   if (document.readyState === "loading" && document.write) {
     document.write('<script src="' + packingDataSrc + '"><\/script>');
     document.write('<script src="' + coreDataSrc + '"><\/script>');
-    document.write('<script src="' + base + 'modules/flight-badges.js' + '"><\/script>');
     document.write('<script src="' + printDataSrc + '"><\/script>');
     document.write('<script src="' + legacySrc.replace(/"/g, "&quot;") + '"><\/script>');
+    document.write('<script src="' + base + 'modules/flight-badges.js' + '"><\/script>');
 
     if (isDailyPage) {
       document.write('<script src="' + base + 'modules/runtime-utils.js"><\/script>');
