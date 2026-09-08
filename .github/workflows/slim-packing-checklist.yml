@@ -1,0 +1,232 @@
+name: One-shot packing checklist migration
+
+on:
+  push:
+    branches: [refactor-transport-safe-v2]
+    paths:
+      - .github/workflows/slim-packing-checklist.yml
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refactor-transport-safe-v2
+          fetch-depth: 0
+
+      - name: Extract packing data and checklist runtime
+        shell: python
+        run: |
+          from pathlib import Path
+
+          root = Path('.')
+          runtime_path = root / 'assets/common-runtime.js'
+          runtime = runtime_path.read_text(encoding='utf-8')
+
+          def extract_decl(text, name, opener, terminator=None):
+              start = text.find(name)
+              if start < 0:
+                  raise SystemExit(f'Expected {name} was not found; refusing to modify runtime.')
+              open_pos = text.find(opener, start)
+              if open_pos < 0:
+                  raise SystemExit(f'Expected opener for {name} was not found; refusing to modify runtime.')
+              depth = 0
+              in_str = None
+              esc = False
+              for i in range(open_pos, len(text)):
+                  ch = text[i]
+                  if in_str:
+                      if esc:
+                          esc = False
+                      elif ch == '\\':
+                          esc = True
+                      elif ch == in_str:
+                          in_str = None
+                      continue
+                  if ch in "'\"`":
+                      in_str = ch
+                      continue
+                  if ch == opener:
+                      depth += 1
+                  elif ch == (']' if opener == '[' else '}'):
+                      depth -= 1
+                      if depth == 0:
+                          end = i + 1
+                          if terminator and not text[end:].startswith(terminator):
+                              raise SystemExit(f'Unexpected terminator after {name}; refusing to modify runtime.')
+                          return start, end
+              raise SystemExit(f'Unbalanced declaration for {name}; refusing to modify runtime.')
+
+          # PACKING_GROUPS is a top-level array declaration.
+          p_start, p_end = extract_decl(runtime, 'const PACKING_GROUPS', '[')
+          p_decl = runtime[p_start:p_end]
+          array_start = p_decl.find('[')
+          array_end = p_decl.rfind(']') + 1
+          packing_items = p_decl[array_start:array_end]
+          data = '''/*
+ * Packing data boundary.
+ *
+ * Extracted from the legacy runtime without changing the packing data itself.
+ */
+(function (root) {
+  var groups = %s;
+  root.TravelPackingData = Object.freeze({
+    getGroups: function () {
+      return groups.slice();
+    }
+  });
+})(window);
+''' % packing_items
+          (root / 'assets/data/packing.js').write_text(data, encoding='utf-8')
+          runtime = runtime[:p_start] + runtime[p_end:]
+
+          def extract_function(text, name):
+              marker = 'function ' + name + '('
+              start = text.find(marker)
+              if start < 0:
+                  raise SystemExit(f'Expected function {name} was not found; refusing to modify runtime.')
+              brace = text.find('{', start)
+              if brace < 0:
+                  raise SystemExit(f'Expected function body {name} was not found; refusing to modify runtime.')
+              depth = 0
+              in_str = None
+              esc = False
+              for i in range(brace, len(text)):
+                  ch = text[i]
+                  if in_str:
+                      if esc:
+                          esc = False
+                      elif ch == '\\':
+                          esc = True
+                      elif ch == in_str:
+                          in_str = None
+                      continue
+                  if ch in "'\"`":
+                      in_str = ch
+                      continue
+                  if ch == '{':
+                      depth += 1
+                  elif ch == '}':
+                      depth -= 1
+                      if depth == 0:
+                          return start, i + 1, text[start:i + 1]
+              raise SystemExit(f'Unbalanced function {name}; refusing to modify runtime.')
+
+          r_start, r_end, render_fn = extract_function(runtime, 'renderChecklist')
+          runtime = runtime[:r_start] + runtime[r_end:]
+
+          s_start, s_end, reset_fn = extract_function(runtime, 'resetChecks')
+          runtime = runtime[:s_start] + runtime[s_end:]
+
+          if runtime.count('renderChecklist();') != 1:
+              raise SystemExit('Expected exactly one legacy renderChecklist invocation; refusing to modify runtime.')
+          runtime = runtime.replace(' renderChecklist();', '', 1)
+          runtime_path.write_text(runtime, encoding='utf-8')
+
+          renderer = '''/*
+ * Checklist renderer.
+ *
+ * Owns the existing checklist rendering and reset behavior. The function bodies
+ * are preserved verbatim; only their data source moved out of common-runtime.js.
+ */
+(function (root) {
+  var PACKING_GROUPS = root.TravelPackingData && typeof root.TravelPackingData.getGroups === "function"
+    ? root.TravelPackingData.getGroups()
+    : [];
+
+  %s
+
+  %s
+
+  root.TravelChecklistRenderer = Object.freeze({
+    render: renderChecklist,
+    reset: resetChecks
+  });
+})(window);
+''' % (render_fn, reset_fn)
+          (root / 'assets/modules/checklist-renderer.js').write_text(renderer, encoding='utf-8')
+
+          module = '''/*
+ * Checklist module boundary.
+ */
+(function (root) {
+  root.TravelChecklist = Object.freeze({
+    render: function () {
+      if (root.TravelChecklistRenderer) return root.TravelChecklistRenderer.render();
+    },
+    reset: function () {
+      if (root.TravelChecklistRenderer) return root.TravelChecklistRenderer.reset();
+    }
+  });
+})(window);
+'''
+          (root / 'assets/modules/checklist.js').write_text(module, encoding='utf-8')
+
+          bootstrap = '''/*
+ * Checklist page bootstrap.
+ */
+(function (root) {
+  function boot() {
+    if (!root.TravelChecklist || typeof root.TravelChecklist.render !== "function") return;
+    if (!document.getElementById("checklistList")) return;
+    root.TravelChecklist.render();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot, { once: true });
+  } else {
+    boot();
+  }
+})(window);
+'''
+          (root / 'assets/modules/checklist-bootstrap.js').write_text(bootstrap, encoding='utf-8')
+
+          common_path = root / 'assets/common.js'
+          common = common_path.read_text(encoding='utf-8')
+          anchor1 = "      document.write('<script src=\"' + base + 'modules/apps-bootstrap.js'><\\/script>');\n      document.write('<script src=\"' + base + 'data/stay.js'><\\/script>');"
+          replacement1 = "      document.write('<script src=\"' + base + 'modules/apps-bootstrap.js'><\\/script>');\n      document.write('<script src=\"' + base + 'data/packing.js'><\\/script>');\n      document.write('<script src=\"' + base + 'modules/checklist-renderer.js'><\\/script>');\n      document.write('<script src=\"' + base + 'modules/checklist.js'><\\/script>');\n      document.write('<script src=\"' + base + 'modules/checklist-bootstrap.js'><\\/script>');\n      document.write('<script src=\"' + base + 'data/stay.js'><\\/script>');"
+          if common.count(anchor1) != 1:
+              raise SystemExit('Expected common.js document.write anchor was not found; refusing to modify.')
+          common = common.replace(anchor1, replacement1, 1)
+          anchor2 = "      base + \"modules/apps-bootstrap.js\",\n      base + \"data/stay.js\","
+          replacement2 = "      base + \"modules/apps-bootstrap.js\",\n      base + \"data/packing.js\",\n      base + \"modules/checklist-renderer.js\",\n      base + \"modules/checklist.js\",\n      base + \"modules/checklist-bootstrap.js\",\n      base + \"data/stay.js\","
+          if common.count(anchor2) != 1:
+              raise SystemExit('Expected common.js dynamic-loader anchor was not found; refusing to modify.')
+          common = common.replace(anchor2, replacement2, 1)
+          common_path.write_text(common, encoding='utf-8')
+
+          reg_path = root / 'assets/modules/registry.js'
+          reg = reg_path.read_text(encoding='utf-8')
+          if 'packingData:' not in reg:
+              reg = reg.replace('      packing: "assets/modules/packing.js",', '      packing: "assets/modules/packing.js",\n      packingData: "assets/data/packing.js",')
+          if 'checklistRenderer:' not in reg:
+              reg = reg.replace('      checklist: "assets/modules/checklist.js",', '      checklist: "assets/modules/checklist.js",\n      checklistRenderer: "assets/modules/checklist-renderer.js",\n      checklistBootstrap: "assets/modules/checklist-bootstrap.js",')
+          reg_path.write_text(reg, encoding='utf-8')
+
+          # Make the legacy wrapper globally visible for any old page references.
+          (root / 'assets/modules/packing.js').write_text('''/*\n * Packing module boundary.\n */\n(function (root) {\n  root.TravelPacking = Object.freeze({\n    getGroups: function () {\n      return root.TravelPackingData && typeof root.TravelPackingData.getGroups === "function"\n        ? root.TravelPackingData.getGroups()\n        : [];\n    }\n  });\n})(window);\n''', encoding='utf-8')
+
+          # Strong postconditions: old ownership must be gone.
+          final_runtime = runtime_path.read_text(encoding='utf-8')
+          for token in ('const PACKING_GROUPS', 'function renderChecklist', 'function resetChecks', 'renderChecklist();'):
+              if token in final_runtime:
+                  raise SystemExit(f'Postcondition failed: {token} still exists in common-runtime.js')
+          for path in ['assets/data/packing.js', 'assets/modules/checklist-renderer.js', 'assets/modules/checklist.js', 'assets/modules/checklist-bootstrap.js']:
+              if not (root / path).exists():
+                  raise SystemExit(f'Missing generated file: {path}')
+
+      - name: Commit migration and remove one-shot workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/common-runtime.js assets/common.js assets/modules/registry.js assets/modules/packing.js assets/modules/checklist.js assets/data/packing.js assets/modules/checklist-renderer.js assets/modules/checklist-bootstrap.js
+          git add .github/workflows/slim-packing-checklist.yml
+          git commit -m "refactor: extract packing and checklist from runtime [skip ci]"
+          git rm .github/workflows/slim-packing-checklist.yml
+          git commit -m "chore: remove one-shot packing checklist workflow [skip ci]"
+          git push origin refactor-transport-safe-v2
