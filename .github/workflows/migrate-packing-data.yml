@@ -1,0 +1,88 @@
+name: Migrate packing data
+
+on:
+  push:
+    branches:
+      - refactor-transport-safe-v2
+    paths:
+      - 'assets/common-runtime.js'
+      - 'assets/common.js'
+      - '.github/workflows/migrate-packing-data.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: "!contains(github.event.head_commit.message, '[packing-migrated]')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract packing data
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          runtime = Path('assets/common-runtime.js').read_text(encoding='utf-8')
+          marker = 'const PACKING_GROUPS = ['
+          start = runtime.find(marker)
+          if start < 0:
+              raise SystemExit('PACKING_GROUPS declaration not found')
+          end = runtime.find('];', start)
+          if end < 0:
+              raise SystemExit('PACKING_GROUPS end not found')
+          end += 2
+          declaration = runtime[start:end]
+          array_text = declaration[len('const PACKING_GROUPS = '):]
+
+          data = '''/* Extracted from the legacy runtime. Keep the data shape unchanged. */
+          (function (root) {
+            const PACKING_GROUPS = %s;
+            root.TravelPackingData = Object.freeze({
+              getGroups: function () { return PACKING_GROUPS; }
+            });
+          })(window);
+          ''' % array_text
+          Path('assets/data/packing.js').write_text(data, encoding='utf-8')
+
+          replacement = 'const PACKING_GROUPS = window.TravelPackingData.getGroups();'
+          runtime = runtime[:start] + replacement + runtime[end:]
+          Path('assets/common-runtime.js').write_text(runtime, encoding='utf-8')
+          PY
+
+      - name: Load packing data before legacy runtime
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('assets/common.js')
+          s = p.read_text(encoding='utf-8')
+          old = 'var legacySrc = base + "common-legacy.js";'
+          new = 'var packingDataSrc = base + "data/packing.js";\n  var legacySrc = base + "common-legacy.js";'
+          if old not in s:
+              raise SystemExit('common.js legacy loader marker not found')
+          s = s.replace(old, new, 1)
+          s = s.replace("document.write('<script src=\"' + legacySrc.replace(/\"/g, \"&quot;\") + '\"><\\/script>');", "document.write('<script src=\"' + packingDataSrc + '\"><\\/script>');\n    document.write('<script src=\"' + legacySrc.replace(/\"/g, \"&quot;\") + '\"><\\/script>');", 1)
+          s = s.replace('var scripts = [legacySrc];', 'var scripts = [packingDataSrc, legacySrc];', 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Verify migration
+        run: |
+          test -s assets/data/packing.js
+          ! grep -q 'const PACKING_GROUPS = \[' assets/common-runtime.js
+          grep -q 'TravelPackingData' assets/common-runtime.js
+          grep -q 'data/packing.js' assets/common.js
+
+      - name: Commit migration
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/data/packing.js assets/common-runtime.js assets/common.js
+          git diff --cached --quiet && exit 0
+          git commit -m 'refactor: extract packing data from common runtime [packing-migrated]'
+          git push
