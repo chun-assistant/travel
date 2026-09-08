@@ -27,8 +27,6 @@
   }
 
   function init() {
-    var unpaidActive = false;
-
     if (typeof APP_DATA !== 'undefined' && Array.isArray(APP_DATA.transport)) {
       APP_DATA.transport = APP_DATA.transport.filter(function (t) {
         return !(String(t.date || '') === '10/10' &&
@@ -84,53 +82,6 @@
 
       renderTransportPage();
     }
-
-    var filters = document.getElementById('transportFilters');
-
-    function applyUnpaid() {
-      document.querySelectorAll('#transportList .transport-card').forEach(function (card) {
-        var status = card.querySelector('.status');
-        var unpaid = status && status.textContent.trim() === '尚未購票';
-        card.classList.toggle('is-unpaid', !!unpaid);
-        card.style.display = unpaidActive && !unpaid ? 'none' : '';
-      });
-
-      var button = filters && filters.querySelector('.unpaid-filter');
-      if (button) {
-        button.classList.toggle('active', unpaidActive);
-        button.setAttribute('aria-pressed', String(unpaidActive));
-      }
-    }
-
-    function ensureUnpaid() {
-      if (!filters || filters.querySelector('.unpaid-filter')) return;
-      var button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'filter-chip unpaid-filter';
-      button.textContent = '尚未購票';
-      button.setAttribute('aria-pressed', 'false');
-      filters.appendChild(button);
-      button.addEventListener('click', function () {
-        unpaidActive = !unpaidActive;
-        applyUnpaid();
-      });
-    }
-
-    var observer = new MutationObserver(function () {
-      ensureUnpaid();
-      applyUnpaid();
-    });
-
-    if (filters) observer.observe(filters, { childList: true, subtree: true });
-    ensureUnpaid();
-    applyUnpaid();
-
-    document.addEventListener('click', function (event) {
-      if (event.target.closest('#transportFilters .filter-chip:not(.unpaid-filter)')) {
-        unpaidActive = false;
-        setTimeout(applyUnpaid, 0);
-      }
-    }, true);
   }
 
   if (document.readyState === 'loading') {
