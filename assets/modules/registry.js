@@ -17,6 +17,7 @@
       daily: "assets/modules/daily.js",
       transport: "assets/modules/transport.js",
       transportRenderer: "assets/modules/transport-renderer.js",
+      transportRendererBridge: "assets/modules/transport-renderer-bridge.js",
       navigation: "assets/modules/navigation.js",
       reminders: "assets/modules/reminders.js",
       apps: "assets/modules/apps.js",
