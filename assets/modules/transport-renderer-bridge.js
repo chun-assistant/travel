@@ -7,10 +7,11 @@
  * the original renderTransport function remains in place.
  */
 (function (root) {
-  if (!root.TravelTransportRenderer || typeof root.renderTransport !== "function") return;
-  if (typeof root.APP_DATA === "undefined" || typeof root.state === "undefined") return;
+  if (typeof root.TravelTransportRenderer === "undefined") return;
+  if (typeof renderTransport !== "function") return;
+  if (typeof APP_DATA === "undefined" || typeof state === "undefined") return;
 
-  var legacyRenderTransport = root.renderTransport;
+  var legacyRenderTransport = renderTransport;
 
   root.renderTransport = function () {
     var filters = document.getElementById("transportFilters");
@@ -18,13 +19,13 @@
     if (!filters || !list) return legacyRenderTransport();
 
     var render = root.TravelTransportRenderer.create({
-      data: Array.isArray(root.APP_DATA.transport) ? root.APP_DATA.transport : [],
-      state: root.state,
-      $: root.$,
-      $$: root.$$, 
-      escapeHtml: root.escapeHtml,
-      statusClass: root.statusClass,
-      fmtCost: root.fmtCost
+      data: Array.isArray(APP_DATA.transport) ? APP_DATA.transport : [],
+      state: state,
+      $: typeof $ !== "undefined" ? $ : undefined,
+      $$: typeof $$ !== "undefined" ? $$ : undefined,
+      escapeHtml: typeof escapeHtml !== "undefined" ? escapeHtml : undefined,
+      statusClass: typeof statusClass !== "undefined" ? statusClass : undefined,
+      fmtCost: typeof fmtCost !== "undefined" ? fmtCost : undefined
     });
 
     return render();
