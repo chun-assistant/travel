@@ -1,13 +1,16 @@
 /*
  * Transport data boundary.
  *
- * The current source of truth remains APP_DATA in common.js. This adapter
- * exposes the transport slice without changing the existing renderer.
+ * APP_DATA in common.js remains the source of truth. Resolve the array at
+ * access time so page-specific enhancements that replace APP_DATA.transport
+ * cannot leave this adapter holding a stale array reference.
  */
 (function (root) {
-  if (typeof APP_DATA === "undefined") return;
-
   root.TravelTransportData = Object.freeze({
-    items: APP_DATA.transport || []
+    getItems: function () {
+      return typeof root.APP_DATA !== "undefined" && Array.isArray(root.APP_DATA.transport)
+        ? root.APP_DATA.transport
+        : [];
+    }
   });
 })(window);
