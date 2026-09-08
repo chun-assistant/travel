@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#102d3e">
   <title>退稅攻略｜2026 歐洲極光之旅</title>
-  <link rel="stylesheet" href="../assets/common.css?v=20260908-mobile2">
+  <link rel="stylesheet" href="../assets/common.css?v=20260908-nav1">
   <style>
     #luggageSegments{display:flex!important}
     #tab-luggage{display:block!important}
@@ -172,17 +172,17 @@
   </main>
 
   <nav class="bottom-nav" aria-label="主要導覽">
-    <a class="nav-btn" href="../daily/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"></path></svg>每日行程</a>
-    <a class="nav-btn" href="../transport/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 17h14M6 17l-1 3M18 17l1 3M6 4h12l2 10H4L6 4Z"></path><circle cx="8" cy="14" r="1"></circle><circle cx="16" cy="14" r="1"></circle></svg>交通</a>
-    <a class="nav-btn" href="../stay/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 20V7l9-4 9-4v13M7 20v-5h10v5M8 9h.01M12 9h.01M16 9h.01M8 12h.01M12 12h.01M16 12h.01"></path></svg>住宿</a>
-    <a class="nav-btn active" href="./"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="5" y="6" width="14" height="15" rx="2"></rect><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M9 10v7M15 10v7"></path></svg>行前與工具</a>
-    <a class="nav-btn" href="../budget/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M16 15h2"></path></svg>預算</a>
-  </nav>
+  <a class="nav-btn" href="../daily/" id="nav-days"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"></path></svg>每日行程</a>
+  <a class="nav-btn" href="../transport/" id="nav-transport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 17h14M6 17l-1 3M18 17l1 3M6 4h12l2 10H4L6 4Z"></path><circle cx="8" cy="14" r="1"></circle><circle cx="16" cy="14" r="1"></circle></svg>交通</a>
+  <a class="nav-btn" href="../stay/" id="nav-hotels"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 20V7l9-4 9 4v13M7 20v-5h10v5M8 9h.01M12 9h.01M16 9h.01M8 12h.01M12 12h.01M16 12h.01"></path></svg>住宿</a>
+  <a class="nav-btn" href="../prep-tools/" id="nav-luggage" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="5" y="6" width="14" height="15" rx="2"></rect><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M9 10v7M15 10v7"></path></svg>行前工具</a>
+  <a class="nav-btn" href="../budget/" id="nav-budget"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M16 15h2"></path></svg>餐食與購物</a>
+</nav>
 </div>
 
 <div class="image-modal" id="taxImageModal" hidden><button class="image-modal-close" id="taxImageClose" type="button" aria-label="關閉">×</button><img id="taxImageModalContent" alt="退稅流程圖放大檢視"></div>
-<script src="../assets/subpage-runtime.js"></script>
-<script src="../assets/common.js"></script>
+<script src="../assets/subpage-runtime.js?v=20260908-nav1"></script>
+<script src="../assets/common.js?v=20260908-nav1"></script>
 <script>
 (function(){
   const key='europe-trip-2026-tax-checks';

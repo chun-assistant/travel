@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#102d3e">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>餐食與購物｜2026 歐洲極光之旅</title>
-  <link rel="stylesheet" href="../assets/common.css?v=20260908-mobile2">
+  <link rel="stylesheet" href="../assets/common.css?v=20260908-nav1">
   <style>
     #foodSegments{display:flex!important}
     .food-view{display:none}.food-view.active{display:block}
@@ -73,6 +73,18 @@
       <div class="food-view" id="food-shopping">
         <div class="notice"><div class="notice-icon">📝</div><div><strong>我的購物清單</strong><p>每位團員可在自己的手機建立要買的物品，勾選已購買並隨時修改。</p></div></div>
         <article class="info-card">
+          <h3>📦 本機保存與備份</h3>
+          <p style="margin-top:0;color:var(--muted)">清單會自動儲存在目前手機與瀏覽器。重要新增後可備份成通用 JSON 檔，iPhone／Android 都能還原。</p>
+          <div class="form-actions">
+            <button class="form-btn" id="backupShoppingList" type="button">備份到手機</button>
+            <button class="form-btn secondary" id="restoreShoppingList" type="button">還原備份</button>
+            <button class="form-btn secondary" id="shareShoppingList" type="button">分享清單</button>
+          </div>
+          <input id="shoppingRestoreFile" type="file" accept=".json,application/json" hidden>
+          <p class="device-note">📱 備份時請選手機本機位置：iPhone 可選「我的 iPhone」，Android 可選「下載／Files」等本機資料夾；不會自動上傳雲端。</p>
+          <p class="device-note" id="shoppingBackupStatus" role="status" aria-live="polite"></p>
+        </article>
+        <article class="info-card">
           <h3 id="shoppingFormTitle">＋ 新增購物項目</h3>
           <div class="shopping-form">
             <label class="full">商品名稱<input id="shopName" type="text" placeholder="例如：Fazer 巧克力" maxlength="80"></label>
@@ -84,7 +96,7 @@
             <label class="full note-field">備註<textarea id="shopNote" placeholder="口味、尺寸、店家等" maxlength="180"></textarea></label>
           </div>
           <div class="form-actions"><button class="form-btn" id="saveShopItem" type="button">加入清單</button><button class="form-btn secondary" id="cancelShopEdit" type="button" hidden>取消編輯</button></div>
-          <p class="device-note">🔒 清單只儲存在目前瀏覽器／裝置，不會同步給其他團員，也不會上傳到網站。</p>
+          <p class="device-note">🔒 每次新增、修改與勾選都會自動保存在目前瀏覽器／裝置；不會同步給其他團員，也不會上傳到網站。</p>
         </article>
         <div class="shopping-summary"><div><b>待買清單</b><small id="shoppingCount">0 項</small></div><button class="small-action" id="clearBought" type="button">清除已購買</button></div>
         <article class="info-card" id="shoppingList"></article>
@@ -93,17 +105,17 @@
   </main>
 
   <nav class="bottom-nav" aria-label="主要導覽">
-    <a class="nav-btn" href="../daily/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"></path></svg>每日行程</a>
-    <a class="nav-btn" href="../transport/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 17h14M6 17l-1 3M18 17l1 3M6 4h12l2 10H4L6 4Z"></path><circle cx="8" cy="14" r="1"></circle><circle cx="16" cy="14" r="1"></circle></svg>交通</a>
-    <a class="nav-btn" href="../stay/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 20V7l9-4 9 4v13M7 20v-5h10v5M8 9h.01M12 9h.01M16 9h.01M8 12h.01M12 12h.01M16 12h.01"></path></svg>住宿</a>
-    <a class="nav-btn" href="../prep-tools/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="5" y="6" width="14" height="15" rx="2"></rect><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M9 10v7M15 10v7"></path></svg>行前工具</a>
-    <a class="nav-btn active" href="./"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M16 15h2"></path></svg>餐食與購物</a>
-  </nav>
+  <a class="nav-btn" href="../daily/" id="nav-days"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"></path></svg>每日行程</a>
+  <a class="nav-btn" href="../transport/" id="nav-transport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 17h14M6 17l-1 3M18 17l1 3M6 4h12l2 10H4L6 4Z"></path><circle cx="8" cy="14" r="1"></circle><circle cx="16" cy="14" r="1"></circle></svg>交通</a>
+  <a class="nav-btn" href="../stay/" id="nav-hotels"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 20V7l9-4 9 4v13M7 20v-5h10v5M8 9h.01M12 9h.01M16 9h.01M8 12h.01M12 12h.01M16 12h.01"></path></svg>住宿</a>
+  <a class="nav-btn" href="../prep-tools/" id="nav-luggage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="5" y="6" width="14" height="15" rx="2"></rect><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M9 10v7M15 10v7"></path></svg>行前工具</a>
+  <a class="nav-btn" href="../budget/" id="nav-budget" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M16 15h2"></path></svg>餐食與購物</a>
+</nav>
 </div>
 
 <div class="image-modal" id="mealModal" hidden><button class="image-modal-close" id="mealModalClose" type="button" aria-label="關閉">×</button><img src="../assets/meal-overview.svg" alt="放大的18天每日餐食總覽"></div>
 <script src="../assets/shopping-data.js?v=20260908-image2"></script>
-<script src="../assets/finland-shopping-extra.js"></script>
+<script src="../assets/finland-shopping-extra.js?v=20260908-assets1"></script>
 <script>
 (function(){
   const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
@@ -121,6 +133,39 @@
   const KEY='aurora-shopping-list-v1';let items=[];let editing=-1;
   try{items=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(items))items=[]}catch(e){items=[]}
   function save(){localStorage.setItem(KEY,JSON.stringify(items));render()}
+  function setBackupStatus(message){const el=$('#shoppingBackupStatus');if(el)el.textContent=message||''}
+  function backupFilename(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return `極光旅行購物清單_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.json`}
+  function backupPayload(){return {type:'aurora-shopping-list-backup',version:1,exportedAt:new Date().toISOString(),items}}
+  async function backupToDevice(){
+    const json=JSON.stringify(backupPayload(),null,2),name=backupFilename(),file=new File([json],name,{type:'application/json'});
+    try{
+      if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+        await navigator.share({title:'極光旅行購物清單備份',files:[file]});
+        setBackupStatus('已開啟系統儲存／分享選單；請確認選擇手機本機資料夾。');
+        return;
+      }
+    }catch(e){if(e&&e.name==='AbortError')return}
+    const url=URL.createObjectURL(file),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    setBackupStatus('備份檔已下載；請確認檔案保存在手機本機資料夾。');
+  }
+  function normalizeBackupItems(rows){if(!Array.isArray(rows))throw new Error('備份格式不正確');return rows.filter(x=>x&&typeof x.name==='string'&&x.name.trim()).map(x=>({name:String(x.name).trim().slice(0,80),country:String(x.country||'其他').slice(0,20),city:String(x.city||'').slice(0,40),qty:Math.max(1,Math.min(999,Number(x.qty)||1)),budget:String(x.budget||'').slice(0,30),forWho:String(x.forWho||'').slice(0,50),note:String(x.note||'').slice(0,180),done:!!x.done}))}
+  async function restoreFromFile(file){
+    try{
+      const parsed=JSON.parse(await file.text()),rows=Array.isArray(parsed)?parsed:parsed&&parsed.items,restored=normalizeBackupItems(rows);
+      if(!confirm(`將以備份檔的 ${restored.length} 項取代目前 ${items.length} 項購物清單，確定還原嗎？`)){setBackupStatus('已取消還原，原本清單沒有變更。');return}
+      items=restored;save();resetForm();setBackupStatus(`還原完成：共 ${items.length} 項。`);
+    }catch(e){setBackupStatus('無法還原：請確認選擇的是本頁匯出的 JSON 備份檔。')}
+  }
+  function shoppingShareText(){
+    if(!items.length)return '🛍️ 2026 極光旅行購物清單\n目前沒有購物項目。';
+    const groups={};items.forEach(x=>(groups[x.country||'其他']||(groups[x.country||'其他']=[])).push(x));
+    const lines=['🛍️ 2026 極光旅行購物清單'];Object.entries(groups).forEach(([country,rows])=>{lines.push('',`【${country}】`);rows.forEach(x=>lines.push(`${x.done?'☑':'☐'} ${x.name} × ${Number(x.qty)||1}${x.city?'｜'+x.city:''}${x.forWho?'｜給 '+x.forWho:''}${x.budget?'｜預算 '+x.budget:''}${x.note?'｜'+x.note:''}`))});return lines.join('\n')
+  }
+  async function shareShoppingList(){
+    const text=shoppingShareText();
+    try{if(navigator.share){await navigator.share({title:'極光旅行購物清單',text});setBackupStatus('已開啟分享選單。');return}}catch(e){if(e&&e.name==='AbortError')return}
+    try{await navigator.clipboard.writeText(text);setBackupStatus('此瀏覽器未提供分享選單，已將清單複製到剪貼簿。')}catch(e){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();setBackupStatus('已將清單複製到剪貼簿。')}
+  }
   function render(){const box=$('#shoppingList');$('#shoppingCount').textContent=`${items.filter(x=>!x.done).length} 待買／${items.length} 總項目`;if(!items.length){box.innerHTML='<div class="empty-list">目前沒有購物項目。可自行新增，或從「伴手禮推薦」一鍵加入。</div>';return}box.innerHTML=items.map((x,i)=>`<div class="shopping-item ${x.done?'done':''}"><input type="checkbox" data-done="${i}" ${x.done?'checked':''} aria-label="${x.done?'取消已購買':'標示已購買'}"><div class="shopping-name"><b>${esc(x.name)} × ${Number(x.qty)||1}</b><div class="shopping-detail">${[x.country,x.city,x.forWho&&'給 '+x.forWho,x.budget&&'預算 '+x.budget,x.note].filter(Boolean).map(esc).join(' · ')}</div></div><div class="item-actions"><button class="item-action" type="button" data-edit="${i}">編輯</button><button class="item-action delete" type="button" data-delete="${i}">刪除</button></div></div>`).join('')}
   function resetForm(){editing=-1;$('#shoppingFormTitle').textContent='＋ 新增購物項目';$('#saveShopItem').textContent='加入清單';$('#cancelShopEdit').hidden=true;$('#shopName').value='';$('#shopCountry').value='奧地利';$('#shopCity').value='';$('#shopQty').value='1';$('#shopBudget').value='';$('#shopFor').value='';$('#shopNote').value=''}
   function fillForm(i){const x=items[i];if(!x)return;editing=i;$('#shoppingFormTitle').textContent='編輯購物項目';$('#saveShopItem').textContent='儲存修改';$('#cancelShopEdit').hidden=false;$('#shopName').value=x.name||'';$('#shopCountry').value=x.country||'其他';$('#shopCity').value=x.city||'';$('#shopQty').value=x.qty||1;$('#shopBudget').value=x.budget||'';$('#shopFor').value=x.forWho||'';$('#shopNote').value=x.note||'';$('#food-shopping').scrollIntoView({behavior:'smooth',block:'start'})}
@@ -129,6 +174,10 @@
   $('#shoppingList').addEventListener('change',e=>{const i=Number(e.target.dataset.done);if(Number.isInteger(i)&&items[i]){items[i].done=e.target.checked;save()}});
   $('#shoppingList').addEventListener('click',e=>{if(e.target.dataset.edit!==undefined)fillForm(Number(e.target.dataset.edit));if(e.target.dataset.delete!==undefined){const i=Number(e.target.dataset.delete);if(items[i]){items.splice(i,1);save();if(editing===i)resetForm()}}});
   $('#clearBought').addEventListener('click',()=>{items=items.filter(x=>!x.done);save();resetForm()});
+  $('#backupShoppingList').addEventListener('click',backupToDevice);
+  $('#restoreShoppingList').addEventListener('click',()=>{const input=$('#shoppingRestoreFile');input.value='';input.click()});
+  $('#shoppingRestoreFile').addEventListener('change',e=>{const file=e.target.files&&e.target.files[0];if(file)restoreFromFile(file)});
+  $('#shareShoppingList').addEventListener('click',shareShoppingList);
   $('#souvenirList').addEventListener('click',e=>{const b=e.target.closest('[data-add-item]');if(!b)return;items.push({name:b.dataset.addItem,country:b.dataset.addCountry||'其他',city:'',qty:1,budget:'',forWho:'',note:'',done:false});save();$$('#foodSegments .segment').find(x=>x.dataset.foodView==='shopping').click()});
   function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function attr(s){return esc(s)}
   render();

@@ -57,8 +57,8 @@ budget/
 | 每日行程 | `daily/index.html` | Day 1–18、國家時間軸、景點與逐時行程 |
 | 交通 | `transport/index.html` | 航班、火車、巴士與交通資訊 |
 | 住宿 | `stay/index.html` | 住宿、地址與入住資訊 |
-| 行前與工具 | `prep-tools/` | 購票 App、入境、待辦、行李、退稅 |
-| 預算 | `budget/index.html` | 旅費與預算資訊 |
+| 行前工具 | `prep-tools/` | 購票 App、入境、待辦、行李、退稅 |
+| 餐食與購物 | `budget/index.html` | 每日餐食、超市採買、伴手禮與購物清單 |
 
 ## 3. 根目錄 `index.html` 規則
 
@@ -77,7 +77,7 @@ budget/
 如果只是修改交通，改 `transport/index.html`。
 如果只是修改住宿，改 `stay/index.html`。
 如果只是修改行前工具，改 `prep-tools/` 裡對應的 HTML。
-如果只是修改預算，改 `budget/index.html`。
+如果只是修改餐食與購物，改 `budget/index.html`。
 
 ## 4. `prep-tools/` 已拆成 5 個獨立子頁
 
@@ -182,7 +182,7 @@ feature/
 標準功能順序固定為：
 
 ```text
-每日行程 → 交通 → 住宿 → 行前與工具 → 預算
+每日行程 → 交通 → 住宿 → 行前工具 → 餐食與購物
 ```
 
 標準頁面的導覽列使用：

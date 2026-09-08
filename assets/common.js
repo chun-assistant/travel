@@ -2,6 +2,7 @@ const TICKET_APPS = [
       {country:"奧地利",name:"ÖBB App",priority:"必裝",use:"查詢與購買奧地利國鐵、機場列車及部分區域交通票。",trip:"9/25：Flughafen Wien Bahnhof → Wien Hauptbahnhof（REX7／Railjet）。",setup:"建議先建立ÖBB帳號並綁定信用卡；可替同行旅客購票。",steps:"輸入起訖站與日期 → 選班次／票種 → 填旅客 → 付款 → My journeys開啟車票。",warning:"購票前確認是否已包含後段U1市區交通，避免重複買票；月台仍以現場看板為準。",source:"https://www.oebb.at/en/tickets-kundenkarten/online-mobile-ticketing/oebb-app"},
       {country:"維也納",name:"WienMobil",priority:"建議安裝",use:"維也納地鐵、電車與公車的路線規劃、即時資訊及市區票券。",trip:"9/25：Wien Hbf → Stephansplatz的U1，以及市中心臨時改道查詢。",setup:"先安裝並完成付款設定；若ÖBB聯票已包含市區段，只用來查路線。",steps:"搜尋目的地 → Tickets選票種與生效時間 → 付款 → 驗票時開啟有效票。",warning:"數位票可能記名；購買時核對旅客姓名和生效時間，不要到查票時才處理。",source:"https://www.wienerlinien.at/web/wl-en/wienmobil-enjoy-mobile-freedom"},
       {country:"赫爾辛基",name:"HSL",priority:"必裝",use:"赫爾辛基地區電車、公車、地鐵、通勤火車與渡輪的路線及票券。",trip:"9/26 HEL機場→中央車站通常需ABC區；9/27市中心多為AB區，依當日路線確認。",setup:"開啟定位、綁定付款卡；先熟悉Zones區域與Journey Planner。",steps:"Journey Planner搜尋路線 → 選正確分區票 → 付款 → 上車前確認票券已生效。",warning:"不要只看交通工具，要看完整路線跨越的區域；全員手機保留票券畫面。",source:"https://www.hsl.fi/en/tickets-and-fares/hsl-app"},
+      {country:"羅瓦涅米",name:"Waltti Mobile",priority:"必裝",use:"Rovaniemi Linkkari 市區公車的路線、即時班次與行動票券。",trip:"9/28：Rovaniemi Station → Santa Claus Village／Napapiiri（Linkkari 8）。",setup:"選擇Rovaniemi／Linkkari並綁定付款卡；可在同一支手機購買多張同行票。",steps:"選票種、旅客類別與區域 → 確認數量 → 付款 → 上車時掃描票券QR。",warning:"票券付款後會立即開始計時，只在搭車前幾分鐘購買，並在上車前確認票券有效。",source:"https://linkkari.fi/In-English/Tickets-and-fares/Mobile-app"},
       {country:"芬蘭夜車",name:"VR Matkalla",priority:"必裝",use:"芬蘭國鐵票券、臥鋪訂位、月台與列車即時資訊。",trip:"9/27 Night Train 265：Helsinki → Rovaniemi。",setup:"建立VR帳號；其他管道購買的票，可用訂單號與參考號加入App。",steps:"登入 → Trips／Add ticket → 輸入訂單與參考號 → 核對265車次、日期、床位與乘客。",warning:"出發前把票券加入Apple Wallet或保留離線備份；臥鋪房號仍以正式票券為準。",source:"https://www.vr.fi/en/vr-matkalla-app"},
       {country:"芬蘭巴士",name:"Matkahuolto Matkat",priority:"必裝",use:"芬蘭長途巴士、區域交通與部分聯程票；2026新版名稱為Matkat。",trip:"9/29 Arctic Circle／Rovaniemi → Ivalo；10/1 Ivalo → Saariselkä。",setup:"安裝新版Matkat App、綁卡；用實際站名搜尋並核對上／下車站。",steps:"輸入起訖站與日期 → 選指定班次 → 填乘客 → 付款 → Tickets開啟QR／訂單。",warning:"長途巴士不要只看城市名；需核對Petsamontie 7、Kiveliontie等實際站點與行李規則。",source:"https://www.matkahuolto.fi/passengers/matkat-app"},
       {country:"特羅姆瑟",name:"Svipper",priority:"必裝",use:"Troms郡市區公車與快船的路線、即時班次和票券。",trip:"10/3–10/8市區、公車前往北極教堂／纜車；機場一般公車可查24、26、40、42。",setup:"以Vipps或簡訊一次性驗證碼登入；外國旅客建議先測試能否收到SMS並綁卡。",steps:"搜尋路線 → Buy ticket → 選單程票 → 付款 → 上車前啟用，看到有效倒數再上車。",warning:"票券必須在上車前啟用，手機要留足電；一般市區公車與機場快線不是同一種票。",source:"https://svipper.no/menu/travel/the-svipper-app/"},
@@ -144,7 +145,6 @@ const TICKET_APPS = [
     const stored = key => { try { return JSON.parse(localStorage.getItem(key)); } catch { return null; } };
     const save = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} };
     const state = {
-      tab: stored("aurora-tab") || "days",
       day: Number(stored("aurora-day")) || 1,
       eventFilter: "全部",
       eventSearch: "",
@@ -181,13 +181,6 @@ const TICKET_APPS = [
       const online = navigator.onLine;
       $("#networkBadge").classList.toggle("offline", !online);
       $("#networkBadge span").textContent = online ? "地圖可開啟" : "離線可查看";
-    }
-
-    function showTab(tab, scroll = true) {
-      state.tab = tab; save("aurora-tab", tab);
-      $$(".tab-panel").forEach(el => el.classList.toggle("active", el.id === `tab-${tab}`));
-      $$(".nav-btn").forEach(el => el.classList.toggle("active", el.dataset.tab === tab));
-      if (scroll) window.scrollTo({ top: 230, behavior: "smooth" });
     }
 
     function renderNotices() {
@@ -388,8 +381,6 @@ const TICKET_APPS = [
     }
     function init() {
       renderCountdown(); renderNetwork(); renderNotices(); renderDayView(); renderTransport(); renderHotels(); renderTicketApps(); renderChecklist(); renderPractical(); renderBookings(); renderTax(); renderBudget(); renderFood(); renderMeals(); bindGuideImages();
-      showTab(state.tab,false);
-      $$(".nav-btn").forEach(btn=>btn.addEventListener("click",()=>showTab(btn.dataset.tab)));
       $("#jumpToday").addEventListener("click",()=>{state.day=currentTripDay();save("aurora-day",state.day);renderDayView();toast(`已切換 Day ${state.day}`);});
       $("#eventSearch").addEventListener("input",e=>{state.eventSearch=e.target.value;renderEvents();});
       $("#clearSearch").addEventListener("click",()=>{$("#eventSearch").value="";state.eventSearch="";renderEvents();});

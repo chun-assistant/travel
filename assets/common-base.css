@@ -283,7 +283,7 @@
     }
     .nav-btn { min-height: 58px; border: 0; border-radius: 13px; background: transparent; color: #74858b; font-size: 10px; font-weight: 750; cursor: pointer; }
     .nav-btn svg { display: block; width: 22px; height: 22px; margin: 0 auto 3px; stroke-width: 1.8; }
-    .nav-btn.active { color: var(--navy); background: #eaf3f1; }
+    .nav-btn[aria-current="page"] { color: var(--navy); background: #eaf3f1; }
 
     .toast { position: fixed; z-index: 100; left: 50%; bottom: calc(91px + var(--safe-bottom)); transform: translate(-50%,20px); max-width: calc(100% - 30px); padding: 10px 14px; border-radius: 999px; color: #fff; background: rgba(16,45,62,.94); box-shadow: var(--shadow); font-size: 12px; opacity: 0; pointer-events: none; transition: .25s ease; }
     .toast.show { opacity: 1; transform: translate(-50%,0); }
