@@ -2,15 +2,14 @@
 @import url("./skin-nordic.css?v=20260907-moomin2");
 @import url("./skin-hero-approved.css?v=20260907-home1");
 
-/* Flight online check-in highlight — overlay only, never changes day-chip height. */
-.day-chip[data-day="1"],.day-chip[data-day="9"],.day-chip[data-day="14"],.day-chip[data-day="15"]{position:relative;box-shadow:0 0 0 2px rgba(197,90,83,.28),0 6px 16px rgba(197,90,83,.10)}
-.day-chip[data-day="1"]::after,.day-chip[data-day="9"]::after,.day-chip[data-day="14"]::after,.day-chip[data-day="15"]::after{content:"✈ 報到";position:absolute;top:6px;right:6px;z-index:3;display:block;padding:2px 5px;border-radius:999px;color:var(--red);background:var(--red-soft);border:1px solid rgba(197,90,83,.28);font-size:8px;line-height:1.1;font-weight:850;white-space:nowrap;pointer-events:none}
-.day-chip.active[data-day="1"]::after,.day-chip.active[data-day="9"]::after,.day-chip.active[data-day="14"]::after,.day-chip.active[data-day="15"]::after{color:#fff;background:rgba(197,90,83,.84);border-color:rgba(255,255,255,.30)}
+/* Flight information removed from the daily itinerary. */
+.flight-checkin-badge{display:none!important}
+.day-chip[data-day="1"],.day-chip[data-day="9"],.day-chip[data-day="14"],.day-chip[data-day="15"]{box-shadow:none}
 
-/* Charter-driver reminder — one day before each charter transfer. */
+/* Charter-driver reminder — shown in the former flight check-in position. */
 .day-chip[data-day="2"],.day-chip[data-day="8"],.day-chip[data-day="9"]{position:relative;box-shadow:0 0 0 2px rgba(197,90,83,.18),0 6px 16px rgba(197,90,83,.07)}
-.day-chip[data-day="2"]::before,.day-chip[data-day="8"]::before,.day-chip[data-day="9"]::before{content:"📞 聯絡包車司機";position:absolute;top:6px;left:6px;z-index:3;display:block;padding:2px 5px;border-radius:999px;color:var(--red);background:var(--red-soft);border:1px solid rgba(197,90,83,.22);font-size:8px;line-height:1.1;font-weight:850;white-space:nowrap;pointer-events:none}
-.day-chip.active[data-day="2"]::before,.day-chip.active[data-day="8"]::before,.day-chip.active[data-day="9"]::before{color:#fff;background:rgba(197,90,83,.84);border-color:rgba(255,255,255,.30)}
+.day-chip[data-day="2"]::after,.day-chip[data-day="8"]::after,.day-chip[data-day="9"]::after{content:"📞 聯絡包車司機";position:absolute;top:6px;right:6px;z-index:3;display:block;padding:2px 5px;border-radius:999px;color:var(--red);background:var(--red-soft);border:1px solid rgba(197,90,83,.22);font-size:8px;line-height:1.1;font-weight:850;white-space:nowrap;pointer-events:none}
+.day-chip.active[data-day="2"]::after,.day-chip.active[data-day="8"]::after,.day-chip.active[data-day="9"]::after{color:#fff;background:rgba(197,90,83,.84);border-color:rgba(255,255,255,.30)}
 
 body .bottom-nav .nav-btn svg{position:absolute!important;width:1px!important;height:1px!important;margin:0!important;opacity:0!important;pointer-events:none!important}
 
