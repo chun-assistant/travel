@@ -12,7 +12,8 @@
       itinerary: "assets/data/itinerary.js",
       transport: "assets/data/transport.js",
       flights: "assets/data/flights.js",
-      stay: "assets/data/stay.js"
+      stay: "assets/data/stay.js",
+      apps: "assets/data/apps.js"
     }),
     modules: Object.freeze({
       runtimeUtils: "assets/modules/runtime-utils.js",
@@ -27,6 +28,8 @@
       navigation: "assets/modules/navigation.js",
       reminders: "assets/modules/reminders.js",
       apps: "assets/modules/apps.js",
+      appsRenderer: "assets/modules/apps-renderer.js",
+      appsBootstrap: "assets/modules/apps-bootstrap.js",
       packing: "assets/modules/packing.js",
       checklist: "assets/modules/checklist.js"
     })

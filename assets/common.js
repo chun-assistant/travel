@@ -21,6 +21,10 @@
 
     if (isDailyPage) {
       document.write('<script src="' + base + 'modules/runtime-utils.js"><\/script>');
+      document.write('<script src="' + base + 'data/apps.js"><\/script>');
+      document.write('<script src="' + base + 'modules/apps-renderer.js"><\/script>');
+      document.write('<script src="' + base + 'modules/apps.js"><\/script>');
+      document.write('<script src="' + base + 'modules/apps-bootstrap.js"><\/script>');
       document.write('<script src="' + base + 'data/stay.js"><\/script>');
       document.write('<script src="' + base + 'modules/stay-renderer.js"><\/script>');
       document.write('<script src="' + base + 'modules/stay.js"><\/script>');
@@ -33,6 +37,10 @@
   if (isDailyPage) {
     scripts.push(
       base + "modules/runtime-utils.js",
+      base + "data/apps.js",
+      base + "modules/apps-renderer.js",
+      base + "modules/apps.js",
+      base + "modules/apps-bootstrap.js",
       base + "data/stay.js",
       base + "modules/stay-renderer.js",
       base + "modules/stay.js",

@@ -1,16 +1,19 @@
 /*
  * Ticket-app module boundary.
  *
- * Rendering remains in common.js for now. The wrapper gives the app section a
- * stable module API without changing the existing page behavior.
+ * Rendering is now owned by the extracted renderer; this module only exposes
+ * the stable feature API and keeps the migration surface small.
  */
 (function (root) {
   root.TravelApps = Object.freeze({
     getData: function () {
-      return typeof TICKET_APPS !== "undefined" ? TICKET_APPS : [];
+      return root.TravelAppsData && typeof root.TravelAppsData.getItems === "function"
+        ? root.TravelAppsData.getItems()
+        : [];
     },
     render: function () {
-      if (typeof renderTicketApps === "function") renderTicketApps();
+      if (!root.TravelAppsRenderer) return;
+      return root.TravelAppsRenderer.create({ data: this.getData() })();
     }
   });
 })(window);
