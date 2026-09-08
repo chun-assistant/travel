@@ -3,9 +3,29 @@
  *
  * Extracted from transport/index.html. This file intentionally does not
  * auto-load itself: the current page still owns script order and rendering.
- * It can be wired in once the large legacy page can be patched safely.
+ * It uses the extracted transport renderer directly, while common.js remains
+ * available as a compatibility fallback for the current page startup path.
  */
 (function (root) {
+  function renderTransportPage() {
+    if (!root.TravelTransportRenderer) return;
+    var filters = document.getElementById('transportFilters');
+    var list = document.getElementById('transportList');
+    if (!filters || !list) return;
+
+    var render = root.TravelTransportRenderer.create({
+      data: typeof APP_DATA !== 'undefined' && Array.isArray(APP_DATA.transport) ? APP_DATA.transport : [],
+      state: typeof state !== 'undefined' ? state : {},
+      $: typeof $ !== 'undefined' ? $ : undefined,
+      $$: typeof $$ !== 'undefined' ? $$ : undefined,
+      escapeHtml: typeof escapeHtml !== 'undefined' ? escapeHtml : undefined,
+      statusClass: typeof statusClass !== 'undefined' ? statusClass : undefined,
+      fmtCost: typeof fmtCost !== 'undefined' ? fmtCost : undefined
+    });
+
+    if (typeof render === 'function') render();
+  }
+
   function init() {
     var unpaidActive = false;
 
@@ -62,7 +82,7 @@
         }
       });
 
-      if (typeof renderTransport === 'function') renderTransport();
+      renderTransportPage();
     }
 
     var filters = document.getElementById('transportFilters');
