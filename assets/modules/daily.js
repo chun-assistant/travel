@@ -1,16 +1,24 @@
 /*
- * Daily itinerary module boundary.
+ * Daily itinerary module.
  *
- * Phase 1 deliberately contains no rendering or event binding. It exposes
- * the daily runtime surface so the implementation can be moved out of
- * common.js incrementally without changing script timing or UI behavior.
+ * The public surface stays small so rendering can be migrated incrementally
+ * without changing the existing page initialization order or UI.
  */
 (function (root) {
   var data = root.TravelItineraryData;
 
+  function getData() {
+    data = root.TravelItineraryData || data;
+    return data || { overview: [], events: [], countryStages: [] };
+  }
+
+  function getOverview() { return getData().overview || []; }
+  function getEvents() { return getData().events || []; }
+  function getCountryStages() { return getData().countryStages || []; }
+
   root.TravelDaily = Object.freeze({
-    getOverview: function () { return data ? data.overview : []; },
-    getEvents: function () { return data ? data.events : []; },
-    getCountryStages: function () { return data ? data.countryStages : []; }
+    getOverview: getOverview,
+    getEvents: getEvents,
+    getCountryStages: getCountryStages
   });
 })(window);
