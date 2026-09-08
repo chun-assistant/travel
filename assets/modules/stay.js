@@ -1,8 +1,9 @@
 /*
  * Stay module boundary.
  *
- * Safe migration step: expose accommodation data and renderer boundaries
- * without replacing the legacy common.js renderer yet. Intentionally inert.
+ * Safe migration step: expose accommodation data and renderer boundaries.
+ * The new renderer is preferred when explicitly loaded; otherwise the legacy
+ * common.js renderer remains the fallback. This keeps the migration reversible.
  */
 (function (root) {
   root.TravelStay = Object.freeze({
@@ -28,6 +29,8 @@
       });
     },
     render: function () {
+      var renderer = this.createRenderer();
+      if (renderer) return renderer();
       if (typeof renderHotels === "function") return renderHotels();
     }
   });
