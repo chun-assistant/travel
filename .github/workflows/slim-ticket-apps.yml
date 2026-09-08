@@ -61,22 +61,25 @@ jobs:
 
           common_path = root / 'assets/common.js'
           common = common_path.read_text(encoding='utf-8')
-          old = '''      base + "modules/runtime-utils.js",\n      base + "data/stay.js",'''
-          new = '''      base + "modules/runtime-utils.js",\n      base + "data/apps.js",\n      base + "modules/apps-renderer.js",\n      base + "modules/apps.js",\n      base + "modules/apps-bootstrap.js",\n      base + "data/stay.js",'''
-          if common.count(old) != 1:
-              raise SystemExit('Expected common.js loading sequence was not found; refusing to modify it.')
-          common = common.replace(old, new, 1)
-          old2 = '''      base + "modules/runtime-utils.js",\n      base + "data/stay.js",\n      base + "modules/stay-renderer.js",'''
-          new2 = '''      base + "modules/runtime-utils.js",\n      base + "data/apps.js",\n      base + "modules/apps-renderer.js",\n      base + "modules/apps.js",\n      base + "modules/apps-bootstrap.js",\n      base + "data/stay.js",\n      base + "modules/stay-renderer.js",'''
+          old1 = '''      document.write('<script src="' + base + 'modules/runtime-utils.js"><\\/script>');\n      document.write('<script src="' + base + 'data/stay.js"><\\/script>');'''
+          new1 = '''      document.write('<script src="' + base + 'modules/runtime-utils.js"><\\/script>');\n      document.write('<script src="' + base + 'data/apps.js"><\\/script>');\n      document.write('<script src="' + base + 'modules/apps-renderer.js"><\\/script>');\n      document.write('<script src="' + base + 'modules/apps.js"><\\/script>');\n      document.write('<script src="' + base + 'modules/apps-bootstrap.js"><\\/script>');\n      document.write('<script src="' + base + 'data/stay.js"><\\/script>');'''
+          if common.count(old1) != 1:
+              raise SystemExit('Expected document.write sequence was not found; refusing to modify common.js.')
+          common = common.replace(old1, new1, 1)
+
+          old2 = '''      base + "modules/runtime-utils.js",\n      base + "data/stay.js",'''
+          new2 = '''      base + "modules/runtime-utils.js",\n      base + "data/apps.js",\n      base + "modules/apps-renderer.js",\n      base + "modules/apps.js",\n      base + "modules/apps-bootstrap.js",\n      base + "data/stay.js",'''
           if common.count(old2) != 1:
-              raise SystemExit('Expected common.js script list was not found; refusing to modify it.')
+              raise SystemExit('Expected dynamic loader sequence was not found; refusing to modify common.js.')
           common = common.replace(old2, new2, 1)
           common_path.write_text(common, encoding='utf-8')
 
           registry_path = root / 'assets/modules/registry.js'
           registry = registry_path.read_text(encoding='utf-8')
-          registry = registry.replace('      stay: "assets/data/stay.js"\n', '      stay: "assets/data/stay.js",\n      apps: "assets/data/apps.js"\n')
-          registry = registry.replace('      apps: "assets/modules/apps.js",\n', '      apps: "assets/modules/apps.js",\n      appsRenderer: "assets/modules/apps-renderer.js",\n      appsBootstrap: "assets/modules/apps-bootstrap.js",\n')
+          if '      apps: "assets/data/apps.js"' not in registry:
+              registry = registry.replace('      stay: "assets/data/stay.js"\n', '      stay: "assets/data/stay.js",\n      apps: "assets/data/apps.js"\n')
+          if '      appsRenderer: "assets/modules/apps-renderer.js"' not in registry:
+              registry = registry.replace('      apps: "assets/modules/apps.js",\n', '      apps: "assets/modules/apps.js",\n      appsRenderer: "assets/modules/apps-renderer.js",\n      appsBootstrap: "assets/modules/apps-bootstrap.js",\n')
           registry_path.write_text(registry, encoding='utf-8')
 
           if 'const TICKET_APPS' in runtime or 'function renderTicketApps' in runtime or 'renderTicketApps();' in runtime:
