@@ -17,32 +17,25 @@
   var printDataSrc = base + "data/print.js";
   var legacySrc = base + "common-legacy.js";
   var isDailyPage = document.body && document.body.getAttribute("data-page") === "days";
-  var isStayPage = document.body && document.body.getAttribute("data-page") === "hotels";
 
   if (document.readyState === "loading" && document.write) {
-    document.write('<script src="' + packingDataSrc + '"><\\/script>');
-    document.write('<script src="' + coreDataSrc + '"><\\/script>');
-    document.write('<script src="' + printDataSrc + '"><\\/script>');
-    document.write('<script src="' + legacySrc.replace(/"/g, "&quot;") + '"><\\/script>');
-    document.write('<script src="' + base + 'modules/flight-badges.js' + '"><\\/script>');
+    document.write('<script src="' + packingDataSrc + '"><\/script>');
+    document.write('<script src="' + coreDataSrc + '"><\/script>');
+    document.write('<script src="' + printDataSrc + '"><\/script>');
+    document.write('<script src="' + legacySrc.replace(/"/g, "&quot;") + '"><\/script>');
+    document.write('<script src="' + base + 'modules/flight-badges.js' + '"><\/script>');
 
     if (isDailyPage) {
-      document.write('<script src="' + base + 'modules/daily-event-filters.js"><\\/script>');
-      document.write('<script src="' + base + 'modules/runtime-utils.js"><\\/script>');
-      document.write('<script src="' + base + 'data/apps.js"><\\/script>');
-      document.write('<script src="' + base + 'modules/apps-renderer.js"><\\/script>');
-      document.write('<script src="' + base + 'modules/apps.js"><\\/script>');
-      document.write('<script src="' + base + 'modules/apps-bootstrap.js"><\\/script>');
-      document.write('<script src="' + base + 'data/stay.js"><\\/script>');
-      document.write('<script src="' + base + 'modules/stay-renderer.js"><\\/script>');
-      document.write('<script src="' + base + 'modules/stay.js"><\\/script>');
-      document.write('<script src="' + base + 'modules/stay-bootstrap.js"><\\/script>');
-    } else if (isStayPage) {
-      document.write('<script src="' + base + 'modules/runtime-utils.js"><\\/script>');
-      document.write('<script src="' + base + 'data/stay.js"><\\/script>');
-      document.write('<script src="' + base + 'modules/stay-renderer.js"><\\/script>');
-      document.write('<script src="' + base + 'modules/stay.js"><\\/script>');
-      document.write('<script src="' + base + 'modules/stay-bootstrap.js"><\\/script>');
+      document.write('<script src="' + base + 'modules/daily-event-filters.js"><\/script>');
+      document.write('<script src="' + base + 'modules/runtime-utils.js"><\/script>');
+      document.write('<script src="' + base + 'data/apps.js"><\/script>');
+      document.write('<script src="' + base + 'modules/apps-renderer.js"><\/script>');
+      document.write('<script src="' + base + 'modules/apps.js"><\/script>');
+      document.write('<script src="' + base + 'modules/apps-bootstrap.js"><\/script>');
+      document.write('<script src="' + base + 'data/stay.js"><\/script>');
+      document.write('<script src="' + base + 'modules/stay-renderer.js"><\/script>');
+      document.write('<script src="' + base + 'modules/stay.js"><\/script>');
+      document.write('<script src="' + base + 'modules/stay-bootstrap.js"><\/script>');
     }
     return;
   }
@@ -56,14 +49,6 @@
       base + "modules/apps-renderer.js",
       base + "modules/apps.js",
       base + "modules/apps-bootstrap.js",
-      base + "data/stay.js",
-      base + "modules/stay-renderer.js",
-      base + "modules/stay.js",
-      base + "modules/stay-bootstrap.js"
-    );
-  } else if (isStayPage) {
-    scripts.push(
-      base + "modules/runtime-utils.js",
       base + "data/stay.js",
       base + "modules/stay-renderer.js",
       base + "modules/stay.js",
