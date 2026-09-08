@@ -26,5 +26,10 @@
     return Object.freeze({ render: render });
   }
 
-  root.TravelDailyEventFilters = Object.freeze({ createRenderer: createRenderer });
+  var renderer = null;
+  root.TravelDailyEventFilters = Object.freeze({
+    createRenderer: createRenderer,
+    init: function (deps) { renderer = createRenderer(deps); return renderer; },
+    render: function () { if (renderer) renderer.render(); }
+  });
 })(window);
