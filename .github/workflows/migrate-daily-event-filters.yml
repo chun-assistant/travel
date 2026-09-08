@@ -10,27 +10,16 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Patch Daily event filters
+      - name: Extract Daily event filters
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          import re
-          p=Path('assets/modules/daily-event-filters.js')
-          s=p.read_text()
-          if 'init: function' not in s:
-              s=s.replace('root.TravelDailyEventFilters = Object.freeze({ createRenderer: createRenderer });','''var renderer = null;
-  root.TravelDailyEventFilters = Object.freeze({
-    createRenderer: createRenderer,
-    init: function (deps) { renderer = createRenderer(deps); return renderer; },
-    render: function () { if (renderer) renderer.render(); }
-  });''')
-              p.write_text(s)
           p=Path('assets/common-runtime.js')
           s=p.read_text()
           start=s.find('    function renderEventFilters() {')
           if start < 0: raise SystemExit('renderEventFilters start not found')
-          end=s.find('\n    function eventCard(',start)
+          end=s.find('\n    function eventCard(', start)
           if end < 0: raise SystemExit('eventCard marker not found')
           replacement='''    function renderEventFilters() {
       if (!window.TravelDailyEventFiltersRenderer) {
@@ -41,20 +30,40 @@ jobs:
 '''
           s=s[:start]+replacement+s[end+1:]
           p.write_text(s)
+
+          p=Path('assets/modules/daily-event-filters.js')
+          s=p.read_text()
+          if 'init: function' not in s:
+            old='root.TravelDailyEventFilters = Object.freeze({ createRenderer: createRenderer });'
+            new='''var renderer = null;
+  root.TravelDailyEventFilters = Object.freeze({
+    createRenderer: createRenderer,
+    init: function (deps) { renderer = createRenderer(deps); return renderer; },
+    render: function () { if (renderer) renderer.render(); }
+  });'''
+            if old not in s: raise SystemExit('module export marker not found')
+            p.write_text(s.replace(old,new))
+
           p=Path('assets/common.js')
           s=p.read_text()
           if 'modules/daily-event-filters.js' not in s:
-              marker='''      document.write('<script src="' + base + 'modules/runtime-utils.js"><\\/script>');'''
-              if marker not in s: raise SystemExit('document.write loader marker not found')
-              s=s.replace(marker, marker+'''\n      document.write('<script src="' + base + 'modules/daily-event-filters.js"><\\/script>');''',1)
-              marker2='''      base + "modules/runtime-utils.js",'''
-              if marker2 not in s: raise SystemExit('async loader marker not found')
-              s=s.replace(marker2, '''      base + "modules/daily-event-filters.js",\n      base + "modules/runtime-utils.js",''',1)
+            marker='''      document.write('<script src="' + base + 'modules/runtime-utils.js"><\\/script>');'''
+            if marker not in s: raise SystemExit('document.write loader marker not found')
+            s=s.replace(marker, '''      document.write('<script src="' + base + 'modules/daily-event-filters.js"><\\/script>');
+'''+marker,1)
+            marker2='''      base + "modules/runtime-utils.js",'''
+            if marker2 not in s: raise SystemExit('async loader marker not found')
+            s=s.replace(marker2, '''      base + "modules/daily-event-filters.js",
+'''+marker2,1)
           p.write_text(s)
           PY
+          grep -q 'TravelDailyEventFilters.init' assets/common-runtime.js
+          grep -q 'daily-event-filters.js' assets/common.js
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git rm .github/workflows/migrate-daily-event-filters.yml
           git add assets/common-runtime.js assets/common.js assets/modules/daily-event-filters.js
           git commit -m "refactor: extract daily event filters [skip daily event filters]"
           git push
+
+          # temporary workflow marker
