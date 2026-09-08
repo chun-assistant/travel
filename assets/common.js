@@ -5,22 +5,49 @@
  * kept in common-legacy.js while its data/rendering responsibilities are split
  * into assets/data and assets/modules.
  *
- * This compatibility loader is synchronous so the legacy runtime keeps the exact
- * same initialization order and page behavior during the refactor.
+ * The legacy runtime is always loaded first and synchronously. On the daily page,
+ * Stay modules are then loaded in dependency order and take over only the Stay
+ * panel. This preserves the legacy initialization order for every other feature.
  */
 (function () {
   var current = document.currentScript;
   var src = current && current.src;
   var base = src ? src.slice(0, src.lastIndexOf("/") + 1) : "";
   var legacySrc = base + "common-legacy.js";
+  var isDailyPage = document.body && document.body.getAttribute("data-page") === "days";
 
   if (document.readyState === "loading" && document.write) {
     document.write('<script src="' + legacySrc.replace(/"/g, "&quot;") + '"><\/script>');
+
+    if (isDailyPage) {
+      document.write('<script src="' + base + 'modules/runtime-utils.js"><\/script>');
+      document.write('<script src="' + base + 'data/stay.js"><\/script>');
+      document.write('<script src="' + base + 'modules/stay-renderer.js"><\/script>');
+      document.write('<script src="' + base + 'modules/stay.js"><\/script>');
+      document.write('<script src="' + base + 'modules/stay-bootstrap.js"><\/script>');
+    }
     return;
   }
 
-  var script = document.createElement("script");
-  script.src = legacySrc;
-  script.async = false;
-  document.head.appendChild(script);
+  var scripts = [legacySrc];
+  if (isDailyPage) {
+    scripts.push(
+      base + "modules/runtime-utils.js",
+      base + "data/stay.js",
+      base + "modules/stay-renderer.js",
+      base + "modules/stay.js",
+      base + "modules/stay-bootstrap.js"
+    );
+  }
+
+  var index = 0;
+  function loadNext() {
+    if (index >= scripts.length) return;
+    var script = document.createElement("script");
+    script.src = scripts[index++];
+    script.async = false;
+    script.onload = loadNext;
+    document.head.appendChild(script);
+  }
+  loadNext();
 })();
