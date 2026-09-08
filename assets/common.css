@@ -4,8 +4,11 @@
 
 /* Flight online check-in highlight — overlay only, never changes day-chip height. */
 .day-chip[data-day="1"],.day-chip[data-day="9"],.day-chip[data-day="14"],.day-chip[data-day="15"]{position:relative;box-shadow:0 0 0 2px rgba(197,90,83,.28),0 6px 16px rgba(197,90,83,.10)}
-.day-chip[data-day="1"]::after,.day-chip[data-day="9"]::after,.day-chip[data-day="14"]::after,.day-chip[data-day="15"]::after{content:"✈ 報到";position:absolute;top:6px;right:6px;z-index:3;display:block;padding:2px 5px;border-radius:999px;color:var(--red);background:var(--red-soft);border:1px solid rgba(197,90,83,.28);font-size:8px;line-height:1.1;font-weight:850;white-space:nowrap;pointer-events:none}
-.day-chip.active[data-day="1"]::after,.day-chip.active[data-day="9"]::after,.day-chip.active[data-day="14"]::after,.day-chip.active[data-day="15"]::after{color:#fff;background:rgba(197,90,83,.84);border-color:rgba(255,255,255,.30)}
+.day-chip[data-day="1"]::before,.day-chip[data-day="9"]::before,.day-chip[data-day="14"]::before,.day-chip[data-day="15"]::before{content:"✈ 報到";position:absolute;top:6px;left:6px;z-index:3;display:block;padding:2px 5px;border-radius:999px;color:var(--red);background:var(--red-soft);border:1px solid rgba(197,90,83,.28);font-size:8px;line-height:1.1;font-weight:850;white-space:nowrap;pointer-events:none}
+.day-chip.active[data-day="1"]::before,.day-chip.active[data-day="9"]::before,.day-chip.active[data-day="14"]::before,.day-chip.active[data-day="15"]::before{color:#fff;background:rgba(197,90,83,.84);border-color:rgba(255,255,255,.30)}
+
+/* The inline flight reminder is redundant because the day-chip already shows ✈ 報到. */
+.flight-checkin-badge{display:none!important}
 
 /* Charter-driver reminder — one day before each charter transfer. */
 .day-chip[data-day="2"],.day-chip[data-day="8"],.day-chip[data-day="9"]{position:relative;box-shadow:0 0 0 2px rgba(197,90,83,.18),0 6px 16px rgba(197,90,83,.07)}
