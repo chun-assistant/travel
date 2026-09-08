@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded',function(){
     if(d2){d2.type='火車';d2.route='VIE→Südtiroler Platz→Stephansplatz→飯店';d2.service='REX 7／IC＋U1＋步行350m';d2.time='8:16（REX 7）／8:34（IC）；8:59／9:11 抵達飯店';d2.method='🚆 REX 7／IC → Vienna Central；🚶 步行約6分鐘 → Südtiroler Platz；🚇 U1 Leopoldau → Stephansplatz；🚶 步行約4分鐘／350公尺 → 飯店';d2.duration='約37–43分鐘（依班次）';d2.currency='EUR';d2.cost=4.4;d2.status='尚未購票';d2.note='尚未購票；REX 7與IC擇一。8:16班次8:59抵達，8:34班次9:11抵達。';}
     const carPickups=[
       {date:'9/26',route:/Vienna飯店→VIE/i},
+      {date:'10/2',route:/包車|Saariselkä|Ivalo|Kirkenes/i},
       {date:'10/3',route:/Scandic Kirkenes→KKN/i}
     ];
     APP_DATA.transport.forEach(t=>{
