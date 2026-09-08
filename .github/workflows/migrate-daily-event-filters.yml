@@ -1,0 +1,65 @@
+/* Temporary migration workflow: wire the extracted Daily event-filter renderer. */
+name: migrate daily event filters
+on:
+  push:
+    branches: [refactor-transport-safe-v2]
+jobs:
+  migrate:
+    if: "!contains(github.event.head_commit.message, '[skip daily event filters]')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify module
+        run: test -s assets/modules/daily-event-filters.js
+      - name: Patch legacy runtime and loader
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('assets/common-runtime.js')
+          s=p.read_text()
+          old='''    function renderEventFilters() {\n      const labels = ["全部","交通","景點","餐飲","住宿","其他"];\n      $("#eventFilters").innerHTML = labels.map(v => `<button class="filter-chip ${state.eventFilter===v?"active":""}" data-filter="${v}">${v}</button>`).join("");\n      $$("#eventFilters .filter-chip").forEach(btn => btn.addEventListener("click",()=>{state.eventFilter=btn.dataset.filter; renderEventFilters(); renderEvents();}));\n    }'''
+          new='''    function renderEventFilters() {\n      if (window.TravelDailyEventFiltersRenderer) return window.TravelDailyEventFiltersRenderer.render();\n    }'''
+          if old not in s: raise SystemExit('renderEventFilters block not found')
+          p.write_text(s.replace(old,new,1))
+
+          p=Path('assets/common.js')
+          s=p.read_text()
+          marker='''      document.write('<script src="' + base + 'modules/runtime-utils.js"><\\/script>');'''
+          replacement=marker+'''\n      document.write('<script src="' + base + 'modules/daily-event-filters.js"><\\/script>');'''
+          if marker not in s: raise SystemExit('loader marker not found')
+          s=s.replace(marker,replacement,1)
+          marker2='''      base + "modules/runtime-utils.js",'''
+          replacement2='''      base + "modules/daily-event-filters.js",\n      base + "modules/runtime-utils.js",'''
+          if marker2 not in s: raise SystemExit('async loader marker not found')
+          p.write_text(s.replace(marker2,replacement2,1))
+          PY
+
+          cat > /tmp/wire.py <<'PY'
+          from pathlib import Path
+          p=Path('assets/modules/daily-event-filters.js')
+          s=p.read_text()
+          s=s.replace('root.TravelDailyEventFilters = Object.freeze({ createRenderer: createRenderer });','''var renderer = null;\n  root.TravelDailyEventFilters = Object.freeze({\n    createRenderer: createRenderer,\n    init: function (deps) { renderer = createRenderer(deps); return renderer; },\n    render: function () { if (renderer) renderer.render(); }\n  });\n  if (root.TravelDailyEventFiltersRenderer === undefined) root.TravelDailyEventFiltersRenderer = null;''')
+          p.write_text(s)
+          PY
+          python3 /tmp/wire.py
+      - name: Commit and remove workflow
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('assets/common-runtime.js')
+          s=p.read_text()
+          needle='''    function renderEventFilters() {\n      if (window.TravelDailyEventFiltersRenderer) return window.TravelDailyEventFiltersRenderer.render();\n    }'''
+          repl='''    function renderEventFilters() {\n      if (!window.TravelDailyEventFiltersRenderer) {\n        window.TravelDailyEventFiltersRenderer = window.TravelDailyEventFilters.init({ $, $$, state, renderEvents });\n      }\n      return window.TravelDailyEventFiltersRenderer.render();\n    }'''
+          if needle not in s: raise SystemExit('patched block not found')
+          p.write_text(s.replace(needle,repl,1))
+          PY
+          git rm .github/workflows/migrate-daily-event-filters.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add assets/common-runtime.js assets/common.js assets/modules/daily-event-filters.js
+          git commit -m "refactor: extract daily event filters [skip daily event filters]"
+          git push
