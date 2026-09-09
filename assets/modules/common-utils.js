@@ -64,6 +64,10 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => el.classList.remove("show"), 1700);
   };
+  const copyText = async text => {
+    try { await navigator.clipboard.writeText(text); toast("地址已複製"); }
+    catch { const t=document.createElement("textarea"); t.value=text; document.body.append(t); t.select(); document.execCommand("copy"); t.remove(); toast("地址已複製"); }
+  };
 
   root.TravelCommonUtils = Object.freeze({
     escapeHtml,
@@ -81,6 +85,7 @@
     mapIcon,
     pinIcon,
     copyIcon,
-    toast
+    toast,
+    copyText
   });
 })(window);
