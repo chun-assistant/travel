@@ -35,73 +35,71 @@
     var state = deps.state || { day: 1 };
     var save = deps.save || function () {};
     var renderDayView = deps.renderDayView || function () {};
+    var dailyRender = root.TravelDailyRender && root.TravelDailyRender.setup
+      ? root.TravelDailyRender.setup({
+        $: $,
+        $$: $$,
+        escapeHtml: escapeHtml,
+        dateLabel: dateLabel,
+        getOverview: getOverview,
+        getCountryStages: getCountryStages,
+        state: state,
+        save: save,
+        renderDayView: renderDayView
+      })
+      : null;
 
     function renderDayScroller() {
+      if (dailyRender && dailyRender.renderDayScroller) {
+        dailyRender.renderDayScroller();
+        return;
+      }
       var host = $("#dayScroller");
       if (!host) return;
       host.innerHTML = getOverview().map(function (d) {
         var presentation = root.TravelDailyLogic && root.TravelDailyLogic.getDayPresentation
           ? root.TravelDailyLogic.getDayPresentation(d.day, getCountryStages())
           : null;
-        var stage = presentation
-          ? presentation.stage
-          : root.TravelDailyLogic
-            ? root.TravelDailyLogic.getStageForDay(d.day, getCountryStages())
-            : d.day >= 2 && d.day <= 3 ? getCountryStages()[0]
-            : d.day >= 4 && d.day <= 8 ? getCountryStages()[1]
-            : d.day >= 9 && d.day <= 14 ? getCountryStages()[2]
-            : d.day >= 15 && d.day <= 17 ? getCountryStages()[3]
-            : null;
-        var dayColor = presentation
-          ? presentation.color
-          : root.TravelDailyLogic
-            ? root.TravelDailyLogic.getDayColor(stage)
-            : stage && stage.color || "#dbe6e3";
+        var stage = presentation ? presentation.stage : root.TravelDailyLogic
+          ? root.TravelDailyLogic.getStageForDay(d.day, getCountryStages())
+          : d.day >= 2 && d.day <= 3 ? getCountryStages()[0]
+          : d.day >= 4 && d.day <= 8 ? getCountryStages()[1]
+          : d.day >= 9 && d.day <= 14 ? getCountryStages()[2]
+          : d.day >= 15 && d.day <= 17 ? getCountryStages()[3] : null;
+        var dayColor = presentation ? presentation.color : root.TravelDailyLogic
+          ? root.TravelDailyLogic.getDayColor(stage) : stage && stage.color || "#dbe6e3";
         return '<button class="day-chip ' + (d.day === state.day ? "active" : "") + '" data-day="' + d.day + '" style="--day-color:' + dayColor + '"><b>Day ' + d.day + '</b><small>' + escapeHtml(dateLabel(d.date)) + '</small><small class="day-place">' + escapeHtml(d.city) + '</small></button>';
       }).join("");
       $$(".day-chip").forEach(function (btn) {
         btn.addEventListener("click", function () {
-          state.day = Number(btn.dataset.day);
-          save("aurora-day", state.day);
-          renderDayView();
+          state.day = Number(btn.dataset.day); save("aurora-day", state.day); renderDayView();
           setTimeout(function () { btn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" }); }, 20);
         });
       });
     }
 
     function renderCountryTrack() {
+      if (dailyRender && dailyRender.renderCountryTrack) {
+        dailyRender.renderCountryTrack();
+        return;
+      }
       var host = $("#countryTrack");
       if (!host) return;
       host.innerHTML = getCountryStages().map(function (stage) {
         var presentation = root.TravelDailyLogic && root.TravelDailyLogic.getCountryStagePresentation
-          ? root.TravelDailyLogic.getCountryStagePresentation(state.day, stage)
-          : null;
-        var active = presentation
-          ? presentation.active
-          : root.TravelDailyLogic
-            ? root.TravelDailyLogic.isDayInStage(state.day, stage)
-            : state.day >= stage.start && state.day <= stage.end;
-        var stageStyle = presentation
-          ? presentation.style
-          : root.TravelDailyLogic
-            ? root.TravelDailyLogic.getStageStyle(stage)
-            : "--stage-color:" + stage.color + ";--stage-start:" + stage.start + ";--stage-end:" + (stage.end + 1);
-        var countryLabel = presentation
-          ? presentation.label
-          : root.TravelDailyLogic
-            ? root.TravelDailyLogic.getCountryLabel(stage.country)
-            : stage.country;
+          ? root.TravelDailyLogic.getCountryStagePresentation(state.day, stage) : null;
+        var active = presentation ? presentation.active : root.TravelDailyLogic
+          ? root.TravelDailyLogic.isDayInStage(state.day, stage) : state.day >= stage.start && state.day <= stage.end;
+        var stageStyle = presentation ? presentation.style : root.TravelDailyLogic
+          ? root.TravelDailyLogic.getStageStyle(stage) : "--stage-color:" + stage.color + ";--stage-start:" + stage.start + ";--stage-end:" + (stage.end + 1);
+        var countryLabel = presentation ? presentation.label : root.TravelDailyLogic
+          ? root.TravelDailyLogic.getCountryLabel(stage.country) : stage.country;
         return '<button class="country-stage ' + (active ? "active" : "") + '" data-day="' + stage.start + '" style="' + stageStyle + '" aria-label="前往' + escapeHtml(stage.country) + '行程 Day ' + stage.start + '"><span class="country-dot">' + stage.flag + '</span><b>' + countryLabel + '</b><small>Day ' + stage.start + '–' + stage.end + '</small></button>';
       }).join("");
       $$(".country-stage", host).forEach(function (btn) {
         btn.addEventListener("click", function () {
-          state.day = Number(btn.dataset.day);
-          save("aurora-day", state.day);
-          renderDayView();
-          setTimeout(function () {
-            var active = $(".day-chip.active");
-            if (active) active.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-          }, 20);
+          state.day = Number(btn.dataset.day); save("aurora-day", state.day); renderDayView();
+          setTimeout(function () { var active = $(".day-chip.active"); if (active) active.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" }); }, 20);
         });
       });
     }
@@ -111,28 +109,11 @@
       if (!el || el.dataset.dragReady) return;
       el.dataset.dragReady = "1";
       var dragging = false, startX = 0, startScroll = 0;
-      el.addEventListener("pointerdown", function (e) {
-        if (e.button !== 0) return;
-        dragging = true;
-        startX = e.clientX;
-        startScroll = el.scrollLeft;
-        el.classList.add("dragging");
-      });
-      el.addEventListener("pointermove", function (e) {
-        if (dragging) el.scrollLeft = startScroll - (e.clientX - startX);
-      });
-      var stop = function () {
-        dragging = false;
-        el.classList.remove("dragging");
-      };
-      el.addEventListener("pointerup", stop);
-      el.addEventListener("pointercancel", stop);
-      el.addEventListener("wheel", function (e) {
-        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-          el.scrollLeft += e.deltaY;
-          e.preventDefault();
-        }
-      }, { passive: false });
+      el.addEventListener("pointerdown", function (e) { if (e.button !== 0) return; dragging = true; startX = e.clientX; startScroll = el.scrollLeft; el.classList.add("dragging"); });
+      el.addEventListener("pointermove", function (e) { if (dragging) el.scrollLeft = startScroll - (e.clientX - startX); });
+      var stop = function () { dragging = false; el.classList.remove("dragging"); };
+      el.addEventListener("pointerup", stop); el.addEventListener("pointercancel", stop);
+      el.addEventListener("wheel", function (e) { if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { el.scrollLeft += e.deltaY; e.preventDefault(); } }, { passive: false });
     }
 
     function renderScrollEnhancements() {
@@ -141,87 +122,42 @@
         root.TravelDailyScroll.setupHorizontalDrag("#countryScroll", { $: $ });
         return;
       }
-      enableHorizontalDragFallback("#dayScroller");
-      enableHorizontalDragFallback("#countryScroll");
+      enableHorizontalDragFallback("#dayScroller"); enableHorizontalDragFallback("#countryScroll");
     }
 
     function setupScrollSync() {
       if (root.TravelDailyScroll && root.TravelDailyScroll.setupBasicScrollSync) {
-        root.TravelDailyScroll.setupBasicScrollSync({ $: $ });
-        return;
+        root.TravelDailyScroll.setupBasicScrollSync({ $: $ }); return;
       }
-      var dayScroller = $("#dayScroller");
-      var countryScroll = $("#countryScroll");
+      var dayScroller = $("#dayScroller"); var countryScroll = $("#countryScroll");
       if (!dayScroller || !countryScroll || dayScroller.dataset.syncReady) return;
-
-      dayScroller.dataset.syncReady = "1";
-      countryScroll.dataset.syncReady = "1";
+      dayScroller.dataset.syncReady = "1"; countryScroll.dataset.syncReady = "1";
       var syncing = false;
-
       function sync(source, target) {
         if (syncing) return;
         var sourceMax = Math.max(0, source.scrollWidth - source.clientWidth);
         var targetMax = Math.max(0, target.scrollWidth - target.clientWidth);
         if (!sourceMax || !targetMax) return;
-        syncing = true;
-        target.scrollLeft = (source.scrollLeft / sourceMax) * targetMax;
+        syncing = true; target.scrollLeft = (source.scrollLeft / sourceMax) * targetMax;
         requestAnimationFrame(function () { syncing = false; });
       }
-
-      dayScroller.addEventListener("scroll", function () {
-        sync(dayScroller, countryScroll);
-      }, { passive: true });
-
-      countryScroll.addEventListener("scroll", function () {
-        sync(countryScroll, dayScroller);
-      }, { passive: true });
+      dayScroller.addEventListener("scroll", function () { sync(dayScroller, countryScroll); }, { passive: true });
+      countryScroll.addEventListener("scroll", function () { sync(countryScroll, dayScroller); }, { passive: true });
     }
 
-    function mount() {
-      renderDayScroller();
-      renderCountryTrack();
-      renderScrollEnhancements();
-      setupScrollSync();
-    }
+    function mount() { renderDayScroller(); renderCountryTrack(); renderScrollEnhancements(); setupScrollSync(); }
 
-    return Object.freeze({
-      renderDayScroller: renderDayScroller,
-      renderCountryTrack: renderCountryTrack,
-      renderScrollEnhancements: renderScrollEnhancements,
-      setupScrollSync: setupScrollSync,
-      mount: mount
-    });
+    return Object.freeze({ renderDayScroller: renderDayScroller, renderCountryTrack: renderCountryTrack, renderScrollEnhancements: renderScrollEnhancements, setupScrollSync: setupScrollSync, mount: mount });
   }
 
   function mountScrollRenderer() {
     if (!root.TravelDailyRuntime) return;
     var runtime = root.TravelDailyRuntime;
-    var renderer = createRenderer({
-      $: runtime.$,
-      $$: runtime.$$, 
-      escapeHtml: runtime.escapeHtml,
-      dateLabel: runtime.dateLabel,
-      state: runtime.state,
-      save: runtime.save,
-      renderDayView: function () {
-        runtime.renderDayView();
-        renderer.mount();
-      }
-    });
+    var renderer = createRenderer({ $: runtime.$, $$: runtime.$$, escapeHtml: runtime.escapeHtml, dateLabel: runtime.dateLabel, state: runtime.state, save: runtime.save, renderDayView: function () { runtime.renderDayView(); renderer.mount(); } });
     renderer.mount();
   }
 
-  root.TravelDaily = Object.freeze({
-    getOverview: getOverview,
-    getEvents: getEvents,
-    getCountryStages: getCountryStages,
-    createRenderer: createRenderer,
-    mountScrollRenderer: mountScrollRenderer
-  });
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", mountScrollRenderer, { once: true });
-  } else {
-    mountScrollRenderer();
-  }
+  root.TravelDaily = Object.freeze({ getOverview: getOverview, getEvents: getEvents, getCountryStages: getCountryStages, createRenderer: createRenderer, mountScrollRenderer: mountScrollRenderer });
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mountScrollRenderer, { once: true });
+  else mountScrollRenderer();
 })(window);
