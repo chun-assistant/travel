@@ -15,6 +15,7 @@
   var packingDataSrc = base + "data/packing.js";
   var coreDataSrc = base + "data/core.js";
   var printDataSrc = base + "data/print.js";
+  var utilsSrc = base + "modules/common-utils.js";
   var legacySrc = base + "common-legacy.js";
   var isDailyPage = document.body && document.body.getAttribute("data-page") === "days";
 
@@ -22,6 +23,7 @@
     document.write('<script src="' + packingDataSrc + '"><\/script>');
     document.write('<script src="' + coreDataSrc + '"><\/script>');
     document.write('<script src="' + printDataSrc + '"><\/script>');
+    document.write('<script src="' + utilsSrc + '"><\/script>');
     document.write('<script src="' + legacySrc.replace(/"/g, "&quot;") + '"><\/script>');
     document.write('<script src="' + base + 'modules/flight-badges.js' + '"><\/script>');
 
@@ -30,7 +32,6 @@
       document.write('<script src="' + base + 'modules/daily-logic.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-scroll.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-render.js' + '"><\/script>');
-      document.write('<script src="' + base + 'modules/common-utils.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-event-filters.js"><\/script>');
       document.write('<script src="' + base + 'modules/runtime-utils.js"><\/script>');
@@ -46,14 +47,13 @@
     return;
   }
 
-  var scripts = [packingDataSrc, printDataSrc, coreDataSrc, legacySrc, base + "modules/flight-badges.js"];
+  var scripts = [packingDataSrc, printDataSrc, coreDataSrc, utilsSrc, legacySrc, base + "modules/flight-badges.js"];
   if (isDailyPage) {
     scripts.push(
       base + "data/itinerary.js",
       base + "modules/daily-logic.js",
       base + "modules/daily-scroll.js",
       base + "modules/daily-render.js",
-      base + "modules/common-utils.js",
       base + "modules/daily.js",
       base + "modules/daily-event-filters.js",
       base + "modules/runtime-utils.js",
