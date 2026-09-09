@@ -22,7 +22,7 @@
     var $$ = deps.$$ || function (selector, rootEl) { return Array.prototype.slice.call((rootEl || document).querySelectorAll(selector)); };
     var escapeHtml = deps.escapeHtml || function (value) {
       return String(value == null ? "" : value).replace(/[&<>'\"]/g, function (ch) {
-        return ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[ch];
+        return ({"&":"&amp;","<":"&lt;"," ":"&gt;","'":"&#39;",'"':"&quot;"})[ch];
       });
     };
     var dateLabel = deps.dateLabel || function (iso) {
@@ -120,7 +120,20 @@
   function mountScrollRenderer() {
     if (!root.TravelDailyRuntime) return;
     var runtime = root.TravelDailyRuntime;
-    var renderer = createRenderer(runtime);
+    var renderer = createRenderer({
+      $: runtime.$,
+      $$: runtime.$$,
+      escapeHtml: runtime.escapeHtml,
+      dateLabel: runtime.dateLabel,
+      state: runtime.state,
+      save: runtime.save,
+      renderDayView: function () {
+        runtime.renderDayView();
+        renderer.renderDayScroller();
+        renderer.renderCountryTrack();
+        renderer.renderScrollEnhancements();
+      }
+    });
     renderer.renderDayScroller();
     renderer.renderCountryTrack();
     renderer.renderScrollEnhancements();
