@@ -120,21 +120,7 @@
   function mountScrollRenderer() {
     if (!root.TravelDailyRuntime) return;
     var runtime = root.TravelDailyRuntime;
-    var renderer;
-    var filters;
-
-    function renderEventFilters() {
-      if (!root.TravelDailyEventFilters) return;
-      filters = filters || root.TravelDailyEventFilters.init({
-        $: runtime.$,
-        $$: runtime.$$, 
-        state: runtime.state,
-        renderEvents: runtime.renderEvents
-      });
-      filters.render();
-    }
-
-    renderer = createRenderer({
+    var renderer = createRenderer({
       $: runtime.$,
       $$: runtime.$$, 
       escapeHtml: runtime.escapeHtml,
@@ -146,13 +132,11 @@
         renderer.renderDayScroller();
         renderer.renderCountryTrack();
         renderer.renderScrollEnhancements();
-        renderEventFilters();
       }
     });
     renderer.renderDayScroller();
     renderer.renderCountryTrack();
     renderer.renderScrollEnhancements();
-    renderEventFilters();
   }
 
   root.TravelDaily = Object.freeze({
