@@ -127,6 +127,10 @@
     }
 
     function setupScrollSync() {
+      if (root.TravelDailyScroll && root.TravelDailyScroll.setupBasicScrollSync) {
+        root.TravelDailyScroll.setupBasicScrollSync({ $: $ });
+        return;
+      }
       var dayScroller = $("#dayScroller");
       var countryScroll = $("#countryScroll");
       if (!dayScroller || !countryScroll || dayScroller.dataset.syncReady) return;
