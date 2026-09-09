@@ -13,8 +13,35 @@
     showToast.timer = setTimeout(function () { el.classList.remove("show"); }, 1700);
   }
 
+  function fallbackCopy(text) {
+    var t = document.createElement("textarea");
+    t.value = text;
+    t.setAttribute("readonly", "");
+    t.style.position = "fixed";
+    t.style.top = "-1000px";
+    t.style.left = "-1000px";
+    t.style.opacity = "0";
+    document.body.appendChild(t);
+    t.focus();
+    t.select();
+    t.setSelectionRange(0, t.value.length);
+
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (_) {}
+    t.remove();
+
+    if (ok) showToast("地址已複製");
+    else showToast("複製失敗，請長按地址複製");
+  }
+
   function copyAddress(text) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
+    text = String(text || "");
+    if (!text) {
+      showToast("沒有可複製的地址");
+      return;
+    }
+
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
       navigator.clipboard.writeText(text).then(function () {
         showToast("地址已複製");
       }).catch(function () {
@@ -22,17 +49,8 @@
       });
       return;
     }
-    fallbackCopy(text);
-  }
 
-  function fallbackCopy(text) {
-    var t = document.createElement("textarea");
-    t.value = text;
-    document.body.appendChild(t);
-    t.select();
-    try { document.execCommand("copy"); } catch (_) {}
-    t.remove();
-    showToast("地址已複製");
+    fallbackCopy(text);
   }
 
   function bind(deps) {
@@ -44,8 +62,9 @@
     $$(".hotel-copy").forEach(function (btn) {
       if (btn.dataset.copyBound) return;
       btn.dataset.copyBound = "1";
-      btn.addEventListener("click", function () {
-        copyAddress(btn.dataset.copy || "");
+      btn.addEventListener("click", function (event) {
+        event.preventDefault();
+        copyAddress(btn.getAttribute("data-copy") || "");
       });
     });
   }
