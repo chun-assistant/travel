@@ -7,32 +7,31 @@
 (function (root) {
   function createRenderer(deps) {
     deps = deps || {};
-    var utils = root.TravelRuntimeUtils || {};
     var data = deps.data || [];
     var $ = deps.$ || function (selector) { return document.querySelector(selector); };
     var $$ = deps.$$ || function (selector, scope) {
       return Array.prototype.slice.call((scope || document).querySelectorAll(selector));
     };
-    var escapeHtml = deps.escapeHtml || utils.escapeHtml || function (value) {
+    var escapeHtml = deps.escapeHtml || function (value) {
       return String(value == null ? "" : value)
         .replace(/&/g, "&amp;").replace(/</g, "&lt;")
         .replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&#39;");
     };
-    var statusClass = deps.statusClass || utils.statusClass || function () { return ""; };
-    var fmtTwd = deps.fmtTwd || utils.fmtTwd || function (value) { return value == null ? "" : String(value); };
+    var statusClass = deps.statusClass || function () { return ""; };
+    var fmtTwd = deps.fmtTwd || function (value) { return value == null ? "" : String(value); };
     var copyText = deps.copyText || function () {};
-    var buildDirections = deps.buildDirections || utils.buildDirections || function (place) {
+    var buildDirections = deps.buildDirections || function (place) {
       if (!place) return "";
       var parts = String(place).split(/→|->/).map(function (s) { return s.trim(); }).filter(Boolean);
       var destination = parts[parts.length - 1] || String(place).trim();
       var p = new URLSearchParams({ api: "1", destination: destination, dir_action: "navigate" });
       return "https://www.google.com/maps/dir/?" + p.toString();
     };
-    var isAirportPlace = deps.isAirportPlace || utils.isAirportPlace || function (value) {
+    var isAirportPlace = deps.isAirportPlace || function (value) {
       return /airport|機場|航廈|departure hall|check-in area/i.test(String(value || ""));
     };
     var mapIcon = deps.mapIcon || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>';
-    var copyIcon = deps.copyIcon || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0 2 2v8a2 2 0 0 0 2 2h2"></path></svg>';
+    var copyIcon = deps.copyIcon || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 2 2v8a2 2 0 0 0 2 2h2"></path></svg>';
 
     return function renderHotels() {
       $("#hotelList").innerHTML = data.map(function (h) {
