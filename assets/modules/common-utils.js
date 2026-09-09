@@ -83,6 +83,16 @@
     badge.classList.toggle("offline", !online);
     badge.querySelector("span").textContent = online ? "地圖可開啟" : "離線可查看";
   };
+  const renderNotices = () => {
+    const notices = [
+      ["🚆","9/25機場交通已修正","VIE搭REX7／Railjet至Wien Hbf，再轉U1；不是機場接送。"],
+      ["⛪","9/27白教堂週日時段","09:15先拍外觀；若要入內，依官方週日12:00後時段回訪。"],
+      ["🍽️","餐食限制","全團避開牛肉與game meat（馴鹿、麋鹿、鹿肉等）；可選雞、豬、魚或素食。"],
+      ["❄️","舒適優先","強風、結冰或長距離時可分流、改短程計程車，不勉強走海岸冰面。"],
+    ];
+    const el = document.querySelector("#globalNotices");
+    el.innerHTML = notices.map(n => `<article class="notice"><div class="notice-icon">${n[0]}</div><div><strong>${escapeHtml(n[1])}</strong><p>${escapeHtml(n[2])}</p></div></article>`).join("");
+  };
 
   root.TravelCommonUtils = Object.freeze({
     escapeHtml,
@@ -103,6 +113,7 @@
     toast,
     copyText,
     renderCountdown,
-    renderNetwork
+    renderNetwork,
+    renderNotices
   });
 })(window);
