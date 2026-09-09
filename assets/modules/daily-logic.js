@@ -32,10 +32,15 @@
     return (d.getMonth() + 1) + "/" + d.getDate() + "（" + "日一二三四五六"[d.getDay()] + "）";
   }
 
+  function getDayColor(stage) {
+    return stage && stage.color || "#dbe6e3";
+  }
+
   root.TravelDailyLogic = Object.freeze({
     getStageForDay: getStageForDay,
     filterKind: filterKind,
     getCountryLabel: getCountryLabel,
-    dateLabel: dateLabel
+    dateLabel: dateLabel,
+    getDayColor: getDayColor
   });
 })(window);
