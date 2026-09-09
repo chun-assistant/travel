@@ -30,6 +30,7 @@
       document.write('<script src="' + base + 'modules/daily-logic.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-scroll.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-render.js' + '"><\/script>');
+      document.write('<script src="' + base + 'modules/common-utils.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-event-filters.js"><\/script>');
       document.write('<script src="' + base + 'modules/runtime-utils.js"><\/script>');
@@ -52,6 +53,7 @@
       base + "modules/daily-logic.js",
       base + "modules/daily-scroll.js",
       base + "modules/daily-render.js",
+      base + "modules/common-utils.js",
       base + "modules/daily.js",
       base + "modules/daily-event-filters.js",
       base + "modules/runtime-utils.js",
