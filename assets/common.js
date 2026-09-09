@@ -26,6 +26,8 @@
     document.write('<script src="' + base + 'modules/flight-badges.js' + '"><\/script>');
 
     if (isDailyPage) {
+      document.write('<script src="' + base + 'data/itinerary.js' + '"><\/script>');
+      document.write('<script src="' + base + 'modules/daily.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-event-filters.js"><\/script>');
       document.write('<script src="' + base + 'modules/runtime-utils.js"><\/script>');
       document.write('<script src="' + base + 'data/apps.js"><\/script>');
@@ -43,6 +45,8 @@
   var scripts = [packingDataSrc, printDataSrc, coreDataSrc, legacySrc, base + "modules/flight-badges.js"];
   if (isDailyPage) {
     scripts.push(
+      base + "data/itinerary.js",
+      base + "modules/daily.js",
       base + "modules/daily-event-filters.js",
       base + "modules/runtime-utils.js",
       base + "data/apps.js",
