@@ -1,9 +1,8 @@
 /*
  * Stay module boundary.
  *
- * Safe migration step: expose accommodation data and renderer boundaries.
- * The new renderer is preferred when explicitly loaded; otherwise the legacy
- * common.js renderer remains the fallback. This keeps the migration reversible.
+ * Stay rendering is owned by the dedicated renderer module. The common runtime
+ * remains available for shared utilities, but is no longer a Stay fallback.
  */
 (function (root) {
   root.TravelStay = Object.freeze({
@@ -17,7 +16,7 @@
       return root.TravelStayRenderer.create({
         data: this.getData(),
         $: root.$,
-        $$: root.$$, 
+        $$: root.$$,
         escapeHtml: root.escapeHtml,
         statusClass: root.statusClass,
         fmtTwd: root.fmtTwd,
@@ -31,7 +30,6 @@
     render: function () {
       var renderer = this.createRenderer();
       if (renderer) return renderer();
-      if (typeof renderHotels === "function") return renderHotels();
     }
   });
 })(window);
