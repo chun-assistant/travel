@@ -162,7 +162,7 @@ const COUNTRY_STAGES = window.TravelCoreData.getCountryStages();
     function renderEventFilters() {
       const labels = ["全部","交通","景點","餐飲","住宿","其他"];
       $("#eventFilters").innerHTML = labels.map(v => `<button class="filter-chip ${state.eventFilter===v?"active":""}" data-filter="${v}">${v}</button>`).join("");
-      $$("#eventFilters .filter-chip").forEach(btn => btn.addEventListener("click",()=>{state.eventFilter=btn.dataset.filter; renderEventFilters(); renderEvents();}));
+      $$("#eventFilters .filter-chip").forEach(btn=>btn.addEventListener("click",()=>{state.eventFilter=btn.dataset.filter; renderEventFilters(); renderEvents();}));
     }
     function eventCard(e) {
       const kind = eventKind(e.type);
@@ -269,7 +269,7 @@ const COUNTRY_STAGES = window.TravelCoreData.getCountryStages();
       }));
     }
     function init() {
-      renderCountdown(); renderNetwork(); renderNotices(); renderDayView(); renderTransport(); renderHotels(); renderChecklist(); renderPractical(); renderBookings(); renderTax(); renderBudget(); renderFood(); renderMeals(); bindGuideImages();
+      renderCountdown(); renderNetwork(); renderNotices(); renderDayView(); renderHotels(); renderChecklist(); renderPractical(); renderBookings(); renderTax(); renderBudget(); renderFood(); renderMeals(); bindGuideImages();
       $("#jumpToday").addEventListener("click",()=>{state.day=currentTripDay();save("aurora-day",state.day);renderDayView();toast(`已切換 Day ${state.day}`);});
       $("#eventSearch").addEventListener("input",e=>{state.eventSearch=e.target.value;renderEvents();});
       $("#clearSearch").addEventListener("click",()=>{$("#eventSearch").value="";state.eventSearch="";renderEvents();});
