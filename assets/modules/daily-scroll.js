@@ -31,6 +31,35 @@
     }, { passive: false });
   }
 
+  function setupBasicScrollSync(deps) {
+    deps = deps || {};
+    var $ = deps.$ || function (selector) { return document.querySelector(selector); };
+    var dayScroller = $("#dayScroller");
+    var countryScroll = $("#countryScroll");
+    if (!dayScroller || !countryScroll || dayScroller.dataset.syncReady) return;
+
+    dayScroller.dataset.syncReady = "1";
+    countryScroll.dataset.syncReady = "1";
+    var syncing = false;
+
+    function sync(source, target) {
+      if (syncing) return;
+      var sourceMax = Math.max(0, source.scrollWidth - source.clientWidth);
+      var targetMax = Math.max(0, target.scrollWidth - target.clientWidth);
+      if (!sourceMax || !targetMax) return;
+      syncing = true;
+      target.scrollLeft = (source.scrollLeft / sourceMax) * targetMax;
+      requestAnimationFrame(function () { syncing = false; });
+    }
+
+    dayScroller.addEventListener("scroll", function () {
+      sync(dayScroller, countryScroll);
+    }, { passive: true });
+    countryScroll.addEventListener("scroll", function () {
+      sync(countryScroll, dayScroller);
+    }, { passive: true });
+  }
+
   function setupScrollSync(deps) {
     deps = deps || {};
     var $ = deps.$ || function (selector) { return document.querySelector(selector); };
@@ -78,6 +107,7 @@
 
   root.TravelDailyScroll = Object.freeze({
     setup: setupScrollSync,
-    setupHorizontalDrag: setupHorizontalDrag
+    setupHorizontalDrag: setupHorizontalDrag,
+    setupBasicScrollSync: setupBasicScrollSync
   });
 })(window);
