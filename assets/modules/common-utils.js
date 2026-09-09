@@ -12,6 +12,14 @@
     const d = new Date(`${iso}T12:00:00`);
     return `${d.getMonth()+1}/${d.getDate()}（${"日一二三四五六"[d.getDay()]}）`;
   };
+  const currentTripDay = () => {
+    const today = new Date(); today.setHours(12,0,0,0);
+    const start = new Date("2026-09-24T12:00:00");
+    const end = new Date("2026-10-11T12:00:00");
+    if (today < start) return 1;
+    if (today > end) return 18;
+    return Math.min(18, Math.max(1, Math.round((today-start)/86400000)+1));
+  };
   const statusClass = status => {
     const s = String(status || "");
     if (/缺漏|衝突|更正|取消/.test(s)) return "alert";
@@ -52,6 +60,7 @@
     fmtTwd,
     fmtCost,
     dateLabel,
+    currentTripDay,
     statusClass,
     eventKind,
     filterKind,
