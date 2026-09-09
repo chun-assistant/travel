@@ -110,10 +110,47 @@
       enableHorizontalDrag("#countryScroll");
     }
 
+    function setupScrollSync() {
+      var dayScroller = $("#dayScroller");
+      var countryScroll = $("#countryScroll");
+      if (!dayScroller || !countryScroll || dayScroller.dataset.syncReady) return;
+
+      dayScroller.dataset.syncReady = "1";
+      countryScroll.dataset.syncReady = "1";
+      var syncing = false;
+
+      function sync(source, target) {
+        if (syncing) return;
+        var sourceMax = Math.max(0, source.scrollWidth - source.clientWidth);
+        var targetMax = Math.max(0, target.scrollWidth - target.clientWidth);
+        if (!sourceMax || !targetMax) return;
+        syncing = true;
+        target.scrollLeft = (source.scrollLeft / sourceMax) * targetMax;
+        requestAnimationFrame(function () { syncing = false; });
+      }
+
+      dayScroller.addEventListener("scroll", function () {
+        sync(dayScroller, countryScroll);
+      }, { passive: true });
+
+      countryScroll.addEventListener("scroll", function () {
+        sync(countryScroll, dayScroller);
+      }, { passive: true });
+    }
+
+    function mount() {
+      renderDayScroller();
+      renderCountryTrack();
+      renderScrollEnhancements();
+      setupScrollSync();
+    }
+
     return Object.freeze({
       renderDayScroller: renderDayScroller,
       renderCountryTrack: renderCountryTrack,
-      renderScrollEnhancements: renderScrollEnhancements
+      renderScrollEnhancements: renderScrollEnhancements,
+      setupScrollSync: setupScrollSync,
+      mount: mount
     });
   }
 
@@ -129,14 +166,10 @@
       save: runtime.save,
       renderDayView: function () {
         runtime.renderDayView();
-        renderer.renderDayScroller();
-        renderer.renderCountryTrack();
-        renderer.renderScrollEnhancements();
+        renderer.mount();
       }
     });
-    renderer.renderDayScroller();
-    renderer.renderCountryTrack();
-    renderer.renderScrollEnhancements();
+    renderer.mount();
   }
 
   root.TravelDaily = Object.freeze({
