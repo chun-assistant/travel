@@ -68,6 +68,15 @@
     try { await navigator.clipboard.writeText(text); toast("地址已複製"); }
     catch { const t=document.createElement("textarea"); t.value=text; document.body.append(t); t.select(); document.execCommand("copy"); t.remove(); toast("地址已複製"); }
   };
+  const renderCountdown = () => {
+    const today = new Date(); today.setHours(12,0,0,0);
+    const start = new Date("2026-09-24T12:00:00"), end = new Date("2026-10-11T12:00:00");
+    const valueEl = document.querySelector("#countdownValue");
+    const labelEl = document.querySelector("#countdownLabel");
+    if (today < start) { valueEl.textContent = `${Math.ceil((start-today)/86400000)} 天`; labelEl.textContent = "距離出發"; }
+    else if (today <= end) { valueEl.textContent = `Day ${currentTripDay()}`; labelEl.textContent = "旅程進行中"; }
+    else { valueEl.textContent = "完成"; labelEl.textContent = "旅程回憶"; }
+  };
 
   root.TravelCommonUtils = Object.freeze({
     escapeHtml,
@@ -86,6 +95,7 @@
     pinIcon,
     copyIcon,
     toast,
-    copyText
+    copyText,
+    renderCountdown
   });
 })(window);
