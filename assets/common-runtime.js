@@ -251,6 +251,21 @@ const COUNTRY_STAGES = window.TravelCoreData.getCountryStages();
         $$(".subview",root).forEach(x=>x.classList.toggle("active",x.id===`${panelPrefix}${btn.dataset.sub}`));
       }));
     }
+
+    window.TravelDailyRuntime = Object.freeze({
+      $: $,
+      $$: $$,
+      escapeHtml: escapeHtml,
+      dateLabel: dateLabel,
+      state: state,
+      save: save,
+      renderDayView: renderDayView,
+      renderEvents: renderEvents,
+      renderEventFilters: renderEventFilters,
+      copyText: copyText,
+      enableHorizontalDrag: enableHorizontalDrag
+    });
+
     function init() {
       renderCountdown(); renderNetwork(); renderNotices(); renderDayView(); renderChecklist(); renderPractical(); renderBookings(); renderTax(); renderBudget(); renderFood(); renderMeals(); bindGuideImages();
       $("#jumpToday").addEventListener("click",()=>{state.day=currentTripDay();save("aurora-day",state.day);renderDayView();toast(`已切換 Day ${state.day}`);});
