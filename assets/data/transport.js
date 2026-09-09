@@ -8,8 +8,8 @@
 (function (root) {
   root.TravelTransportData = Object.freeze({
     getItems: function () {
-      return typeof root.APP_DATA !== "undefined" && Array.isArray(root.APP_DATA.transport)
-        ? root.APP_DATA.transport
+      return typeof APP_DATA !== "undefined" && Array.isArray(APP_DATA.transport)
+        ? APP_DATA.transport
         : [];
     }
   });
