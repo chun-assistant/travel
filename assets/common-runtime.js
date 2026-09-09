@@ -10,6 +10,7 @@ const escapeHtml = COMMON_UTILS.escapeHtml;
 const fmtTwd = COMMON_UTILS.fmtTwd;
 const fmtCost = COMMON_UTILS.fmtCost;
 const dateLabel = COMMON_UTILS.dateLabel;
+const currentTripDay = COMMON_UTILS.currentTripDay;
 const statusClass = COMMON_UTILS.statusClass;
 const eventKind = COMMON_UTILS.eventKind;
 const filterKind = COMMON_UTILS.filterKind;
@@ -18,6 +19,8 @@ const isAirportPlace = COMMON_UTILS.isAirportPlace;
 const mapIcon = COMMON_UTILS.mapIcon;
 const pinIcon = COMMON_UTILS.pinIcon;
 const copyIcon = COMMON_UTILS.copyIcon;
+const stored = COMMON_UTILS.stored;
+const save = COMMON_UTILS.save;
 
 const isHotelPlace = value => {
   const place = String(value || "").trim().toLowerCase();
@@ -33,8 +36,6 @@ const isNavigableEvent = event => {
   return /景點|活動/.test(type) || (/住宿/.test(type) && isHotelPlace(event.place));
 };
 
-const stored = key => { try { return JSON.parse(localStorage.getItem(key)); } catch { return null; } };
-const save = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} };
 const state = {
   day: Number(stored("aurora-day")) || 1,
   eventFilter: "全部",
@@ -53,7 +54,6 @@ async function copyText(text) {
   catch { const t=document.createElement("textarea"); t.value=text; document.body.append(t); t.select(); document.execCommand("copy"); t.remove(); toast("地址已複製"); }
 }
 
-const currentTripDay = COMMON_UTILS.currentTripDay;
 function renderCountdown() {
   const today = new Date(); today.setHours(12,0,0,0);
   const start = new Date("2026-09-24T12:00:00"), end = new Date("2026-10-11T12:00:00");
@@ -92,7 +92,7 @@ function renderDayScroller() {
 
 function renderCountryTrack() {
   $("#countryTrack").innerHTML = COUNTRY_STAGES.map(stage=>{ const code={"奧地利":"奧地利 (Austria)","芬蘭":"芬蘭 (Finland)","挪威":"挪威 (Norway)","荷蘭":"荷蘭 (Netherlands)"}[stage.country]||stage.country; return `<button class="country-stage ${state.day>=stage.start&&state.day<=stage.end?"active":""}" data-day="${stage.start}" style="--stage-color:${stage.color};--stage-start:${stage.start};--stage-end:${stage.end+1}" aria-label="前往${escapeHtml(stage.country)}行程 Day ${stage.start}"><span class="country-dot">${stage.flag}</span><b>${code}</b><small>Day ${stage.start}–${stage.end}</small></button>`; }).join("");
-  $$(".country-stage",$("#countryTrack")).forEach(btn=>btn.addEventListener("click",()=>{state.day=Number(btn.dataset.day);save("aurora-day",state.day);renderDayView();setTimeout(()=>$(".day-chip.active")?.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}),20);}));
+  $$(".country-stage",$("#countryTrack")).forEach(btn=>btn.addEventListener("click",()=>{state.day=Number(btn.dataset.day);save("aurora-day",state.day);renderDayView();setTimeout(()=>$(".day-chip.active")?.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}),20); }));
 }
 
 function enableHorizontalDrag(selector) {
