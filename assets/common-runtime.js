@@ -190,14 +190,6 @@ const COUNTRY_STAGES = window.TravelCoreData.getCountryStages();
       $$(".copy-place", $("#eventTimeline")).forEach(btn => btn.addEventListener("click",()=>copyText(btn.dataset.copy)));
     }
 
-    function renderTransport() {
-      const cats = ["全部",...new Set(APP_DATA.transport.map(t=>t.type))];
-      $("#transportFilters").innerHTML = cats.map(v=>`<button class="filter-chip ${state.transportFilter===v?"active":""}" data-filter="${escapeHtml(v)}">${escapeHtml(v)}</button>`).join("");
-      $$("#transportFilters .filter-chip").forEach(btn=>btn.addEventListener("click",()=>{state.transportFilter=btn.dataset.filter;renderTransport();}));
-      const rows = APP_DATA.transport.filter(t=>state.transportFilter==="全部"||t.type===state.transportFilter);
-      $("#transportList").innerHTML = rows.map(t=>`<article class="info-card transport-card"><div class="event-top"><div><span class="event-type">${escapeHtml(t.date)} · ${escapeHtml(t.type)}</span><h3>${escapeHtml(t.route)}</h3></div><span class="status ${statusClass(t.status)}">${escapeHtml(t.status)}</span></div><p class="subtitle">${escapeHtml(t.service)}</p><div class="info-card-row"><span>時間</span><b>${escapeHtml(t.time)}</b></div><div class="info-card-row"><span>方式</span><b>${escapeHtml(t.method)}</b></div><div class="info-card-row"><span>時長</span><b>${escapeHtml(t.duration)}</b></div><div class="info-card-row"><span>費用／人</span><b>${escapeHtml(fmtCost(t.currency,t.cost))}</b></div><div class="info-card-row"><span>提醒</span><b>${escapeHtml(t.note)}</b></div></article>`).join("");
-    }
-
     function renderHotels() {
       $("#hotelList").innerHTML = APP_DATA.hotels.map(h=>{
         const isHotel = !/night train|夜臥火車|機上/i.test(`${h.name} ${h.city}`) && !isAirportPlace(h.address);
@@ -206,7 +198,6 @@ const COUNTRY_STAGES = window.TravelCoreData.getCountryStages();
       }).join("");
       $$(".hotel-copy").forEach(btn=>btn.addEventListener("click",()=>copyText(btn.dataset.copy)));
     }
-
     function initChecks() {
       APP_DATA.prep.forEach((item,i)=>{ const id=`p${i}`; if (!(id in state.checks) && /已完成|已裝/.test(item.status||"")) state.checks[id]=true; });
       APP_DATA.bookings.forEach((item,i)=>{ const id=`b${i}`; if (!(id in state.checks) && /已完成|已購票|已確認/.test(item.status||"")) state.checks[id]=true; });
