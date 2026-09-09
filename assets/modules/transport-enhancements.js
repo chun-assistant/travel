@@ -34,8 +34,7 @@
     }
 
     if (root.TravelTransportData &&
-        typeof root.TravelTransportData.getItems === 'function' &&
-        Array.isArray(root.TravelTransportData.getItems())) {
+        typeof root.TravelTransportData.getItems === 'function') {
       renderTransportPage();
     }
   }
