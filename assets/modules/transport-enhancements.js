@@ -33,7 +33,9 @@
       root.TravelTransportDataEnhancements.apply();
     }
 
-    if (typeof APP_DATA !== 'undefined' && Array.isArray(APP_DATA.transport)) {
+    if (root.TravelTransportData &&
+        typeof root.TravelTransportData.getItems === 'function' &&
+        Array.isArray(root.TravelTransportData.getItems())) {
       renderTransportPage();
     }
   }
