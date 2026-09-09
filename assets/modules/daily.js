@@ -123,7 +123,7 @@
     var renderer;
     renderer = createRenderer({
       $: runtime.$,
-      $$: runtime.$$,
+      $$: runtime.$$, 
       escapeHtml: runtime.escapeHtml,
       dateLabel: runtime.dateLabel,
       state: runtime.state,
@@ -133,6 +133,15 @@
         renderer.renderDayScroller();
         renderer.renderCountryTrack();
         renderer.renderScrollEnhancements();
+        if (root.TravelDailyEventFilters) {
+          var filters = root.TravelDailyEventFilters.init({
+            $: runtime.$,
+            $$: runtime.$$,
+            state: runtime.state,
+            renderEvents: runtime.renderEvents
+          });
+          filters.render();
+        }
       }
     });
     renderer.renderDayScroller();
