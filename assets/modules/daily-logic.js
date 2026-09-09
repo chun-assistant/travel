@@ -40,12 +40,18 @@
     return stage && stage.color || "#dbe6e3";
   }
 
+  function getStageStyle(stage) {
+    if (!stage) return "";
+    return "--stage-color:" + stage.color + ";--stage-start:" + stage.start + ";--stage-end:" + (stage.end + 1);
+  }
+
   root.TravelDailyLogic = Object.freeze({
     getStageForDay: getStageForDay,
     isDayInStage: isDayInStage,
     filterKind: filterKind,
     getCountryLabel: getCountryLabel,
     dateLabel: dateLabel,
-    getDayColor: getDayColor
+    getDayColor: getDayColor,
+    getStageStyle: getStageStyle
   });
 })(window);
