@@ -69,7 +69,10 @@
         var active = root.TravelDailyLogic
           ? root.TravelDailyLogic.isDayInStage(state.day, stage)
           : state.day >= stage.start && state.day <= stage.end;
-        return '<button class="country-stage ' + (active ? "active" : "") + '" data-day="' + stage.start + '" style="--stage-color:' + stage.color + ';--stage-start:' + stage.start + ';--stage-end:' + (stage.end + 1) + '" aria-label="前往' + escapeHtml(stage.country) + '行程 Day ' + stage.start + '"><span class="country-dot">' + stage.flag + '</span><b>' + (root.TravelDailyLogic ? root.TravelDailyLogic.getCountryLabel(stage.country) : stage.country) + '</b><small>Day ' + stage.start + '–' + stage.end + '</small></button>';
+        var stageStyle = root.TravelDailyLogic
+          ? root.TravelDailyLogic.getStageStyle(stage)
+          : "--stage-color:" + stage.color + ";--stage-start:" + stage.start + ";--stage-end:" + (stage.end + 1);
+        return '<button class="country-stage ' + (active ? "active" : "") + '" data-day="' + stage.start + '" style="' + stageStyle + '" aria-label="前往' + escapeHtml(stage.country) + '行程 Day ' + stage.start + '"><span class="country-dot">' + stage.flag + '</span><b>' + (root.TravelDailyLogic ? root.TravelDailyLogic.getCountryLabel(stage.country) : stage.country) + '</b><small>Day ' + stage.start + '–' + stage.end + '</small></button>';
       }).join("");
       $$(".country-stage", host).forEach(function (btn) {
         btn.addEventListener("click", function () {
