@@ -26,9 +26,16 @@
     return code[country] || country;
   }
 
+  function dateLabel(iso) {
+    if (!iso) return "";
+    var d = new Date(String(iso) + "T12:00:00");
+    return (d.getMonth() + 1) + "/" + d.getDate() + "（" + "日一二三四五六"[d.getDay()] + "）";
+  }
+
   root.TravelDailyLogic = Object.freeze({
     getStageForDay: getStageForDay,
     filterKind: filterKind,
-    getCountryLabel: getCountryLabel
+    getCountryLabel: getCountryLabel,
+    dateLabel: dateLabel
   });
 })(window);
