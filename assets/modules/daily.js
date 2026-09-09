@@ -87,7 +87,7 @@
       });
     }
 
-    function enableHorizontalDrag(selector) {
+    function enableHorizontalDragFallback(selector) {
       var el = $(selector);
       if (!el || el.dataset.dragReady) return;
       el.dataset.dragReady = "1";
@@ -117,8 +117,13 @@
     }
 
     function renderScrollEnhancements() {
-      enableHorizontalDrag("#dayScroller");
-      enableHorizontalDrag("#countryScroll");
+      if (root.TravelDailyScroll && root.TravelDailyScroll.setupHorizontalDrag) {
+        root.TravelDailyScroll.setupHorizontalDrag("#dayScroller", { $: $ });
+        root.TravelDailyScroll.setupHorizontalDrag("#countryScroll", { $: $ });
+        return;
+      }
+      enableHorizontalDragFallback("#dayScroller");
+      enableHorizontalDragFallback("#countryScroll");
     }
 
     function setupScrollSync() {
