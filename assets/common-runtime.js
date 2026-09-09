@@ -22,6 +22,7 @@ const copyIcon = COMMON_UTILS.copyIcon;
 const stored = COMMON_UTILS.stored;
 const save = COMMON_UTILS.save;
 const toast = COMMON_UTILS.toast;
+const copyText = COMMON_UTILS.copyText;
 
 const isHotelPlace = value => {
   const place = String(value || "").trim().toLowerCase();
@@ -44,11 +45,6 @@ const state = {
   transportFilter: "全部",
   checks: stored("aurora-checks") || {},
 };
-
-async function copyText(text) {
-  try { await navigator.clipboard.writeText(text); toast("地址已複製"); }
-  catch { const t=document.createElement("textarea"); t.value=text; document.body.append(t); t.select(); document.execCommand("copy"); t.remove(); toast("地址已複製"); }
-}
 
 function renderCountdown() {
   const today = new Date(); today.setHours(12,0,0,0);
