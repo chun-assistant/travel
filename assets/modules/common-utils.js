@@ -20,6 +20,8 @@
     if (today > end) return 18;
     return Math.min(18, Math.max(1, Math.round((today-start)/86400000)+1));
   };
+  const stored = key => { try { return JSON.parse(localStorage.getItem(key)); } catch { return null; } };
+  const save = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} };
   const statusClass = status => {
     const s = String(status || "");
     if (/缺漏|衝突|更正|取消/.test(s)) return "alert";
@@ -61,6 +63,8 @@
     fmtCost,
     dateLabel,
     currentTripDay,
+    stored,
+    save,
     statusClass,
     eventKind,
     filterKind,
