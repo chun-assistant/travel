@@ -1,5 +1,36 @@
 /* Daily scroll interaction extracted from common-runtime.js. */
 (function (root) {
+  function setupHorizontalDrag(selector, deps) {
+    deps = deps || {};
+    var $ = deps.$ || function (value) { return document.querySelector(value); };
+    var el = $(selector);
+    if (!el || el.dataset.dragReady) return;
+    el.dataset.dragReady = "1";
+    var dragging = false, startX = 0, startScroll = 0;
+    el.addEventListener("pointerdown", function (e) {
+      if (e.button !== 0) return;
+      dragging = true;
+      startX = e.clientX;
+      startScroll = el.scrollLeft;
+      el.classList.add("dragging");
+    });
+    el.addEventListener("pointermove", function (e) {
+      if (dragging) el.scrollLeft = startScroll - (e.clientX - startX);
+    });
+    var stop = function () {
+      dragging = false;
+      el.classList.remove("dragging");
+    };
+    el.addEventListener("pointerup", stop);
+    el.addEventListener("pointercancel", stop);
+    el.addEventListener("wheel", function (e) {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        el.scrollLeft += e.deltaY;
+        e.preventDefault();
+      }
+    }, { passive: false });
+  }
+
   function setupScrollSync(deps) {
     deps = deps || {};
     var $ = deps.$ || function (selector) { return document.querySelector(selector); };
@@ -45,5 +76,8 @@
     syncCountryActive();
   }
 
-  root.TravelDailyScroll = Object.freeze({ setup: setupScrollSync });
+  root.TravelDailyScroll = Object.freeze({
+    setup: setupScrollSync,
+    setupHorizontalDrag: setupHorizontalDrag
+  });
 })(window);
