@@ -117,10 +117,26 @@
     });
   }
 
+  function mountScrollRenderer() {
+    if (!root.TravelDailyRuntime) return;
+    var runtime = root.TravelDailyRuntime;
+    var renderer = createRenderer(runtime);
+    renderer.renderDayScroller();
+    renderer.renderCountryTrack();
+    renderer.renderScrollEnhancements();
+  }
+
   root.TravelDaily = Object.freeze({
     getOverview: getOverview,
     getEvents: getEvents,
     getCountryStages: getCountryStages,
-    createRenderer: createRenderer
+    createRenderer: createRenderer,
+    mountScrollRenderer: mountScrollRenderer
   });
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", mountScrollRenderer, { once: true });
+  } else {
+    mountScrollRenderer();
+  }
 })(window);
