@@ -13,18 +13,12 @@ const dateLabel = COMMON_UTILS.dateLabel;
 const statusClass = COMMON_UTILS.statusClass;
 const eventKind = COMMON_UTILS.eventKind;
 const filterKind = COMMON_UTILS.filterKind;
+const buildDirections = COMMON_UTILS.buildDirections;
+const isAirportPlace = COMMON_UTILS.isAirportPlace;
 const mapIcon = COMMON_UTILS.mapIcon;
 const pinIcon = COMMON_UTILS.pinIcon;
 const copyIcon = COMMON_UTILS.copyIcon;
 
-const buildDirections = place => {
-  if (!place) return "";
-  const parts = String(place).split(/→|->/).map(s => s.trim()).filter(Boolean);
-  const destination = parts.at(-1) || String(place).trim();
-  const p = new URLSearchParams({ api: "1", destination, dir_action: "navigate" });
-  return `https://www.google.com/maps/dir/?${p.toString()}`;
-};
-const isAirportPlace = value => /airport|機場|航廈|departure hall|check-in area/i.test(String(value || ""));
 const isHotelPlace = value => {
   const place = String(value || "").trim().toLowerCase();
   if (!place || isAirportPlace(place)) return false;
