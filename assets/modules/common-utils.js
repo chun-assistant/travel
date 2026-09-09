@@ -77,6 +77,12 @@
     else if (today <= end) { valueEl.textContent = `Day ${currentTripDay()}`; labelEl.textContent = "旅程進行中"; }
     else { valueEl.textContent = "完成"; labelEl.textContent = "旅程回憶"; }
   };
+  const renderNetwork = () => {
+    const online = navigator.onLine;
+    const badge = document.querySelector("#networkBadge");
+    badge.classList.toggle("offline", !online);
+    badge.querySelector("span").textContent = online ? "地圖可開啟" : "離線可查看";
+  };
 
   root.TravelCommonUtils = Object.freeze({
     escapeHtml,
@@ -96,6 +102,7 @@
     copyIcon,
     toast,
     copyText,
-    renderCountdown
+    renderCountdown,
+    renderNetwork
   });
 })(window);
