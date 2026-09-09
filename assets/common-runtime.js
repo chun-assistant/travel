@@ -190,14 +190,6 @@ const COUNTRY_STAGES = window.TravelCoreData.getCountryStages();
       $$(".copy-place", $("#eventTimeline")).forEach(btn => btn.addEventListener("click",()=>copyText(btn.dataset.copy)));
     }
 
-    function renderHotels() {
-      $("#hotelList").innerHTML = APP_DATA.hotels.map(h=>{
-        const isHotel = !/night train|夜臥火車|機上/i.test(`${h.name} ${h.city}`) && !isAirportPlace(h.address);
-        const hotelNav = isHotel ? `<a class="map-btn" href="${escapeHtml(buildDirections(h.address))}" target="_blank" rel="noopener">${mapIcon}開始導航</a>` : "";
-        return `<article class="info-card hotel-card"><span class="hotel-city">${escapeHtml(h.city)} · ${escapeHtml(h.date)}</span><div class="event-top"><h3>${escapeHtml(h.name)}</h3><span class="status ${statusClass(h.status)}">${escapeHtml(h.status)}</span></div><p class="hotel-address">${escapeHtml(h.address)}</p><div class="info-card-row"><span>入住／退房</span><b>${escapeHtml(h.time)}</b></div><div class="info-card-row"><span>早餐／餐食</span><b>${escapeHtml(h.meal)}</b></div><div class="info-card-row"><span>分攤／人</span><b>${fmtTwd(h.cost)}</b></div><div class="info-card-row"><span>提醒</span><b>${escapeHtml(h.note)}</b></div><div class="two-actions">${hotelNav}<button class="ghost-btn hotel-copy" data-copy="${escapeHtml(h.address)}">${copyIcon}複製地址</button></div></article>`;
-      }).join("");
-      $$(".hotel-copy").forEach(btn=>btn.addEventListener("click",()=>copyText(btn.dataset.copy)));
-    }
     function initChecks() {
       APP_DATA.prep.forEach((item,i)=>{ const id=`p${i}`; if (!(id in state.checks) && /已完成|已裝/.test(item.status||"")) state.checks[id]=true; });
       APP_DATA.bookings.forEach((item,i)=>{ const id=`b${i}`; if (!(id in state.checks) && /已完成|已購票|已確認/.test(item.status||"")) state.checks[id]=true; });
@@ -260,7 +252,7 @@ const COUNTRY_STAGES = window.TravelCoreData.getCountryStages();
       }));
     }
     function init() {
-      renderCountdown(); renderNetwork(); renderNotices(); renderDayView(); renderHotels(); renderChecklist(); renderPractical(); renderBookings(); renderTax(); renderBudget(); renderFood(); renderMeals(); bindGuideImages();
+      renderCountdown(); renderNetwork(); renderNotices(); renderDayView(); renderChecklist(); renderPractical(); renderBookings(); renderTax(); renderBudget(); renderFood(); renderMeals(); bindGuideImages();
       $("#jumpToday").addEventListener("click",()=>{state.day=currentTripDay();save("aurora-day",state.day);renderDayView();toast(`已切換 Day ${state.day}`);});
       $("#eventSearch").addEventListener("input",e=>{state.eventSearch=e.target.value;renderEvents();});
       $("#clearSearch").addEventListener("click",()=>{$("#eventSearch").value="";state.eventSearch="";renderEvents();});
