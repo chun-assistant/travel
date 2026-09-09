@@ -21,6 +21,7 @@ const pinIcon = COMMON_UTILS.pinIcon;
 const copyIcon = COMMON_UTILS.copyIcon;
 const stored = COMMON_UTILS.stored;
 const save = COMMON_UTILS.save;
+const toast = COMMON_UTILS.toast;
 
 const isHotelPlace = value => {
   const place = String(value || "").trim().toLowerCase();
@@ -44,11 +45,6 @@ const state = {
   checks: stored("aurora-checks") || {},
 };
 
-let toastTimer;
-function toast(message) {
-  const el = $("#toast"); el.textContent = message; el.classList.add("show");
-  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove("show"), 1700);
-}
 async function copyText(text) {
   try { await navigator.clipboard.writeText(text); toast("地址已複製"); }
   catch { const t=document.createElement("textarea"); t.value=text; document.body.append(t); t.select(); document.execCommand("copy"); t.remove(); toast("地址已複製"); }
