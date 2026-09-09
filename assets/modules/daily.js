@@ -25,11 +25,13 @@
         return ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[ch];
       });
     };
-    var dateLabel = deps.dateLabel || function (iso) {
-      if (!iso) return "";
-      var d = new Date(String(iso) + "T12:00:00");
-      return (d.getMonth() + 1) + "/" + d.getDate() + "（" + "日一二三四五六"[d.getDay()] + "）";
-    };
+    var dateLabel = root.TravelDailyLogic && root.TravelDailyLogic.dateLabel
+      ? root.TravelDailyLogic.dateLabel
+      : deps.dateLabel || function (iso) {
+        if (!iso) return "";
+        var d = new Date(String(iso) + "T12:00:00");
+        return (d.getMonth() + 1) + "/" + d.getDate() + "（" + "日一二三四五六"[d.getDay()] + "）";
+      };
     var state = deps.state || { day: 1 };
     var save = deps.save || function () {};
     var renderDayView = deps.renderDayView || function () {};
