@@ -20,9 +20,7 @@
         fmtTwd: root.fmtTwd,
         copyText: root.copyText,
         buildDirections: root.buildDirections,
-        isAirportPlace: root.isAirportPlace,
-        mapIcon: root.mapIcon,
-        copyIcon: root.copyIcon
+        isAirportPlace: root.isAirportPlace
       });
     },
     render: function () {
