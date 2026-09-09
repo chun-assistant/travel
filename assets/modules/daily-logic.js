@@ -16,8 +16,19 @@
     return "其他";
   }
 
+  function getCountryLabel(country) {
+    var code = {
+      "奧地利": "奧地利 (Austria)",
+      "芬蘭": "芬蘭 (Finland)",
+      "挪威": "挪威 (Norway)",
+      "荷蘭": "荷蘭 (Netherlands)"
+    };
+    return code[country] || country;
+  }
+
   root.TravelDailyLogic = Object.freeze({
     getStageForDay: getStageForDay,
-    filterKind: filterKind
+    filterKind: filterKind,
+    getCountryLabel: getCountryLabel
   });
 })(window);
