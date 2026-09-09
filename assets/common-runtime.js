@@ -23,6 +23,7 @@ const stored = COMMON_UTILS.stored;
 const save = COMMON_UTILS.save;
 const toast = COMMON_UTILS.toast;
 const copyText = COMMON_UTILS.copyText;
+const renderCountdown = COMMON_UTILS.renderCountdown;
 
 const isHotelPlace = value => {
   const place = String(value || "").trim().toLowerCase();
@@ -46,13 +47,6 @@ const state = {
   checks: stored("aurora-checks") || {},
 };
 
-function renderCountdown() {
-  const today = new Date(); today.setHours(12,0,0,0);
-  const start = new Date("2026-09-24T12:00:00"), end = new Date("2026-10-11T12:00:00");
-  if (today < start) { $("#countdownValue").textContent = `${Math.ceil((start-today)/86400000)} 天`; $("#countdownLabel").textContent = "距離出發"; }
-  else if (today <= end) { $("#countdownValue").textContent = `Day ${currentTripDay()}`; $("#countdownLabel").textContent = "旅程進行中"; }
-  else { $("#countdownValue").textContent = "完成"; $("#countdownLabel").textContent = "旅程回憶"; }
-}
 function renderNetwork() {
   const online = navigator.onLine;
   $("#networkBadge").classList.toggle("offline", !online);
