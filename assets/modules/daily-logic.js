@@ -40,6 +40,14 @@
     return stage && stage.color || "#dbe6e3";
   }
 
+  function getDayPresentation(day, countryStages) {
+    var stage = getStageForDay(day, countryStages);
+    return {
+      stage: stage,
+      color: getDayColor(stage)
+    };
+  }
+
   function getStageStyle(stage) {
     if (!stage) return "";
     return "--stage-color:" + stage.color + ";--stage-start:" + stage.start + ";--stage-end:" + (stage.end + 1);
@@ -52,6 +60,7 @@
     getCountryLabel: getCountryLabel,
     dateLabel: dateLabel,
     getDayColor: getDayColor,
+    getDayPresentation: getDayPresentation,
     getStageStyle: getStageStyle
   });
 })(window);
