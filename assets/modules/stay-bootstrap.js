@@ -1,15 +1,21 @@
 /*
  * Stay page takeover bootstrap.
  *
- * Safe migration step: let the new Stay renderer replace the legacy DOM output
- * after the legacy runtime has initialized. The legacy renderer remains intact
- * as the rollback path until behavior is verified.
+ * Wires the dedicated Stay renderer and its interaction layer after the legacy
+ * runtime has initialized.
  */
 (function (root) {
   function boot() {
     if (!root.TravelStay || typeof root.TravelStay.render !== "function") return;
     if (!document.getElementById("hotelList")) return;
+
     root.TravelStay.render();
+
+    if (root.TravelStayInteractions && typeof root.TravelStayInteractions.bind === "function") {
+      root.TravelStayInteractions.bind({
+        copyText: root.copyText
+      });
+    }
   }
 
   if (document.readyState === "loading") {
