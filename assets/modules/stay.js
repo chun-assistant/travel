@@ -15,8 +15,6 @@
       if (!root.TravelStayRenderer) return null;
       return root.TravelStayRenderer.create({
         data: this.getData(),
-        $: root.$,
-        $$: root.$$,
         escapeHtml: root.escapeHtml,
         statusClass: root.statusClass,
         fmtTwd: root.fmtTwd,
