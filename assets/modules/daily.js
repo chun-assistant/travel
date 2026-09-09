@@ -47,7 +47,9 @@
           : d.day >= 9 && d.day <= 14 ? getCountryStages()[2]
           : d.day >= 15 && d.day <= 17 ? getCountryStages()[3]
           : null;
-        var dayColor = stage && stage.color || "#dbe6e3";
+        var dayColor = root.TravelDailyLogic
+          ? root.TravelDailyLogic.getDayColor(stage)
+          : stage && stage.color || "#dbe6e3";
         return '<button class="day-chip ' + (d.day === state.day ? "active" : "") + '" data-day="' + d.day + '" style="--day-color:' + dayColor + '"><b>Day ' + d.day + '</b><small>' + escapeHtml(dateLabel(d.date)) + '</small><small class="day-place">' + escapeHtml(d.city) + '</small></button>';
       }).join("");
       $$(".day-chip").forEach(function (btn) {
