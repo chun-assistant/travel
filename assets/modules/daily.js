@@ -38,7 +38,9 @@
       var host = $("#dayScroller");
       if (!host) return;
       host.innerHTML = getOverview().map(function (d) {
-        var stage = d.day >= 2 && d.day <= 3 ? getCountryStages()[0]
+        var stage = root.TravelDailyLogic
+          ? root.TravelDailyLogic.getStageForDay(d.day, getCountryStages())
+          : d.day >= 2 && d.day <= 3 ? getCountryStages()[0]
           : d.day >= 4 && d.day <= 8 ? getCountryStages()[1]
           : d.day >= 9 && d.day <= 14 ? getCountryStages()[2]
           : d.day >= 15 && d.day <= 17 ? getCountryStages()[3]
