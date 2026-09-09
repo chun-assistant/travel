@@ -27,6 +27,7 @@
 
     if (isDailyPage) {
       document.write('<script src="' + base + 'data/itinerary.js' + '"><\/script>');
+      document.write('<script src="' + base + 'modules/daily-logic.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-event-filters.js"><\/script>');
       document.write('<script src="' + base + 'modules/runtime-utils.js"><\/script>');
@@ -46,6 +47,7 @@
   if (isDailyPage) {
     scripts.push(
       base + "data/itinerary.js",
+      base + "modules/daily-logic.js",
       base + "modules/daily.js",
       base + "modules/daily-event-filters.js",
       base + "modules/runtime-utils.js",
