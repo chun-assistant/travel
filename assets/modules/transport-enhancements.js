@@ -15,7 +15,7 @@
     var render = root.TravelTransportRenderer.create({
       data: root.TravelTransportData && typeof root.TravelTransportData.getItems === 'function'
         ? root.TravelTransportData.getItems()
-        : (typeof APP_DATA !== 'undefined' && Array.isArray(APP_DATA.transport) ? APP_DATA.transport : []),
+        : [],
       state: typeof state !== 'undefined' ? state : {},
       $: typeof $ !== 'undefined' ? $ : undefined,
       $$: typeof $$ !== 'undefined' ? $$ : undefined,
