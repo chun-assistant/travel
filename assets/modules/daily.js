@@ -73,13 +73,25 @@
       var host = $("#countryTrack");
       if (!host) return;
       host.innerHTML = getCountryStages().map(function (stage) {
-        var active = root.TravelDailyLogic
-          ? root.TravelDailyLogic.isDayInStage(state.day, stage)
-          : state.day >= stage.start && state.day <= stage.end;
-        var stageStyle = root.TravelDailyLogic
-          ? root.TravelDailyLogic.getStageStyle(stage)
-          : "--stage-color:" + stage.color + ";--stage-start:" + stage.start + ";--stage-end:" + (stage.end + 1);
-        return '<button class="country-stage ' + (active ? "active" : "") + '" data-day="' + stage.start + '" style="' + stageStyle + '" aria-label="前往' + escapeHtml(stage.country) + '行程 Day ' + stage.start + '"><span class="country-dot">' + stage.flag + '</span><b>' + (root.TravelDailyLogic ? root.TravelDailyLogic.getCountryLabel(stage.country) : stage.country) + '</b><small>Day ' + stage.start + '–' + stage.end + '</small></button>';
+        var presentation = root.TravelDailyLogic && root.TravelDailyLogic.getCountryStagePresentation
+          ? root.TravelDailyLogic.getCountryStagePresentation(state.day, stage)
+          : null;
+        var active = presentation
+          ? presentation.active
+          : root.TravelDailyLogic
+            ? root.TravelDailyLogic.isDayInStage(state.day, stage)
+            : state.day >= stage.start && state.day <= stage.end;
+        var stageStyle = presentation
+          ? presentation.style
+          : root.TravelDailyLogic
+            ? root.TravelDailyLogic.getStageStyle(stage)
+            : "--stage-color:" + stage.color + ";--stage-start:" + stage.start + ";--stage-end:" + (stage.end + 1);
+        var countryLabel = presentation
+          ? presentation.label
+          : root.TravelDailyLogic
+            ? root.TravelDailyLogic.getCountryLabel(stage.country)
+            : stage.country;
+        return '<button class="country-stage ' + (active ? "active" : "") + '" data-day="' + stage.start + '" style="' + stageStyle + '" aria-label="前往' + escapeHtml(stage.country) + '行程 Day ' + stage.start + '"><span class="country-dot">' + stage.flag + '</span><b>' + countryLabel + '</b><small>Day ' + stage.start + '–' + stage.end + '</small></button>';
       }).join("");
       $$(".country-stage", host).forEach(function (btn) {
         btn.addEventListener("click", function () {
