@@ -61,9 +61,8 @@
     function renderCountryTrack() {
       var host = $("#countryTrack");
       if (!host) return;
-      var code = {"奧地利":"奧地利 (Austria)","芬蘭":"芬蘭 (Finland)","挪威":"挪威 (Norway)","荷蘭":"荷蘭 (Netherlands)"};
       host.innerHTML = getCountryStages().map(function (stage) {
-        return '<button class="country-stage ' + (state.day >= stage.start && state.day <= stage.end ? "active" : "") + '" data-day="' + stage.start + '" style="--stage-color:' + stage.color + ';--stage-start:' + stage.start + ';--stage-end:' + (stage.end + 1) + '" aria-label="前往' + escapeHtml(stage.country) + '行程 Day ' + stage.start + '"><span class="country-dot">' + stage.flag + '</span><b>' + (code[stage.country] || stage.country) + '</b><small>Day ' + stage.start + '–' + stage.end + '</small></button>';
+        return '<button class="country-stage ' + (state.day >= stage.start && state.day <= stage.end ? "active" : "") + '" data-day="' + stage.start + '" style="--stage-color:' + stage.color + ';--stage-start:' + stage.start + ';--stage-end:' + (stage.end + 1) + '" aria-label="前往' + escapeHtml(stage.country) + '行程 Day ' + stage.start + '"><span class="country-dot">' + stage.flag + '</span><b>' + (root.TravelDailyLogic ? root.TravelDailyLogic.getCountryLabel(stage.country) : stage.country) + '</b><small>Day ' + stage.start + '–' + stage.end + '</small></button>';
       }).join("");
       $$(".country-stage", host).forEach(function (btn) {
         btn.addEventListener("click", function () {
