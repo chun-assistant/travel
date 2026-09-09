@@ -93,6 +93,15 @@
     const el = document.querySelector("#globalNotices");
     el.innerHTML = notices.map(n => `<article class="notice"><div class="notice-icon">${n[0]}</div><div><strong>${escapeHtml(n[1])}</strong><p>${escapeHtml(n[2])}</p></div></article>`).join("");
   };
+  const bindSegments = (rootSelector, panelPrefix) => {
+    const root = document.querySelector(rootSelector);
+    if (!root) return;
+    root.querySelectorAll(".segment").forEach(btn => btn.addEventListener("click", () => {
+      root.querySelectorAll(".segment").forEach(x => x.classList.toggle("active", x === btn));
+      const parent = root.parentElement;
+      parent.querySelectorAll(".subview").forEach(x => x.classList.toggle("active", x.id === `${panelPrefix}${btn.dataset.sub}`));
+    }));
+  };
 
   root.TravelCommonUtils = Object.freeze({
     escapeHtml,
@@ -114,6 +123,7 @@
     copyText,
     renderCountdown,
     renderNetwork,
-    renderNotices
+    renderNotices,
+    bindSegments
   });
 })(window);
