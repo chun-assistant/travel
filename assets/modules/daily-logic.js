@@ -53,6 +53,14 @@
     return "--stage-color:" + stage.color + ";--stage-start:" + stage.start + ";--stage-end:" + (stage.end + 1);
   }
 
+  function getCountryStagePresentation(day, stage) {
+    return {
+      active: isDayInStage(day, stage),
+      style: getStageStyle(stage),
+      label: getCountryLabel(stage && stage.country)
+    };
+  }
+
   root.TravelDailyLogic = Object.freeze({
     getStageForDay: getStageForDay,
     isDayInStage: isDayInStage,
@@ -61,6 +69,7 @@
     dateLabel: dateLabel,
     getDayColor: getDayColor,
     getDayPresentation: getDayPresentation,
-    getStageStyle: getStageStyle
+    getStageStyle: getStageStyle,
+    getCountryStagePresentation: getCountryStagePresentation
   });
 })(window);
