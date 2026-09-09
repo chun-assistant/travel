@@ -7,6 +7,10 @@
     }) || null;
   }
 
+  function isDayInStage(day, stage) {
+    return !!stage && day >= stage.start && day <= stage.end;
+  }
+
   function filterKind(type) {
     var t = String(type || "");
     if (/餐|早餐|午餐|晚餐|甜點|購物|市場/.test(t)) return "餐飲";
@@ -38,6 +42,7 @@
 
   root.TravelDailyLogic = Object.freeze({
     getStageForDay: getStageForDay,
+    isDayInStage: isDayInStage,
     filterKind: filterKind,
     getCountryLabel: getCountryLabel,
     dateLabel: dateLabel,
