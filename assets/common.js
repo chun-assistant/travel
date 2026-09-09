@@ -29,6 +29,7 @@
       document.write('<script src="' + base + 'data/itinerary.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-event-filters.js"><\/script>');
+      document.write('<script src="' + base + 'modules/daily-events.js"><\/script>');
       document.write('<script src="' + base + 'modules/runtime-utils.js"><\/script>');
       document.write('<script src="' + base + 'data/apps.js"><\/script>');
       document.write('<script src="' + base + 'modules/apps-renderer.js"><\/script>');
@@ -48,6 +49,7 @@
       base + "data/itinerary.js",
       base + "modules/daily.js",
       base + "modules/daily-event-filters.js",
+      base + "modules/daily-events.js",
       base + "modules/runtime-utils.js",
       base + "data/apps.js",
       base + "modules/apps-renderer.js",
