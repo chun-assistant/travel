@@ -24,6 +24,7 @@ const save = COMMON_UTILS.save;
 const toast = COMMON_UTILS.toast;
 const copyText = COMMON_UTILS.copyText;
 const renderCountdown = COMMON_UTILS.renderCountdown;
+const renderNetwork = COMMON_UTILS.renderNetwork;
 const bindSegments = COMMON_UTILS.bindSegments;
 const bindGuideImages = COMMON_UTILS.bindGuideImages;
 const renderPractical = () => COMMON_UTILS.renderPractical(APP_DATA);
@@ -49,12 +50,6 @@ const state = {
   transportFilter: "全部",
   checks: stored("aurora-checks") || {},
 };
-
-function renderNetwork() {
-  const online = navigator.onLine;
-  $("#networkBadge").classList.toggle("offline", !online);
-  $("#networkBadge span").textContent = online ? "地圖可開啟" : "離線可查看";
-}
 
 function renderNotices() {
   const notices = [
