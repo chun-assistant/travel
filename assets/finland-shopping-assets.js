@@ -1,6 +1,10 @@
 (function(){
   var data=window.AURORA_SHOPPING_DATA;
   var finlandData=window.TravelFinlandShoppingData;
+  if(!finlandData&&document.currentScript){
+    document.write('<script src="../assets/modules/shopping/finland-shopping-data.js?v=20260910-data1"><\/script>');
+    finlandData=window.TravelFinlandShoppingData;
+  }
   if(!data||!finlandData)return;
   var base='../assets/shopping/finland/';
   var version='?v=20260909-finland1';
