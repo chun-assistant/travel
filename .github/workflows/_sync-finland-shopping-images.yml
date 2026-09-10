@@ -1,0 +1,29 @@
+name: sync Finland shopping images
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: europe-trip-2026
+          fetch-depth: 1
+      - name: Copy exact upstream image directories
+        run: |
+          git clone --depth 1 --branch main https://github.com/yangchinghsuan955-web/europe-trip-2026.git /tmp/upstream
+          rm -rf assets/shopping/finland/thumbs assets/shopping/finland/large
+          cp -R /tmp/upstream/assets/shopping/finland/thumbs assets/shopping/finland/thumbs
+          cp -R /tmp/upstream/assets/shopping/finland/large assets/shopping/finland/large
+      - name: Commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/shopping/finland/thumbs assets/shopping/finland/large
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'assets: sync upstream Finland shopping images'
+          git push origin HEAD:europe-trip-2026
