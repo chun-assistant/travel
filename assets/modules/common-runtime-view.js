@@ -3,7 +3,7 @@
   function setup(deps) {
     var $ = deps.$, $$ = deps.$$, APP_DATA = deps.APP_DATA, COUNTRY_STAGES = deps.COUNTRY_STAGES;
     var state = deps.state, save = deps.save, escapeHtml = deps.escapeHtml;
-    var dateLabel = deps.dateLabel, fmtTwd = deps.fmtTwd, fmtCost = deps.fmtCost;
+    var dateLabel = deps.dateLabel, fmtTwd = deps.fmtTwd, fmtCost = deps.fmtCost, statusClass = deps.statusClass;
     var eventKind = deps.eventKind, filterKind = deps.filterKind;
     var buildDirections = deps.buildDirections, isAirportPlace = deps.isAirportPlace;
     var mapIcon = deps.mapIcon, pinIcon = deps.pinIcon, copyIcon = deps.copyIcon, copyText = deps.copyText;
@@ -123,15 +123,13 @@
       $$(".copy-place", $("#eventTimeline")).forEach(function (btn) { btn.addEventListener("click", function () { copyText(btn.dataset.copy); }); });
     }
 
-    var renderDayViewRef = renderDayView;
-    function renderEventFiltersRef() { renderEventFilters(); }
     return Object.freeze({
       renderNotices: renderNotices,
-      renderDayView: renderDayViewRef,
+      renderDayView: renderDayView,
       renderDayScroller: renderDayScroller,
       renderCountryTrack: renderCountryTrack,
       enableHorizontalDrag: enableHorizontalDrag,
-      renderEventFilters: renderEventFiltersRef,
+      renderEventFilters: renderEventFilters,
       renderEvents: renderEvents,
       eventCard: eventCard,
       isHotelPlace: isHotelPlace,
