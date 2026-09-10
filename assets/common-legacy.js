@@ -12,8 +12,8 @@
   var runtimeSrc = base + "common-runtime.js";
 
   if (document.readyState === "loading" && document.write) {
-    document.write('<script src="' + viewSrc.replace(/"/g, "&quot;") + '"><\\/script>');
-    document.write('<script src="' + runtimeSrc.replace(/"/g, "&quot;") + '"><\\/script>');
+    document.write('<script src="' + viewSrc.replace(/"/g, "&quot;") + '<\\/script>');
+    document.write('<script src="' + runtimeSrc.replace(/"/g, "&quot;") + '<\\/script>');
     return;
   }
 
