@@ -1,0 +1,23 @@
+name: sync-finland-shopping-exact
+on:
+  push:
+    branches: [europe-trip-2026]
+    paths:
+      - '.github/workflows/_sync-finland-shopping-exact.yml'
+      - '.github/_sync-finland-shopping-trigger'
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy exact upstream file
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/yangchinghsuan955-web/europe-trip-2026/main/assets/finland-shopping-assets.js -o assets/finland-shopping-assets.js
+          rm -f .github/_sync-finland-shopping-trigger .github/workflows/_sync-finland-shopping-exact.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add assets/finland-shopping-assets.js .github/_sync-finland-shopping-trigger .github/workflows/_sync-finland-shopping-exact.yml
+          git commit -m "chore: sync exact upstream Finland shopping runtime" || exit 0
+          git push
