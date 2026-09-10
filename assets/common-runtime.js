@@ -26,6 +26,7 @@ const copyText = COMMON_UTILS.copyText;
 const renderCountdown = COMMON_UTILS.renderCountdown;
 const bindSegments = COMMON_UTILS.bindSegments;
 const bindGuideImages = COMMON_UTILS.bindGuideImages;
+const renderPractical = () => COMMON_UTILS.renderPractical(APP_DATA);
 
 const isHotelPlace = value => {
   const place = String(value || "").trim().toLowerCase();
@@ -150,9 +151,6 @@ function renderChecklist() {
   $$("[data-check]",$("#checklist")).forEach(input=>input.addEventListener("change",()=>{state.checks[input.dataset.check]=input.checked;save("aurora-checks",state.checks);renderChecklist();}));
   const total=packing.length, done=packing.filter(item=>state.checks[item.id]).length, pct=total?Math.round(done/total*100):0;
   $("#checkPercent").textContent=`${pct}%`; $("#checkCount").textContent=`${done} / ${total}`; $("#progressFill").style.width=`${pct}%`;
-}
-function renderPractical() {
-  $("#practicalList").innerHTML = APP_DATA.practical.map(p=>`<article class="practical-card"><span class="topic">${escapeHtml(p.topic)}</span><h4>${escapeHtml(p.item)}</h4><p><b>${escapeHtml(p.value||"")}</b>${p.value&&p.guide?"\n":""}${escapeHtml(p.guide||"")}</p>${p.source&&/^https?:/.test(p.source)?`<a class="source-link" href="${escapeHtml(p.source)}" target="_blank" rel="noopener">查看官方資料 ↗</a>`:p.source?`<span class="source-link">${escapeHtml(p.source)}</span>`:""}</article>`).join("");
 }
 function renderBookings() {
   initChecks();
