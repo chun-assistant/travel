@@ -10,11 +10,13 @@
   var base = src ? src.slice(0, src.lastIndexOf("/") + 1) : "";
   var toolsSrc = base + "modules/common-runtime-tools.js";
   var viewSrc = base + "modules/common-runtime-view.js";
+  var initSrc = base + "modules/common-runtime-init.js";
   var runtimeSrc = base + "common-runtime.js";
 
   if (document.readyState === "loading" && document.write) {
     document.write('<script src="' + toolsSrc.replace(/"/g, "&quot;") + '"><\/script>');
     document.write('<script src="' + viewSrc.replace(/"/g, "&quot;") + '"><\/script>');
+    document.write('<script src="' + initSrc.replace(/"/g, "&quot;") + '"><\/script>');
     document.write('<script src="' + runtimeSrc.replace(/"/g, "&quot;") + '"><\/script>');
     return;
   }
@@ -27,10 +29,16 @@
     viewScript.src = viewSrc;
     viewScript.async = false;
     viewScript.onload = function () {
-      var runtimeScript = document.createElement("script");
-      runtimeScript.src = runtimeSrc;
-      runtimeScript.async = false;
-      document.head.appendChild(runtimeScript);
+      var initScript = document.createElement("script");
+      initScript.src = initSrc;
+      initScript.async = false;
+      initScript.onload = function () {
+        var runtimeScript = document.createElement("script");
+        runtimeScript.src = runtimeSrc;
+        runtimeScript.async = false;
+        document.head.appendChild(runtimeScript);
+      };
+      document.head.appendChild(initScript);
     };
     document.head.appendChild(viewScript);
   };
