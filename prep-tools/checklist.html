@@ -1,11 +1,124 @@
 <!doctype html>
-<html lang="zh-Hant-TW"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#102d3e"><title>行李清單｜2026 歐洲極光之旅</title><link rel="stylesheet" href="../assets/common.css?v=20260908-nav1"><style>#luggageSegments{display:flex!important}#tab-luggage{display:block!important}#tab-luggage .subview{display:block!important}.bottom-nav .nav-btn{text-align:center!important}</style></head>
+<html lang="zh-Hant-TW"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#102d3e"><title>行李清單｜2026 歐洲極光之旅</title><link rel="stylesheet" href="../assets/common.css?v=20260908-nav1"><style>#luggageSegments{display:flex!important}#tab-luggage{display:block!important}#tab-luggage .subview{display:block!important}.bottom-nav .nav-btn{text-align:center!important}.packing-warning-card{margin:0 0 14px;border:1px solid #dce7e3;border-radius:18px;background:rgba(255,253,249,.97);box-shadow:0 7px 20px rgba(42,78,88,.055);overflow:hidden}.packing-warning-card summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;cursor:pointer;list-style:none;color:#0c4c75;font-weight:800}.packing-warning-card summary::-webkit-details-marker{display:none}.packing-warning-card summary::after{content:"展開⌄";flex:0 0 auto;color:#278dbb;font-size:12px;font-weight:800}.packing-warning-card[open] summary::after{content:"收合⌃"}.packing-warning-body{padding:0 15px 14px;border-top:1px solid rgba(220,231,227,.75)}.packing-warning-card h4{margin:14px 0 7px;color:#154a68}.packing-warning-card ul{margin:0;padding-left:1.25rem}.packing-warning-card li{margin:6px 0;line-height:1.55}.packing-warning-card strong{font-weight:800}#tab-luggage .progress-card{padding:11px 14px!important;margin:0 0 14px!important;border:1px solid #dce7e3!important;border-radius:16px!important;color:#174a69!important;background:rgba(255,253,249,.97)!important;box-shadow:0 7px 18px rgba(42,78,88,.05)!important}#tab-luggage .progress-top b{color:#0b4d78!important;font-size:22px!important}#tab-luggage .progress-top span{color:#6f8490!important;opacity:1!important}#tab-luggage .progress-track{height:7px!important;margin-top:8px!important;background:#e7efec!important}#tab-luggage .progress-fill{background:linear-gradient(90deg,#6fa69a,#4b9bc0)!important}</style>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="2026歐洲極光">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon-v2.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+</head>
 <body data-page="luggage"><div class="app-shell"><header class="hero"><div class="stars"></div><div class="hero-inner"><div class="eyebrow"><span>EUROPE · AURORA 2026</span><span class="eyebrow-badge" id="networkBadge"><i class="online-dot"></i><span>離線可查看</span></span></div><h1>18天歐洲極光之旅</h1><p class="hero-sub">2026.09.24 — 10.11 · 奧地利・芬蘭・挪威・荷蘭</p><div class="route-line"><span class="route-stop">台北</span><span class="route-arrow">›</span><span class="route-stop">維也納</span><span class="route-arrow">›</span><span class="route-stop">赫爾辛基</span><span class="route-arrow">›</span><span class="route-stop">拉普蘭</span><span class="route-arrow">›</span><span class="route-stop">特羅姆瑟</span><span class="route-arrow">›</span><span class="route-stop">阿姆斯特丹</span></div><div class="hero-stats"><div class="hero-stat"><b>18 天</b><small>完整逐時行程</small></div><div class="hero-stat"><b>248 站</b><small>一鍵開啟導航</small></div><div class="hero-stat"><b id="countdownValue">—</b><small id="countdownLabel">距離出發</small></div></div></div></header>
-<main><section class="tab-panel active" id="tab-luggage"><div class="section-head"><div><h2>行前與工具</h2><p>旅行 App、入境、待辦、打包與退稅集中查看</p></div><button class="small-action" id="resetChecks">重設勾選</button></div><div class="segmented" id="luggageSegments"><a class="segment" href="apps/">旅行 App</a><a class="segment" href="entry.html">入境攻略</a><a class="segment" href="booking.html">行前待辦</a><a class="segment active" href="checklist.html">行李清單</a><a class="segment" href="tax.html">退稅攻略</a></div><div class="subview active"><div id="checklistList" style="display:none"></div><div class="progress-card"><div class="progress-top"><div><b id="checkPercent">0%</b><span> 完成</span></div><span id="checkCount">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div><div id="checklist"></div></div></section></main>
+<main><section class="tab-panel active" id="tab-luggage"><div class="section-head"><div><h2>行前與工具</h2><p>旅行 App、入境、待辦、打包與退稅集中查看</p></div><button class="small-action" id="resetChecks">重設勾選</button></div><div class="segmented" id="luggageSegments"><a class="segment" href="apps/">旅行 App</a><a class="segment" href="entry.html">入境攻略</a><a class="segment" href="booking.html">行前待辦</a><a class="segment active" href="checklist.html">行李清單</a><a class="segment" href="tax.html">退稅攻略</a></div><div class="subview active"><div id="checklistList" style="display:none"></div><div id="packingWarnings"></div><div class="progress-card"><div class="progress-top"><div><b id="checkPercent">0%</b><span> 完成</span></div><span id="checkCount">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div><div id="checklist"></div></div></section></main>
 <nav class="bottom-nav" aria-label="主要導覽">
   <a class="nav-btn" href="../daily/" id="nav-days"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"></path></svg>每日行程</a>
   <a class="nav-btn" href="../transport/" id="nav-transport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 17h14M6 17l-1 3M18 17l1 3M6 4h12l2 10H4L6 4Z"></path><circle cx="8" cy="14" r="1"></circle><circle cx="16" cy="14" r="1"></circle></svg>交通</a>
   <a class="nav-btn" href="../stay/" id="nav-hotels"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 20V7l9-4 9 4v13M7 20v-5h10v5M8 9h.01M12 9h.01M16 9h.01M8 12h.01M12 12h.01M16 12h.01"></path></svg>住宿</a>
   <a class="nav-btn" href="../prep-tools/" id="nav-luggage" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="5" y="6" width="14" height="15" rx="2"></rect><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M9 10v7M15 10v7"></path></svg>行前工具</a>
   <a class="nav-btn" href="../budget/" id="nav-budget"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M16 15h2"></path></svg>餐食與購物</a>
-</nav></div><script src="../assets/subpage-runtime.js?v=20260908-nav1"></script><script src="../assets/common.js?v=20260908-nav1"></script><script>(function(){function fix(){document.getElementById('tab-luggage')?.classList.add('active');document.getElementById('luggageSegments')?.style.setProperty('display','flex','important');document.querySelector('#tab-luggage .subview')?.style.setProperty('display','block','important');}fix();document.addEventListener('DOMContentLoaded',fix);window.addEventListener('load',fix)})();</script></body></html>
+</nav></div><script src="../assets/subpage-runtime.js?v=20260908-nav1"></script><script src="../assets/common.js?v=20260908-nav1"></script><script>
+(function(){
+  const PACKING_V2 = [
+    {group:"01｜證件・必要文件",items:[
+      {item:"護照"},{item:"身分證"},{item:"已列印必要旅行文件"},{item:"旅遊保險證明"},
+      {item:"護照補辦備援資料",note:"護照規格證件照 2 張／護照影本／身分證影本"}
+    ]},
+    {group:"02｜金錢・支付",items:[
+      {item:"攜帶信用卡"},{item:"少量備用現金"}
+    ]},
+    {group:"03｜手機・3C",items:[
+      {item:"手機"},{item:"手機充電線"},{item:"行動電源"},{item:"行動電源充電線"},
+      {item:"多孔充電器",note:"⚡ 國際電壓／可變壓"},{item:"歐規轉接頭"},{item:"藍牙耳機"},{item:"Apple Watch／智慧手錶"},
+      {item:"Apple Watch／智慧手錶充電器",note:"⚡ 國際電壓／可變壓"},{item:"手機掛繩"},{item:"手機腳架／自拍棒"},{item:"鏡頭擦拭布"}
+    ]},
+    {group:"04｜衣物・保暖層",items:[
+      {item:"防風防水外套"},{item:"羽絨／保暖中層"},{item:"發熱衣"},{item:"毛衣／針織衫"},{item:"長袖上衣"},{item:"長褲"},{item:"防風／防潑水長褲"},{item:"發熱褲／保暖內搭褲"}
+    ]},
+    {group:"05｜內著・睡衣",items:[
+      {item:"內衣"},{item:"內褲"},{item:"睡衣"},{item:"一般襪"},{item:"羊毛／保暖襪"}
+    ]},
+    {group:"06｜保暖配件",items:[
+      {item:"毛帽"},{item:"耳罩"},{item:"圍巾／脖圍"},{item:"保暖手套"},{item:"可觸控手套"},{item:"暖暖包"},{item:"足部暖暖包"}
+    ]},
+    {group:"07｜鞋子・足部",items:[
+      {item:"市區防水休閒鞋"},{item:"保暖防水短靴"},{item:"保暖鞋墊"},{item:"防磨腳貼"},{item:"鞋袋"},{item:"室內拖鞋"},{item:"防水噴霧",note:"⚠️ 出發前確認產品是否可航空運輸；易燃氣霧型不攜帶"}
+    ]},
+    {group:"08｜盥洗・保養・美容",items:[
+      {item:"牙刷／牙膏／牙線"},{item:"洗面乳"},{item:"洗髮／潤髮／沐浴用品"},{item:"卸妝用品"},{item:"化妝水"},{item:"乳液／面霜"},{item:"護唇膏"},{item:"護手霜"},{item:"防曬"},{item:"化妝包"},{item:"梳子／髮圈"},{item:"女性生理用品"},{item:"眼鏡"},{item:"隱形眼鏡／藥水"},{item:"吹風機",note:"⚡ 國際電壓／可變壓"},{item:"離子夾",note:"⚡ 國際電壓／可變壓"},{item:"快乾毛巾／旅行毛巾"},{item:"指甲剪／個人修容工具"}
+    ]},
+    {group:"09｜藥品・個人醫療（需保留原包裝或有藥品明細）",items:[
+      {item:"個人藥品／常備藥",note:"依個人需要"},{item:"個人醫療用品",note:"依個人需要"},{item:"生理食鹽水鼻噴劑／鼻腔保濕用品"},{item:"口罩"}
+    ]},
+    {group:"10｜飲食・快煮用品",items:[
+      {item:"保溫瓶／水壺"},{item:"快煮鍋",note:"⚡ 國際電壓／可變壓"},{item:"碗"},{item:"餐具"},{item:"水果刀",note:"🔒 僅托運"},{item:"食物剪刀",note:"🔒 僅托運"},{item:"小瓶洗碗精"},{item:"菜瓜布"},{item:"夾鏈袋"},{item:"泡麵／簡易乾糧"},{item:"濃湯包"}
+    ]},
+    {group:"11｜飛機・長途交通",items:[
+      {item:"頸枕"},{item:"眼罩"},{item:"耳塞"},{item:"壓縮襪"},{item:"隨身盥洗小包"},{item:"小零食"}
+    ]},
+    {group:"12｜隨身・雨天用品",items:[
+      {item:"輕量折疊傘"},{item:"面紙"},{item:"濕紙巾"},{item:"小型防水／夾鏈收納袋"},{item:"摺疊購物袋"},{item:"頭燈"},{item:"乾洗手／隨身消毒用品"},{item:"太陽眼鏡"}
+    ]},
+    {group:"13｜洗衣・衣物收納",items:[
+      {item:"衣物收納袋／壓縮袋"},{item:"髒衣袋"},{item:"洗衣精／洗衣膠囊"}
+    ]},
+    {group:"14｜行李・購物・住宿安全",items:[
+      {item:"托運行李箱"},{item:"隨身登機包"},{item:"Travelon 防盜隨身包"},{item:"大型行李袋（約登機箱大小）"},{item:"行李束帶"},{item:"行李吊牌"},{item:"AirTag"},{item:"行李秤"},{item:"退稅文件袋"},{item:"易碎品簡易保護材料"},{item:"攜帶式房門鎖／門阻警報器"}
+    ]}
+  ];
+
+  const warningHtml = `
+    <details class="packing-warning-card">
+      <summary>⚠️ 行李禁帶・限制提醒</summary>
+      <div class="packing-warning-body">
+        <h4>✈️ 飛機行李</h4>
+        <ul>
+          <li>🔪 <strong>水果刀／食物剪刀</strong> → 僅可放托運行李</li>
+          <li>🔋 <strong>行動電源</strong> → 僅可隨身攜帶，不可托運</li>
+          <li>🧴 <strong>易燃氣霧型防水噴霧</strong> → 不攜帶，鞋子於台灣出發前先完成防水處理</li>
+          <li>💧 <strong>隨身液體／膠狀用品</strong> → 單瓶 ≤100 mL，集中放透明夾鏈袋；大容量請托運</li>
+          <li>⚡ <strong>插電電器</strong> → 出發前確認為國際電壓／可變壓，支援當地 220–240V</li>
+        </ul>
+        <h4>🥩 食品・海關</h4>
+        <ul>
+          <li>❌ 不攜帶肉乾、肉鬆、香腸、含肉料理包等肉類食品入境 EU</li>
+          <li>❌ 不攜帶新鮮水果、蔬菜、植物等進入 EU</li>
+          <li>❌ 從歐洲返台不攜帶肉類製品、新鮮水果、蔬果及植物</li>
+          <li>🥣 濃湯包／泡麵 → 選擇商業密封、常溫保存、<strong>不含肉類成分</strong></li>
+        </ul>
+        <h4>🇳🇴 挪威段特別注意</h4>
+        <ul>
+          <li>芬蘭 → 挪威屬 EU → 非 EU，食品及商品仍需遵守挪威海關規定</li>
+          <li>挪威 → 荷蘭為重新進入 EU，挪威購買的高價商品需留意 EU 入境免稅額</li>
+          <li>挪威購買的馴鹿肉乾、香腸、肉罐頭等 <strong>不要帶回台灣</strong></li>
+        </ul>
+      </div>
+    </details>`;
+
+  function readChecks(){
+    try{return JSON.parse(localStorage.getItem('aurora-checks')||'{}')||{}}catch(e){return{}}
+  }
+  function writeChecks(checks){localStorage.setItem('aurora-checks',JSON.stringify(checks))}
+  function esc(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+  function renderCustomPacking(){
+    const warning=document.getElementById('packingWarnings');
+    const target=document.getElementById('checklist');
+    if(!warning||!target)return;
+    warning.innerHTML=warningHtml;
+    const checks=readChecks();
+    const flat=PACKING_V2.flatMap((group,groupIndex)=>group.items.map((item,itemIndex)=>({...item,id:`pack2-${groupIndex}-${itemIndex}`})));
+    target.innerHTML=PACKING_V2.map((group,groupIndex)=>`<section class="check-group"><h3>${esc(group.group)}</h3>${group.items.map((item,itemIndex)=>{const id=`pack2-${groupIndex}-${itemIndex}`;return `<label class="check-item ${checks[id]?"done":""}"><input type="checkbox" data-packing-v2="${id}" ${checks[id]?"checked":""}><span class="fake-check">✓</span><span class="check-copy"><b>${esc(item.item)}</b>${item.note?`<small>${esc(item.note)}</small>`:''}</span><span class="status neutral">未裝</span></label>`}).join('')}</section>`).join('');
+    target.querySelectorAll('[data-packing-v2]').forEach(input=>input.addEventListener('change',()=>{const latest=readChecks();latest[input.dataset.packingV2]=input.checked;writeChecks(latest);renderCustomPacking()}));
+    const latest=readChecks();
+    const done=flat.filter(item=>latest[item.id]).length;
+    const total=flat.length;
+    const pct=total?Math.round(done/total*100):0;
+    document.getElementById('checkPercent').textContent=`${pct}%`;
+    document.getElementById('checkCount').textContent=`${done} / ${total}`;
+    document.getElementById('progressFill').style.width=`${pct}%`;
+  }
+  function fix(){document.getElementById('tab-luggage')?.classList.add('active');document.getElementById('luggageSegments')?.style.setProperty('display','flex','important');document.querySelector('#tab-luggage .subview')?.style.setProperty('display','block','important');renderCustomPacking()}
+  fix();
+  document.addEventListener('DOMContentLoaded',fix);
+  window.addEventListener('load',fix);
+  document.getElementById('resetChecks')?.addEventListener('click',()=>setTimeout(()=>{const checks=readChecks();Object.keys(checks).filter(k=>k.startsWith('pack2-')).forEach(k=>delete checks[k]);writeChecks(checks);renderCustomPacking()},0));
+})();
+</script></body></html>

@@ -1,0 +1,32 @@
+{
+  "id": "./",
+  "name": "2026歐洲極光",
+  "short_name": "2026歐洲極光",
+  "description": "2026 歐洲極光之旅｜18天行程 App",
+  "lang": "zh-Hant-TW",
+  "start_url": "./daily/",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#102d3e",
+  "theme_color": "#102d3e",
+  "icons": [
+    {
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
