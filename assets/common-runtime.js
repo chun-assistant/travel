@@ -25,6 +25,7 @@ const toast = COMMON_UTILS.toast;
 const copyText = COMMON_UTILS.copyText;
 const renderCountdown = COMMON_UTILS.renderCountdown;
 const bindSegments = COMMON_UTILS.bindSegments;
+const bindGuideImages = COMMON_UTILS.bindGuideImages;
 
 const isHotelPlace = value => {
   const place = String(value || "").trim().toLowerCase();
@@ -177,18 +178,6 @@ function renderFood() {
 }
 function renderMeals() {
   $("#mealList").innerHTML=APP_DATA.mealReminders.map(m=>`<article class="info-card food-card"><div class="event-top"><div><span class="event-type">${escapeHtml(m.date)} · ${escapeHtml(m.city)}</span><h3>${escapeHtml(m.meals.join("／"))}</h3></div><span class="status pending">需自理</span></div><p class="subtitle">${escapeHtml(m.note)}</p></article>`).join("");
-}
-
-function bindGuideImages() {
-  const modal=$("#imageModal"), content=$("#imageModalContent"), caption=$("#imageModalCaption");
-  const closeModal=()=>{ modal.hidden=true; content.removeAttribute("src"); document.body.style.overflow=""; };
-  $$('[data-zoom-image]').forEach(button=>button.addEventListener("click",()=>{
-    const img=$("img",button), figure=button.closest("figure"), label=$("figcaption",figure)?.textContent.replace("點圖放大","").trim()||img.alt;
-    content.src=img.src; content.alt=img.alt; caption.textContent=label; modal.hidden=false; document.body.style.overflow="hidden";
-  }));
-  $("#imageModalClose").addEventListener("click",closeModal);
-  modal.addEventListener("click",event=>{ if(event.target===modal) closeModal(); });
-  document.addEventListener("keydown",event=>{ if(event.key==="Escape"&&!modal.hidden) closeModal(); });
 }
 
 window.TravelDailyRuntime = Object.freeze({
