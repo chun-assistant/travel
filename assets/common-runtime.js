@@ -75,13 +75,11 @@ window.TravelDailyRuntime = Object.freeze({
   enableHorizontalDrag: enableHorizontalDrag
 });
 
-function init() {
-  renderCountdown(); renderNetwork(); renderNotices(); renderDayView(); renderChecklist(); renderPractical(); renderBookings(); renderTax(); renderBudget(); renderFood(); renderMeals(); bindGuideImages();
-  $("#jumpToday").addEventListener("click",()=>{state.day=currentTripDay();save("aurora-day",state.day);renderDayView();toast(`已切換 Day ${state.day}`);});
-  $("#eventSearch").addEventListener("input",e=>{state.eventSearch=e.target.value;renderEvents();});
-  $("#clearSearch").addEventListener("click",()=>{$("#eventSearch").value="";state.eventSearch="";renderEvents();});
-  $("#resetChecks").addEventListener("click",()=>{if(confirm("確定要清除所有行李與待辦勾選紀錄嗎？")){state.checks={};save("aurora-checks",state.checks);renderChecklist();renderBookings();toast("行李與待辦已重設");}});
-  bindSegments("#luggageSegments","sub-"); bindSegments("#budgetSegments","budget-");
-  window.addEventListener("online",renderNetwork); window.addEventListener("offline",renderNetwork);
-}
-init();
+const runtimeInit = window.TravelCommonRuntimeInit.setup({
+  $, state, save, currentTripDay, toast, renderCountdown, renderNetwork,
+  renderNotices, renderDayView, renderChecklist, renderPractical,
+  renderBookings, renderTax, renderBudget, renderFood, renderMeals,
+  bindGuideImages, renderEvents, bindSegments
+});
+
+runtimeInit.init();
