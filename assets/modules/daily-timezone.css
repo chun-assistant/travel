@@ -1,0 +1,39 @@
+/* Daily itinerary timezone reference — local time stays primary. */
+body[data-page="days"] .timezone-note{
+  display:grid;
+  grid-template-columns:34px minmax(0,1fr);
+  align-items:center;
+  gap:10px;
+  width:fit-content;
+  max-width:calc(100% - 8px);
+  box-sizing:border-box;
+  margin:-2px 4px 14px;
+  padding:10px 12px;
+  border:1px solid rgba(69,126,146,.17);
+  border-radius:15px;
+  color:#174c69;
+  background:linear-gradient(135deg,rgba(237,248,249,.96),rgba(255,250,241,.96));
+  box-shadow:0 6px 18px rgba(42,78,88,.055)
+}
+body[data-page="days"] .timezone-note-icon{
+  display:grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  border-radius:12px;
+  background:rgba(255,255,255,.82);
+  box-shadow:inset 0 0 0 1px rgba(82,137,151,.10);
+  font-size:17px
+}
+body[data-page="days"] .timezone-note strong{
+  display:block;
+  font-size:14px;
+  line-height:1.4;
+  letter-spacing:.01em
+}
+body[data-page="days"] .timezone-note p{
+  margin:2px 0 0;
+  color:#647d89;
+  font-size:13px;
+  line-height:1.45
+}
