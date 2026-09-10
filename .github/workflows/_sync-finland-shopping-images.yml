@@ -1,7 +1,9 @@
 name: sync Finland shopping images
 
 on:
-  workflow_dispatch:
+  push:
+    paths:
+      - '.github/_sync-finland-shopping-images-trigger'
 
 jobs:
   sync:
@@ -23,6 +25,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm -f .github/_sync-finland-shopping-images-trigger
           git add assets/shopping/finland/thumbs assets/shopping/finland/large
           if git diff --cached --quiet; then exit 0; fi
           git commit -m 'assets: sync upstream Finland shopping images'
