@@ -88,7 +88,13 @@
       countryScroll.addEventListener("scroll", function () { sync(countryScroll, dayScroller); }, { passive: true });
     }
 
-    function mount() { renderDayScroller(); renderCountryTrack(); renderScrollEnhancements(); setupScrollSync(); }
+    function mount() {
+      renderDayScroller();
+      renderCountryTrack();
+      renderScrollEnhancements();
+      setupScrollSync();
+      if (root.TravelDailyTimezone && root.TravelDailyTimezone.setup) root.TravelDailyTimezone.setup();
+    }
     return Object.freeze({ renderDayScroller: renderDayScroller, renderCountryTrack: renderCountryTrack, renderScrollEnhancements: renderScrollEnhancements, setupScrollSync: setupScrollSync, mount: mount });
   }
 
