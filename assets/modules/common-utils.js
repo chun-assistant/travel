@@ -93,6 +93,17 @@
     const el = document.querySelector("#globalNotices");
     el.innerHTML = notices.map(n => `<article class="notice"><div class="notice-icon">${n[0]}</div><div><strong>${escapeHtml(n[1])}</strong><p>${escapeHtml(n[2])}</p></div></article>`).join("");
   };
+  const bindGuideImages = () => {
+    const modal=document.querySelector("#imageModal"), content=document.querySelector("#imageModalContent"), caption=document.querySelector("#imageModalCaption");
+    const closeModal=()=>{ modal.hidden=true; content.removeAttribute("src"); document.body.style.overflow=""; };
+    document.querySelectorAll('[data-zoom-image]').forEach(button=>button.addEventListener("click",()=>{
+      const img=button.querySelector("img"), figure=button.closest("figure"), label=figure?.querySelector("figcaption")?.textContent.replace("點圖放大","").trim()||img.alt;
+      content.src=img.src; content.alt=img.alt; caption.textContent=label; modal.hidden=false; document.body.style.overflow="hidden";
+    }));
+    document.querySelector("#imageModalClose").addEventListener("click",closeModal);
+    modal.addEventListener("click",event=>{ if(event.target===modal) closeModal(); });
+    document.addEventListener("keydown",event=>{ if(event.key==="Escape"&&!modal.hidden) closeModal(); });
+  };
   const bindSegments = (rootSelector, panelPrefix) => {
     const rootEl = document.querySelector(rootSelector);
     if (!rootEl) return;
@@ -115,6 +126,7 @@
     eventKind,
     filterKind,
     bindSegments,
+    bindGuideImages,
     buildDirections,
     isAirportPlace,
     mapIcon,
