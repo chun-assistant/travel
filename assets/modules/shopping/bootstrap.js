@@ -16,6 +16,6 @@
   }
 
   sources.forEach(src => {
-    document.write(`<script src="${src}"><\\/script>`);
+    document.write(`<script src="${src}"></script>`);
   });
 })();
