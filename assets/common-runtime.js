@@ -24,6 +24,7 @@ const save = COMMON_UTILS.save;
 const toast = COMMON_UTILS.toast;
 const copyText = COMMON_UTILS.copyText;
 const renderCountdown = COMMON_UTILS.renderCountdown;
+const bindSegments = COMMON_UTILS.bindSegments;
 
 const isHotelPlace = value => {
   const place = String(value || "").trim().toLowerCase();
@@ -188,14 +189,6 @@ function bindGuideImages() {
   $("#imageModalClose").addEventListener("click",closeModal);
   modal.addEventListener("click",event=>{ if(event.target===modal) closeModal(); });
   document.addEventListener("keydown",event=>{ if(event.key==="Escape"&&!modal.hidden) closeModal(); });
-}
-
-function bindSegments(rootSelector, panelPrefix) {
-  $$(".segment",$(rootSelector)).forEach(btn=>btn.addEventListener("click",()=>{
-    $$(".segment",$(rootSelector)).forEach(x=>x.classList.toggle("active",x===btn));
-    const root=$(rootSelector).parentElement;
-    $$(".subview",root).forEach(x=>x.classList.toggle("active",x.id===`${panelPrefix}${btn.dataset.sub}`));
-  }));
 }
 
 window.TravelDailyRuntime = Object.freeze({
