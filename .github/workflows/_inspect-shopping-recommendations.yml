@@ -8,7 +8,7 @@ jobs:
   inspect:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -18,8 +18,21 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           s=Path('budget/index.html').read_text(encoding='utf-8')
-          for needle in ['function renderSupermarkets','function renderSouvenirs','data-add-item']:
+          out=[]
+          for needle in ['function renderSupermarkets','function renderSouvenirs','function renderShopping']:
               i=s.find(needle)
-              print('\n===',needle,'at',i,'===')
-              print(s[max(0,i-1200):i+5000])
+              out.append(f'=== {needle} at {i} ===')
+              out.append(s[max(0,i-1500):i+7000])
+          Path('/tmp/inspection.txt').write_text('\n\n'.join(out),encoding='utf-8')
           PY
+          cp /tmp/inspection.txt /tmp/shopping-recommendations-inspection.txt
+          mkdir -p /tmp/out
+          cp /tmp/inspection.txt /tmp/out/inspection.txt
+      - name: Commit inspection
+        run: |
+          cp /tmp/inspection.txt .github/shopping-recommendations-inspection.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/shopping-recommendations-inspection.txt
+          git commit -m 'chore: capture shopping recommendation boundaries'
+          git push
