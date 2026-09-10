@@ -28,8 +28,8 @@ const renderCountdown = COMMON_UTILS.renderCountdown;
 const renderNetwork = COMMON_UTILS.renderNetwork;
 const bindSegments = COMMON_UTILS.bindSegments;
 const bindGuideImages = COMMON_UTILS.bindGuideImages;
-const renderPractical = () => COMMON_UTILS.renderPractical(APP_DATA);
-const renderMeals = () => COMMON_UTILS.renderMeals(APP_DATA);
+const renderPractical = () => window.TravelCommonRuntimeInfo.renderPractical(APP_DATA);
+const renderMeals = () => window.TravelCommonRuntimeInfo.renderMeals(APP_DATA);
 
 const state = {
   day: Number(stored("aurora-day")) || 1,
