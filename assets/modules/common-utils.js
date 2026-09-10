@@ -83,42 +83,6 @@
     badge.classList.toggle("offline", !online);
     badge.querySelector("span").textContent = online ? "地圖可開啟" : "離線可查看";
   };
-  const renderNotices = () => {
-    const notices = [
-      ["🚆","9/25機場交通已修正","VIE搭REX7／Railjet至Wien Hbf，再轉U1；不是機場接送。"],
-      ["⛪","9/27白教堂週日時段","09:15先拍外觀；若要入內，依官方週日12:00後時段回訪。"],
-      ["🍽️","餐食限制","全團避開牛肉與game meat（馴鹿、麋鹿、鹿肉等）；可選雞、豬、魚或素食。"],
-      ["❄️","舒適優先","強風、結冰或長距離時可分流、改短程計程車，不勉強走海岸冰面。"],
-    ];
-    const el = document.querySelector("#globalNotices");
-    el.innerHTML = notices.map(n => `<article class="notice"><div class="notice-icon">${n[0]}</div><div><strong>${escapeHtml(n[1])}</strong><p>${escapeHtml(n[2])}</p></div></article>`).join("");
-  };
-  const bindGuideImages = () => {
-    const modal=document.querySelector("#imageModal"), content=document.querySelector("#imageModalContent"), caption=document.querySelector("#imageModalCaption");
-    const closeModal=()=>{ modal.hidden=true; content.removeAttribute("src"); document.body.style.overflow=""; };
-    document.querySelectorAll('[data-zoom-image]').forEach(button=>button.addEventListener("click",()=>{
-      const img=button.querySelector("img"), figure=button.closest("figure"), label=figure?.querySelector("figcaption")?.textContent.replace("點圖放大","").trim()||img.alt;
-      content.src=img.src; content.alt=img.alt; caption.textContent=label; modal.hidden=false; document.body.style.overflow="hidden";
-    }));
-    document.querySelector("#imageModalClose").addEventListener("click",closeModal);
-    modal.addEventListener("click",event=>{ if(event.target===modal) closeModal(); });
-    document.addEventListener("keydown",event=>{ if(event.key==="Escape"&&!modal.hidden) closeModal(); });
-  };
-  const bindSegments = (rootSelector, panelPrefix) => {
-    const rootEl = document.querySelector(rootSelector);
-    if (!rootEl) return;
-    rootEl.querySelectorAll(".segment").forEach(btn=>btn.addEventListener("click",()=>{
-      rootEl.querySelectorAll(".segment").forEach(x=>x.classList.toggle("active",x===btn));
-      const root=rootEl.parentElement;
-      root.querySelectorAll(".subview").forEach(x=>x.classList.toggle("active",x.id===`${panelPrefix}${btn.dataset.sub}`));
-    }));
-  };
-  const renderPractical = appData => {
-    document.querySelector("#practicalList").innerHTML = appData.practical.map(p=>`<article class="practical-card"><span class="topic">${escapeHtml(p.topic)}</span><h4>${escapeHtml(p.item)}</h4><p><b>${escapeHtml(p.value||"")}</b>${p.value&&p.guide?"\n":""}${escapeHtml(p.guide||"")}</p>${p.source&&/^https?:/.test(p.source)?`<a class="source-link" href="${escapeHtml(p.source)}" target="_blank" rel="noopener">查看官方資料 ↗</a>`:p.source?`<span class="source-link">${escapeHtml(p.source)}</span>`:""}</article>`).join("");
-  };
-  const renderMeals = appData => {
-    document.querySelector("#mealList").innerHTML=appData.mealReminders.map(m=>`<article class="info-card food-card"><div class="event-top"><div><span class="event-type">${escapeHtml(m.date)} · ${escapeHtml(m.city)}</span><h3>${escapeHtml(m.meals.join("／"))}</h3></div><span class="status pending">需自理</span></div><p class="subtitle">${escapeHtml(m.note)}</p></article>`).join("");
-  };
 
   root.TravelCommonUtils = Object.freeze({
     escapeHtml,
@@ -131,9 +95,6 @@
     statusClass,
     eventKind,
     filterKind,
-    bindSegments,
-    bindGuideImages,
-    renderPractical,
     buildDirections,
     isAirportPlace,
     mapIcon,
@@ -142,8 +103,6 @@
     toast,
     copyText,
     renderCountdown,
-    renderNetwork,
-    renderNotices,
-    renderMeals
+    renderNetwork
   });
 })(window);
