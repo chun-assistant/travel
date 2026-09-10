@@ -82,4 +82,12 @@ const runtimeInit = window.TravelCommonRuntimeInit.setup({
   bindGuideImages, renderEvents, bindSegments
 });
 
-runtimeInit.init();
+window.TravelCommonRuntimeStart = function () {
+  if (window.TravelCommonRuntimeStarted) return;
+  window.TravelCommonRuntimeStarted = true;
+  runtimeInit.init();
+};
+
+if (!window.TRAVEL_DEFER_RUNTIME_INIT) {
+  window.TravelCommonRuntimeStart();
+}
