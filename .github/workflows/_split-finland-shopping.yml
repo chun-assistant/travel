@@ -1,0 +1,36 @@
+name: split-finland-shopping
+on:
+  push:
+    paths:
+      - .github/_split-finland-shopping-trigger
+jobs:
+  split:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Split Daily meals from Finland shopping runtime
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          src = Path('assets/finland-shopping-assets.js')
+          text = src.read_text(encoding='utf-8')
+          marker = '/* Daily meals: compact overview + 18-day cards. Scoped to the budget page only. */'
+          idx = text.find(marker)
+          if idx < 0:
+              raise SystemExit('Daily meals marker not found')
+          shopping = text[:idx].rstrip() + '\n'
+          meals = text[idx:].lstrip() + '\n'
+          Path('assets/modules/daily-meals.js').write_text(meals, encoding='utf-8')
+          src.write_text(shopping, encoding='utf-8')
+          PY
+          rm -f .github/_split-finland-shopping-trigger .github/workflows/_split-finland-shopping.yml
+      - name: Commit split
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/finland-shopping-assets.js assets/modules/daily-meals.js .github/_split-finland-shopping-trigger .github/workflows/_split-finland-shopping.yml
+          git commit -m 'refactor: split Daily meals from Finland shopping'
+          git push
