@@ -28,6 +28,7 @@ const renderNetwork = COMMON_UTILS.renderNetwork;
 const bindSegments = COMMON_UTILS.bindSegments;
 const bindGuideImages = COMMON_UTILS.bindGuideImages;
 const renderPractical = () => COMMON_UTILS.renderPractical(APP_DATA);
+const renderMeals = () => COMMON_UTILS.renderMeals(APP_DATA);
 
 const isHotelPlace = value => {
   const place = String(value || "").trim().toLowerCase();
@@ -168,9 +169,6 @@ function renderBudget() {
 }
 function renderFood() {
   $("#foodList").innerHTML=APP_DATA.food.map(f=>`<article class="info-card food-card"><div class="event-top"><div><span class="event-type">${escapeHtml(f.date)} · ${escapeHtml(f.city)} · ${escapeHtml(f.category)}</span><h3>${escapeHtml(f.shop)}</h3></div><span class="status ${statusClass(f.status)}">${escapeHtml(f.status)}</span></div><p class="subtitle">${escapeHtml(f.recommendation)}</p><div class="info-card-row"><span>預估價格</span><b class="food-price">${escapeHtml(f.price||"現場支付")}</b></div><div class="info-card-row"><span>提醒</span><b>${escapeHtml(f.note||"—")}</b></div></article>`).join("");
-}
-function renderMeals() {
-  $("#mealList").innerHTML=APP_DATA.mealReminders.map(m=>`<article class="info-card food-card"><div class="event-top"><div><span class="event-type">${escapeHtml(m.date)} · ${escapeHtml(m.city)}</span><h3>${escapeHtml(m.meals.join("／"))}</h3></div><span class="status pending">需自理</span></div><p class="subtitle">${escapeHtml(m.note)}</p></article>`).join("");
 }
 
 window.TravelDailyRuntime = Object.freeze({
