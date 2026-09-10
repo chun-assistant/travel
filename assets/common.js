@@ -1,9 +1,12 @@
 /*
  * Shared runtime entry point.
  *
- * The monolithic implementation now lives in common-runtime.js. Data files are
- * loaded first so the runtime keeps the same global data boundaries as before.
- * Stay has its own page modules; Daily remains on the legacy runtime path here.
+ * Keep this file intentionally tiny: the existing implementation is temporarily
+ * kept in common-legacy.js while its data/rendering responsibilities are split
+ * into assets/data and assets/modules.
+ *
+ * The legacy runtime is always loaded first and synchronously. On the daily page,
+ * Daily modules are then loaded in dependency order without changing legacy timing.
  */
 (function () {
   var current = document.currentScript;
@@ -12,17 +15,59 @@
   var packingDataSrc = base + "data/packing.js";
   var coreDataSrc = base + "data/core.js";
   var printDataSrc = base + "data/print.js";
+  var utilsSrc = base + "modules/common-utils.js";
   var legacySrc = base + "common-legacy.js";
+  var isDailyPage = document.body && document.body.getAttribute("data-page") === "days";
 
   if (document.readyState === "loading" && document.write) {
     document.write('<script src="' + packingDataSrc + '"><\/script>');
     document.write('<script src="' + coreDataSrc + '"><\/script>');
     document.write('<script src="' + printDataSrc + '"><\/script>');
+    document.write('<script src="' + utilsSrc + '"><\/script>');
     document.write('<script src="' + legacySrc.replace(/"/g, "&quot;") + '"><\/script>');
+    document.write('<script src="' + base + 'modules/flight-badges.js' + '"><\/script>');
+
+    if (isDailyPage) {
+      document.write('<script src="' + base + 'data/itinerary.js' + '"><\/script>');
+      document.write('<script src="' + base + 'modules/daily-logic.js' + '"><\/script>');
+      document.write('<script src="' + base + 'modules/daily-scroll.js' + '"><\/script>');
+      document.write('<script src="' + base + 'modules/daily-render.js' + '"><\/script>');
+      document.write('<script src="' + base + 'modules/daily.js' + '"><\/script>');
+      document.write('<script src="' + base + 'modules/daily-event-filters.js"><\/script>');
+      document.write('<script src="' + base + 'modules/runtime-utils.js"><\/script>');
+      document.write('<script src="' + base + 'data/apps.js"><\/script>');
+      document.write('<script src="' + base + 'modules/apps-renderer.js"><\/script>');
+      document.write('<script src="' + base + 'modules/apps.js"><\/script>');
+      document.write('<script src="' + base + 'modules/apps-bootstrap.js"><\/script>');
+      document.write('<script src="' + base + 'data/stay.js"><\/script>');
+      document.write('<script src="' + base + 'modules/stay-renderer.js"><\/script>');
+      document.write('<script src="' + base + 'modules/stay.js"><\/script>');
+      document.write('<script src="' + base + 'modules/stay-bootstrap.js"><\/script>');
+    }
     return;
   }
 
-  var scripts = [packingDataSrc, printDataSrc, coreDataSrc, legacySrc];
+  var scripts = [packingDataSrc, printDataSrc, coreDataSrc, utilsSrc, legacySrc, base + "modules/flight-badges.js"];
+  if (isDailyPage) {
+    scripts.push(
+      base + "data/itinerary.js",
+      base + "modules/daily-logic.js",
+      base + "modules/daily-scroll.js",
+      base + "modules/daily-render.js",
+      base + "modules/daily.js",
+      base + "modules/daily-event-filters.js",
+      base + "modules/runtime-utils.js",
+      base + "data/apps.js",
+      base + "modules/apps-renderer.js",
+      base + "modules/apps.js",
+      base + "modules/apps-bootstrap.js",
+      base + "data/stay.js",
+      base + "modules/stay-renderer.js",
+      base + "modules/stay.js",
+      base + "modules/stay-bootstrap.js"
+    );
+  }
+
   var index = 0;
   function loadNext() {
     if (index >= scripts.length) return;
