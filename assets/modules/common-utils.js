@@ -84,6 +84,46 @@
     badge.querySelector("span").textContent = online ? "地圖可開啟" : "離線可查看";
   };
 
+  const bindGuideImages = () => {
+    const modal = document.querySelector("#imageModal");
+    const modalImg = document.querySelector("#imageModalContent");
+    const caption = document.querySelector("#imageModalCaption");
+    if (!modal || !modalImg) return;
+    const close = () => modal.classList.remove("show");
+    const closeBtn = document.querySelector("#imageModalClose");
+    if (closeBtn && !closeBtn.dataset.bound) { closeBtn.dataset.bound = "1"; closeBtn.addEventListener("click", close); }
+    if (!modal.dataset.bound) {
+      modal.dataset.bound = "1";
+      modal.addEventListener("click", e => { if (e.target === modal) close(); });
+      document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+    }
+    document.querySelectorAll(".guide-image").forEach(img => {
+      if (img.dataset.bound) return;
+      img.dataset.bound = "1";
+      img.addEventListener("click", () => {
+        modalImg.src = img.currentSrc || img.src;
+        if (caption) caption.textContent = img.alt || "";
+        modal.classList.add("show");
+      });
+    });
+  };
+
+  const bindSegments = (rootSelector, panelPrefix) => {
+    const rootEl = document.querySelector(rootSelector);
+    if (!rootEl) return;
+    rootEl.querySelectorAll(".segment").forEach(btn => {
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = "1";
+      btn.addEventListener("click", () => {
+        rootEl.querySelectorAll(".segment").forEach(x => x.classList.remove("active"));
+        rootEl.querySelectorAll(".subview").forEach(x => x.classList.remove("active"));
+        btn.classList.add("active");
+        const panel = document.querySelector("#" + panelPrefix + btn.dataset.segment);
+        if (panel) panel.classList.add("active");
+      });
+    });
+  };
+
   root.TravelCommonUtils = Object.freeze({
     escapeHtml,
     fmtTwd,
@@ -103,6 +143,8 @@
     toast,
     copyText,
     renderCountdown,
-    renderNetwork
+    renderNetwork,
+    bindGuideImages,
+    bindSegments
   });
 })(window);
