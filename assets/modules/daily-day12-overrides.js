@@ -7,27 +7,6 @@
 (function () {
   if (typeof APP_DATA === "undefined" || !Array.isArray(APP_DATA.events)) return;
 
-  /*
-   * The Daily renderer normally formats numeric costs. Day 12 also needs one
-   * textual range, so support a display-only cost override without changing
-   * the shared formatter or the underlying numeric data model elsewhere.
-   */
-  if (typeof TravelCommonUtils !== "undefined") {
-    var originalFmtCost = TravelCommonUtils.fmtCost;
-    TravelCommonUtils.fmtCost = function (currency, value) {
-      if (typeof value === "string" && value.trim()) return value.trim();
-      return originalFmtCost(currency, value);
-    };
-
-    var originalBuildDirections = TravelCommonUtils.buildDirections;
-    TravelCommonUtils.buildDirections = function (place) {
-      if (String(place || "").trim() === "19:10 Day 12 navigation") {
-        return "https://maps.app.goo.gl/BqTcEoNoxSyvdhTX7";
-      }
-      return originalBuildDirections(place);
-    };
-  }
-
   APP_DATA.events.forEach(function (event) {
     if (event.day !== 12) return;
 
@@ -39,16 +18,19 @@
     if (event.start === "12:15") {
       event.currency = "NOK";
       event.cost = 0;
+      event.navigable = true;
     }
 
     if (event.start === "12:35" && event.end === "13:15") {
       event.currency = "NOK";
-      event.cost = "Around NOK 100~200";
+      event.costDisplay = "Around NOK 100~200";
+      event.navigable = true;
     }
 
     if (event.start === "13:30" && event.end === "14:00") {
       event.currency = "NOK";
       event.cost = 0;
+      event.navigable = true;
     }
 
     if (event.start === "14:00" && event.end === "14:15") {
@@ -67,6 +49,7 @@
       event.duration = "約20-30分鐘";
       event.currency = "NOK";
       event.cost = 0;
+      event.navigable = true;
     }
 
     if (event.start === "15:30" && event.end === "16:15") {
@@ -100,7 +83,7 @@
       event.duration = "約30分鐘";
       event.currency = "NOK";
       event.cost = 30;
-      event.place = "19:10 Day 12 navigation";
+      event.navigationMap = "https://maps.app.goo.gl/BqTcEoNoxSyvdhTX7";
       event.navigable = true;
     }
 
@@ -112,6 +95,7 @@
     }
 
     if (event.start === "20:20" && event.end === "21:00") {
+      event.transport = "步行";
       event.currency = "NOK";
       event.cost = 0;
       event.place = "Quality Hotel Grand Tromsø, Storgata 44, 9008 Tromsø, 挪威";

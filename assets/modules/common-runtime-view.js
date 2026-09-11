@@ -105,9 +105,9 @@
     }
 
     function eventCard(e) {
-      var kind = eventKind(e.type), nav = isNavigableEvent(e) ? buildDirections(e.place) : "";
+      var kind = eventKind(e.type), nav = isNavigableEvent(e) ? (e.navigationMap || buildDirections(e.place)) : "";
       var mapButton = nav ? '<a class="map-btn" href="' + escapeHtml(nav) + '" target="_blank" rel="noopener">' + mapIcon + '開始導航</a>' : "";
-      var cost = fmtCost(e.currency, e.cost);
+      var cost = e.costDisplay || fmtCost(e.currency, e.cost);
       return '<article class="event-card ' + kind + '">' +
         '<div class="event-top"><div><span class="event-time">◷ ' + escapeHtml(e.start) + (e.end ? '–' + escapeHtml(e.end) : "") + '</span><span class="event-type"> · ' + escapeHtml(e.type) + '</span></div><span class="status ' + statusClass(e.status) + '">' + escapeHtml(e.status || "行程") + '</span></div>' +
         '<h4>' + escapeHtml(e.title) + '</h4>' +

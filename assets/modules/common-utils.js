@@ -49,13 +49,13 @@
     if (!place) return "";
     const parts = String(place).split(/→|->/).map(s => s.trim()).filter(Boolean);
     const destination = parts.at(-1) || String(place).trim();
-    const p = new URLSearchParams({ api: "1", destination, dir_action: "navigate" });
+    const p = new URLSearchParams({ api: "1", origin: "Current Location", destination, dir_action: "navigate" });
     return `https://www.google.com/maps/dir/?${p.toString()}`;
   };
   const isAirportPlace = value => /airport|機場|航廈|departure hall|check-in area/i.test(String(value || ""));
   const mapIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>`;
   const pinIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2"></circle></svg>`;
-  const copyIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0 2 2v8a2 2 0 0 0 2 2h2"></path></svg>`;
+  const copyIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg>`;
   let toastTimer;
   const toast = message => {
     const el = document.querySelector("#toast");
