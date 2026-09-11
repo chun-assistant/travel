@@ -28,6 +28,11 @@
       event.navigable = true;
     }
 
+    if (event.start === "08:10" && event.end === "08:35") {
+      event.navigationMap = "https://maps.app.goo.gl/ShV6Mp9KMktpaLfH7";
+      event.navigable = true;
+    }
+
     if (event.start === "09:09" && event.end === "09:30") {
       event.start = "08:39";
       event.end = "09:00";
