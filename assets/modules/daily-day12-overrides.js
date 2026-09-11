@@ -7,25 +7,114 @@
 (function () {
   if (typeof APP_DATA === "undefined" || !Array.isArray(APP_DATA.events)) return;
 
+  /*
+   * The Daily renderer normally formats numeric costs. Day 12 also needs one
+   * textual range, so support a display-only cost override without changing
+   * the shared formatter or the underlying numeric data model elsewhere.
+   */
+  if (typeof TravelCommonUtils !== "undefined") {
+    var originalFmtCost = TravelCommonUtils.fmtCost;
+    TravelCommonUtils.fmtCost = function (currency, value) {
+      if (typeof value === "string" && value.trim()) return value.trim();
+      return originalFmtCost(currency, value);
+    };
+
+    var originalBuildDirections = TravelCommonUtils.buildDirections;
+    TravelCommonUtils.buildDirections = function (place) {
+      if (String(place || "").trim() === "19:10 Day 12 navigation") {
+        return "https://maps.app.goo.gl/BqTcEoNoxSyvdhTX7";
+      }
+      return originalBuildDirections(place);
+    };
+  }
+
   APP_DATA.events.forEach(function (event) {
     if (event.day !== 12) return;
 
-    if (event.start === "12:15" && event.end === "12:30") {
-      event.place = "Nordøstpassasjen 47, 9008, 9006 Tromsø, 挪威";
-      event.map = "https://www.google.com/maps/search/?api=1&query=Nord%C3%B8stpassasjen%2047%2C%209008%2C%209006%20Troms%C3%B8%2C%20Norway";
-      event.navigable = true;
+    if (event.start === "11:00" && event.end === "12:00") {
+      event.currency = "NOK";
+      event.cost = 130;
+    }
+
+    if (event.start === "12:15") {
+      event.currency = "NOK";
+      event.cost = 0;
     }
 
     if (event.start === "12:35" && event.end === "13:15") {
-      event.place = "Gjøastredet 1, 9008 Tromsø, 挪威";
-      event.map = "https://www.google.com/maps/search/?api=1&query=Gj%C3%B8astredet%201%2C%209008%20Troms%C3%B8%2C%20Norway";
-      event.navigable = true;
+      event.currency = "NOK";
+      event.cost = "Around NOK 100~200";
     }
 
     if (event.start === "13:30" && event.end === "14:00") {
-      event.type = "景點";
-      event.place = "Nordøstpassasjen 33, 9008 Tromsø, 挪威";
-      event.map = "https://www.google.com/maps/search/?api=1&query=Nord%C3%B8stpassasjen%2033%2C%209008%20Troms%C3%B8%2C%20Norway";
+      event.currency = "NOK";
+      event.cost = 0;
+    }
+
+    if (event.start === "14:00" && event.end === "14:15") {
+      event.title = "前往Tromsø Bridge";
+      event.place = "Bruvegen, 9020 Tromsø, 挪威";
+      event.transport = "步行";
+      event.duration = "約15分鐘";
+      event.currency = "NOK";
+      event.cost = 0;
+      event.navigable = true;
+    }
+
+    if (event.start === "14:15" && event.end === "15:10") {
+      event.title = "Tromsø Bridge拍照";
+      event.transport = "步行";
+      event.duration = "約20-30分鐘";
+      event.currency = "NOK";
+      event.cost = 0;
+    }
+
+    if (event.start === "15:30" && event.end === "16:15") {
+      event.transport = "步行";
+      event.currency = "NOK";
+      event.cost = 90;
+    }
+
+    if (event.start === "16:15" && event.end === "16:30") {
+      event.transport = "步行";
+      event.place = "Fjellheisen, Sollivegen 12, 9020 Tromsdalen, 挪威";
+      event.currency = "NOK";
+      event.cost = 0;
+      event.navigable = true;
+    }
+
+    if (event.start === "16:30" && event.end === "17:30") {
+      event.currency = "NOK";
+      event.cost = 495;
+    }
+
+    if (event.start === "19:16" && event.end === "19:19") {
+      event.start = "18:55";
+      event.end = "19:10";
+      event.duration = "約15分鐘";
+    }
+
+    if (event.start === "19:19" && event.end === "19:40") {
+      event.start = "19:10";
+      event.end = "19:40";
+      event.duration = "約30分鐘";
+      event.currency = "NOK";
+      event.cost = 30;
+      event.place = "19:10 Day 12 navigation";
+      event.navigable = true;
+    }
+
+    if (event.start === "19:40" && event.end === "20:20") {
+      event.currency = "NOK";
+      event.cost = 0;
+      event.place = "Storgata 102, 9008 Tromsø, 挪威";
+      event.navigable = true;
+    }
+
+    if (event.start === "20:20" && event.end === "21:00") {
+      event.currency = "NOK";
+      event.cost = 0;
+      event.place = "Quality Hotel Grand Tromsø, Storgata 44, 9008 Tromsø, 挪威";
       event.navigable = true;
     }
   });
