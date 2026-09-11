@@ -36,6 +36,7 @@
       document.write('<script src="' + base + 'modules/daily-day11-overrides.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-day12-overrides.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-day13-overrides.js' + '"><\/script>');
+      document.write('<script src="' + base + 'modules/daily-day15-overrides.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-logic.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-scroll.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-render.js' + '"><\/script>');
@@ -65,6 +66,7 @@
       base + "modules/daily-day11-overrides.js",
       base + "modules/daily-day12-overrides.js",
       base + "modules/daily-day13-overrides.js",
+      base + "modules/daily-day15-overrides.js",
       base + "modules/daily-logic.js",
       base + "modules/daily-scroll.js",
       base + "modules/daily-render.js",
