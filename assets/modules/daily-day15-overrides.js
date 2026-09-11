@@ -56,6 +56,7 @@
       event.start = "20:21";
       event.end = "20:30";
       event.duration = "約9分鐘";
+      event.navigable = true;
     }
 
     if (event.start === "19:25" && event.end === "19:40") {
@@ -68,6 +69,7 @@
       event.start = "20:55";
       event.end = "21:35";
       event.duration = "約40分鐘";
+      event.navigable = true;
     }
 
     if (event.start === "20:30" && event.end === "21:30") {
