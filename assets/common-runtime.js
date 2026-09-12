@@ -31,6 +31,33 @@ const bindGuideImages = COMMON_UTILS.bindGuideImages;
 const renderPractical = () => window.TravelCommonRuntimeInfo.renderPractical(APP_DATA);
 const renderMeals = () => window.TravelCommonRuntimeInfo.renderMeals(APP_DATA);
 
+// Defer non-critical guide images without changing their content or layout.
+(function enableLazyImages() {
+  const apply = (root) => {
+    if (!root || !root.querySelectorAll) return;
+    root.querySelectorAll('img:not([loading])').forEach((img) => {
+      img.loading = 'lazy';
+      img.decoding = 'async';
+    });
+  };
+  apply(document);
+  if (document.documentElement) {
+    new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === 1) {
+            if (node.tagName === 'IMG' && !node.hasAttribute('loading')) {
+              node.loading = 'lazy';
+              node.decoding = 'async';
+            }
+            apply(node);
+          }
+        });
+      });
+    }).observe(document.documentElement, { childList: true, subtree: true });
+  }
+})();
+
 const state = {
   day: Number(stored("aurora-day")) || 1,
   eventFilter: "全部",
