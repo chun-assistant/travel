@@ -3,12 +3,17 @@
   var finlandData=window.TravelFinlandShoppingData;
   if(!data||!finlandData)return;
   var base='../assets/shopping/finland/';
-  var version='?v=20260909-finland1';
+  var version='?v=20260912-cloudberry2';
   function local(path){return encodeURI(base+path)+version}
   var files=finlandData.files;
+  function assetParts(file){
+    if(!file)return null;
+    if(typeof file==='string')return {thumb:file,large:file};
+    return {thumb:file.thumb||file.large,large:file.large||file.thumb};
+  }
   function decorate(p){
-    var file=p&&files[p.item]; if(!file)return p;
-    p.image=local('thumbs/'+file); p.imageFull=local('large/'+file); p.fullImage=p.imageFull; return p;
+    var parts=assetParts(p&&files[p.item]); if(!parts)return p;
+    p.image=local('thumbs/'+parts.thumb); p.imageFull=local('large/'+parts.large); p.fullImage=p.imageFull; return p;
   }
   var marketOnly=new Set(finlandData.marketOnly);
   var finland=(data.supermarkets||[]).find(function(x){return String(x.city||'').indexOf('芬蘭')>=0});
@@ -24,7 +29,7 @@
   var rows=finlandData.souvenirs.map(function(x){return Object.assign({},x)}).map(decorate);
   var firstNorway=data.souvenirs.findIndex(function(x){return String(x.country||'').indexOf('挪威')>=0});
   if(firstNorway>=0)data.souvenirs.splice.apply(data.souvenirs,[firstNorway,0].concat(rows)); else data.souvenirs=data.souvenirs.concat(rows);
-  var largeByName={}; Object.keys(files).forEach(function(name){largeByName[name]=local('large/'+files[name])});
+  var largeByName={}; Object.keys(files).forEach(function(name){var parts=assetParts(files[name]);if(parts)largeByName[name]=local('large/'+parts.large)});
   function overrideButton(button){
     var name=button&&button.dataset&&button.dataset.productName||''; var full=largeByName[name]; if(!full)return;
     var img=button.querySelector&&button.querySelector('.shopping-product-image'); if(img)button.dataset.productThumbnail=img.getAttribute('src')||'';
