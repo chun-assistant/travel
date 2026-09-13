@@ -46,6 +46,67 @@
       d2.note = '尚未購票；REX 7與IC擇一。8:16班次8:59抵達，8:34班次9:11抵達。';
     }
 
+    // Contactless payment updates requested for the Amsterdam transport page.
+    APP_DATA.transport.forEach(function (t) {
+      var route = String(t.route || '');
+      if (/Schiphol.*Sloterdijk/i.test(route) || /Sloterdijk.*Schiphol/i.test(route) ||
+          (/Amsterdam ID Aparthotel/i.test(route) && /Schiphol Airport/i.test(route))) {
+        t.status = '感應信用卡';
+      }
+    });
+
+    // 10/9 Amsterdam tram journeys paid by contactless credit card.
+    var additions = [
+      {
+        date: '10/9',
+        type: '電車',
+        route: 'Amsterdam Sloterdijk Station→Rijksmuseum Station',
+        service: 'GVB',
+        time: '07:55–08:19',
+        method: 'GVB電車19號',
+        duration: '24分鐘',
+        currency: 'EUR',
+        cost: 2.22,
+        status: '感應信用卡',
+        note: '感應信用卡'
+      },
+      {
+        date: '10/9',
+        type: '電車',
+        route: 'Albert Cuypstraat Station→Rokin Station',
+        service: 'GVB',
+        time: '13:33–13:50',
+        method: 'GVB電車4號',
+        duration: '17分鐘',
+        currency: 'EUR',
+        cost: 1.42,
+        status: '感應信用卡',
+        note: '感應信用卡'
+      },
+      {
+        date: '10/9',
+        type: '電車',
+        route: 'Westermarkt Station→Sloterdijk Station',
+        service: 'GVB',
+        time: '20:40–21:10',
+        method: 'GVB電車9號',
+        duration: '20分鐘',
+        currency: 'EUR',
+        cost: 2.3,
+        status: '感應信用卡',
+        note: '感應信用卡'
+      }
+    ];
+
+    additions.forEach(function (item) {
+      var exists = APP_DATA.transport.some(function (t) {
+        return String(t.date || '') === item.date &&
+          String(t.route || '') === item.route &&
+          String(t.time || '') === item.time;
+      });
+      if (!exists) APP_DATA.transport.push(item);
+    });
+
     var carPickups = [
       { date: '9/26', route: /Vienna飯店→VIE/i },
       { date: '10/2', route: /Saariselkä.*Kirkenes/i },
