@@ -12,5 +12,10 @@
       event.navigationMap = "https://maps.app.goo.gl/gpT6c7vkb8pFuJQC7";
       event.navigable = true;
     }
+
+    // 06:55–07:05: payment is by contactless credit card.
+    if (event.start === "06:55" && event.end === "07:05") {
+      event.status = "感應信用卡";
+    }
   });
 })();
