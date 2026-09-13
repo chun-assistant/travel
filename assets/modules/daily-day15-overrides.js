@@ -55,6 +55,7 @@
       event.start = "20:09";
       event.end = "20:21";
       event.duration = "約12分鐘";
+      event.status = "感應信用卡";
     }
 
     if (event.start === "19:12" && event.end === "19:25") {
