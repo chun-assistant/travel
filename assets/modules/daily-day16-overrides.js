@@ -32,6 +32,11 @@
       event.navigable = true;
     }
 
+    // 07:55–08:19: payment is by contactless credit card.
+    if (event.start === "07:55" && event.end === "08:19") {
+      event.status = "感應信用卡";
+    }
+
     // Updated Amsterdam addresses + exact itinerary durations.
     if (event.start === "12:00" && event.end === "12:30") {
       event.place = "Eerste van der Helststraat 60, 1072 NX Amsterdam, 荷蘭";
@@ -60,6 +65,7 @@
       event.duration = "17分鐘";
       event.navigationMap = "https://maps.app.goo.gl/gYgGYRZ1yzNEuWbYA";
       event.navigable = true;
+      event.status = "感應信用卡";
     }
 
     if (event.start === "14:20" && event.end === "14:45") {
@@ -87,6 +93,7 @@
       event.cost = 2.3;
       event.costDisplay = "EUR 2.3~3.4";
       event.duration = "50分鐘";
+      event.status = "感應信用卡";
     }
   });
 })();
