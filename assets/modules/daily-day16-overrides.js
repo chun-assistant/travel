@@ -66,10 +66,11 @@
       event.navigable = true;
     }
 
-    // 20:40–21:30: explicit EUR 2.3–3.4 cost range.
+    // 20:40–21:30: display the EUR 2.3–3.4 range while keeping cost numeric.
     if (event.start === "20:40" && event.end === "21:30") {
       event.currency = "EUR";
-      event.cost = "2.3~3.4";
+      event.cost = 2.3;
+      event.costDisplay = "EUR 2.3~3.4";
     }
   });
 })();
