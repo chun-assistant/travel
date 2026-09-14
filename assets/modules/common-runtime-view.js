@@ -94,13 +94,11 @@
       var d = APP_DATA.overview.find(function (x) { return x.day === state.day; });
       if (!d) return;
       var highlightHtml = escapeHtml(d.highlight);
-      if (d.highlightLinkText && d.highlightLinkUrl) {
-        var linkText = escapeHtml(d.highlightLinkText);
-        var linkUrl = escapeHtml(d.highlightLinkUrl);
-        var marker = escapeHtml("(" + d.highlightLinkText + ")");
-        highlightHtml = highlightHtml.replace(marker, '(<a href="' + linkUrl + '" target="_blank" rel="noopener noreferrer" class="day-highlight-link">' + linkText + '</a>)');
+      var routeMapHtml = "";
+      if (d.highlightLinkUrl) {
+        routeMapHtml = '<span>🗺️ <a href="' + escapeHtml(d.highlightLinkUrl) + '" target="_blank" rel="noopener noreferrer">路線圖</a></span>';
       }
-      $("#daySummary").innerHTML = '<article class="day-summary"><div class="day-kicker">DAY ' + d.day + ' · ' + escapeHtml(dateLabel(d.date)) + '</div><h3>' + escapeHtml(d.city) + '</h3><p>' + highlightHtml + '</p><div class="day-summary-meta"><span>🚉 ' + escapeHtml(d.transport) + '</span><span>🛏️ ' + escapeHtml(d.hotel) + '</span><span>🚶 體力 ' + escapeHtml(d.effort) + '</span><span>💰 ' + fmtTwd(d.estimate) + '</span></div></article>';
+      $("#daySummary").innerHTML = '<article class="day-summary"><div class="day-kicker">DAY ' + d.day + ' · ' + escapeHtml(dateLabel(d.date)) + '</div><h3>' + escapeHtml(d.city) + '</h3><p>' + highlightHtml + '</p><div class="day-summary-meta"><span>🚉 ' + escapeHtml(d.transport) + '</span><span>🛏️ ' + escapeHtml(d.hotel) + '</span><span>🚶 體力 ' + escapeHtml(d.effort) + '</span><span>💰 ' + fmtTwd(d.estimate) + '</span>' + routeMapHtml + '</div></article>';
       renderEventFilters(); renderEvents();
     }
 
