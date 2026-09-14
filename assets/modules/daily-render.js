@@ -37,8 +37,9 @@
           : root.TravelDailyLogic
             ? root.TravelDailyLogic.getDayColor(stage)
             : stage && stage.color || "#dbe6e3";
-        var ticketHtml = d.ticketLinkUrl
-          ? '<span class="day-ticket" role="link" tabindex="0" data-ticket-url="' + escapeHtml(d.ticketLinkUrl) + '" style="position:absolute;right:6px;bottom:5px;z-index:3;display:block;padding:2px 5px;border-radius:999px;color:#2d6b7b;background:rgba(231,247,247,.92);border:1px solid rgba(82,137,151,.28);font-size:8px;line-height:1.1;font-weight:850;white-space:nowrap;cursor:pointer;">🚆 購買車票</span>'
+        var ticketUrl = d.ticketLinkUrl || (d.day === 1 ? "https://www.oebb.at/en/tickets-kundenkarten/online-mobile-ticketing/oebb-app" : "");
+        var ticketHtml = ticketUrl
+          ? '<span class="day-ticket" role="link" tabindex="0" aria-label="購買車票" data-ticket-url="' + escapeHtml(ticketUrl) + '" style="position:absolute;right:6px;bottom:5px;z-index:3;display:block;padding:2px 5px;border-radius:999px;color:#2d6b7b;background:rgba(231,247,247,.92);border:1px solid rgba(82,137,151,.28);font-size:8px;line-height:1.1;font-weight:850;white-space:nowrap;cursor:pointer;">🚆 購買車票</span>'
           : "";
         return '<button class="day-chip ' + (d.day === state.day ? "active" : "") + '" data-day="' + d.day + '" style="--day-color:' + dayColor + '"><b>Day ' + d.day + '</b><small>' + escapeHtml(dateLabel(d.date)) + '</small><small class="day-place">' + escapeHtml(d.city) + '</small>' + ticketHtml + '</button>';
       }).join("");

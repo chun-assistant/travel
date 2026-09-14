@@ -44,7 +44,7 @@
       document.write('<script src="' + base + 'modules/daily-day17-overrides.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-logic.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-scroll.js' + '"><\/script>');
-      document.write('<script src="' + base + 'modules/daily-render.js' + '"><\/script>');
+      document.write('<script src="' + base + 'modules/daily-render.js?v=20260915-ticket1' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-timezone.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-event-filters.js"><\/script>');
@@ -79,7 +79,7 @@
       base + "modules/daily-day17-overrides.js",
       base + "modules/daily-logic.js",
       base + "modules/daily-scroll.js",
-      base + "modules/daily-render.js",
+      base + "modules/daily-render.js?v=20260915-ticket1",
       base + "modules/daily-timezone.js",
       base + "modules/daily.js",
       base + "modules/daily-event-filters.js",
