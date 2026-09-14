@@ -48,58 +48,21 @@
         <div class="search-wrap">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
           <input class="search-input" id="eventSearch" type="search" placeholder="搜尋景點、餐廳、交通…" autocomplete="off">
-          <button class="clear-search" id="clearSearch" aria-label="清除搜尋">×</button>
         </div>
-        <div class="chip-row" id="eventFilters" aria-label="行程類別"></div>
+        <div class="filter-row" id="eventFilters"></div>
         <div class="timeline" id="eventTimeline"></div>
       </section>
 
-      <section class="tab-panel" id="tab-transport" aria-labelledby="nav-transport">
-        <div class="section-head"><div><h2>交通</h2><p>班次、費用、時間與路線集中查</p></div></div>
-        <div class="chip-row" id="transportFilters"></div>
-        <div class="card-list" id="transportList"></div>
-      </section>
-
-      <section class="tab-panel" id="tab-hotels" aria-labelledby="nav-hotels">
-        <div class="section-head"><div><h2>住宿</h2><p>8間住宿・地址與入住資訊</p></div></div>
-        <div class="card-list" id="hotelList"></div>
-      </section>
-
       <section class="tab-panel" id="tab-luggage" aria-labelledby="nav-luggage">
-        <div class="section-head"><div><h2>行前與工具</h2><p>購票、入境、待辦、打包與退稅集中查看</p></div><button class="small-action" id="resetChecks">重設勾選</button></div>
+        <div class="section-head"><div><h2>行前工具</h2><p>行李、實用資訊與訂位</p></div></div>
         <div class="segmented" id="luggageSegments">
-          <button class="segment active" data-sub="apps">購票 App</button>
-          <button class="segment" data-sub="entry">入境攻略</button>
-          <button class="segment" data-sub="booking">行前待辦</button>
-          <button class="segment" data-sub="checklist">行李清單</button>
-          <button class="segment" data-sub="tax">退稅攻略</button>
+          <button class="segment active" data-sub="check">行李清單</button>
+          <button class="segment" data-sub="practical">實用資訊</button>
+          <button class="segment" data-sub="bookings">訂位</button>
         </div>
-        <div class="subview active" id="sub-apps">
-          <div class="notice"><div class="notice-icon">📱</div><div><strong>出發前先安裝、登入並綁卡</strong><p>每個 App 都保留離線票券或訂單截圖；多人票要先確認是否能由同一支手機出示。</p></div></div>
-          <div class="card-list" id="ticketAppList"></div>
-          <div class="section-head inner-head"><div><h2>其他實用資訊</h2><p>網路、換匯、保險、時差與緊急聯絡</p></div></div>
-          <div class="practical-grid" id="practicalList"></div>
-        </div>
-        <div class="subview" id="sub-entry">
-          <div class="notice"><div class="notice-icon">🛂</div><div><strong>9/25 維也納入境</strong><p>準備護照、回程電子機票、飯店訂房紀錄、英文旅遊保險證明與付款工具；人工通道或 EES 自助機依現場指示辦理。</p></div></div>
-          <div class="guide-gallery">
-            <figure class="guide-figure"><button class="guide-image-button" type="button" data-zoom-image aria-label="放大維也納機場入境攻略"><img src="../assets/vienna-entry-3x4.svg.png" loading="lazy" decoding="async" alt="維也納機場入境全攻略流程圖與注意事項"></button><figcaption class="guide-caption">維也納機場入境全攻略<span>點圖放大</span></figcaption></figure>
-          </div>
-          <article class="info-card"><h3>入境問答速記</h3><div class="info-card-row"><span>Purpose</span><b>Sightseeing / Vacation</b></div><div class="info-card-row"><span>Stay</span><b>18 days</b></div><div class="info-card-row"><span>Next</span><b>Austria, Finland, Norway and Netherlands</b></div><div class="info-card-row"><span>Occupation</span><b>依個人職業如實回答</b></div></article>
-        </div>
-        <div class="subview" id="sub-booking"><div class="card-list" id="bookingList"></div></div>
-        <div class="subview" id="sub-checklist">
-          <div class="progress-card"><div class="progress-top"><div><b id="checkPercent">0%</b><span> 完成</span></div><span id="checkCount">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
-          <div id="checklist"></div>
-        </div>
-        <div class="subview" id="sub-tax">
-          <div class="notice"><div class="notice-icon">🧾</div><div><strong>先看圖，再看逐項文字</strong><p>挪威商品於 OSL 辦理；奧地利、芬蘭與荷蘭商品依行程於 AMS 最後離境時處理。驗貨前不要托運退稅品。</p></div></div>
-          <div class="guide-gallery">
-            <figure class="guide-figure"><button class="guide-image-button" type="button" data-zoom-image aria-label="放大挪威退稅流程圖"><img src="../assets/norway-tax-free-flow.png" loading="lazy" decoding="async" alt="挪威 Global Blue 退稅流程圖"></button><figcaption class="guide-caption">挪威 Norway｜Global Blue 退稅流程<span>點圖放大</span></figcaption></figure>
-            <figure class="guide-figure"><button class="guide-image-button" type="button" data-zoom-image aria-label="放大阿姆斯特丹退稅流程圖"><img src="../assets/eu-tax-free-flow.png" loading="lazy" decoding="async" alt="阿姆斯特丹 AMS 完整退稅流程圖"></button><figcaption class="guide-caption">阿姆斯特丹 AMS｜完整退稅流程<span>點圖放大</span></figcaption></figure>
-          </div>
-          <div class="card-list" id="taxList"></div>
-        </div>
+        <div class="subview active" id="luggage-check"><div id="checkSummary"></div><div id="checkList"></div></div>
+        <div class="subview" id="luggage-practical"><div id="practicalList"></div></div>
+        <div class="subview" id="luggage-bookings"><div id="bookingList"></div></div>
       </section>
 
       <section class="tab-panel" id="tab-budget" aria-labelledby="nav-budget">
@@ -141,6 +104,8 @@
   <script defer src="../assets/common-runtime.js?v=20260914-perf1"></script>
   <script defer src="../assets/modules/flight-badges.js?v=20260914-perf1"></script>
   <script defer src="../assets/data/itinerary.js?v=20260914-perf1"></script>
+  <script defer src="../assets/modules/daily-day1-overrides.js?v=20260914-perf1"></script>
+  <script defer src="../assets/modules/daily-day2-overrides.js?v=20260914-perf1"></script>
   <script defer src="../assets/modules/daily-day5-overrides.js?v=20260914-perf1"></script>
   <script defer src="../assets/modules/daily-day9-overrides.js?v=20260914-perf1"></script>
   <script defer src="../assets/modules/daily-day10-overrides.js?v=20260914-perf1"></script>
