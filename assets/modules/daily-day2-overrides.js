@@ -1,5 +1,5 @@
 /*
- * Day 2 itinerary navigation and budget controls.
+ * Day 2 and Day 3 itinerary navigation and budget controls.
  */
 (function () {
   if (typeof APP_DATA === "undefined" || !Array.isArray(APP_DATA.events)) return;
@@ -15,16 +15,18 @@
     "18:00-18:20": true,
     "18:20-19:00": true,
     "19:00-19:20": true,
-    "19:20-20:00": true
+    "19:20-20:00": true,
+    "18:45-20:15": true,
+    "20:45-21:30": true
   };
 
   APP_DATA.events.forEach(function (event) {
-    if (event.day !== 2) return;
+    if (event.day !== 2 && event.day !== 3) return;
 
     var key = String(event.start || "") + "-" + String(event.end || "");
 
     // 08:00–08:20: use the supplied Google Maps route link exactly.
-    if (key === "08:00-08:20") {
+    if (event.day === 2 && key === "08:00-08:20") {
       event.navigationMap = "https://maps.app.goo.gl/cDGE2N4PwprRkKdk9";
       event.navigable = true;
     }
