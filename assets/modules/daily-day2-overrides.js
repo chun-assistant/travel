@@ -35,12 +35,17 @@
     }
   });
 
-  // Day 2 total: display NT$5,273 and expose the route-map URL to the summary renderer.
+  // Day 2 total: display NT$5,273 and expose the existing route-map URL to the summary renderer.
+  // Day 3 uses the newly requested route map link.
   if (Array.isArray(APP_DATA.overview)) {
     APP_DATA.overview.forEach(function (day) {
-      if (day.day !== 2) return;
-      day.estimate = 5273;
-      day.highlightLinkUrl = "https://www.google.com/maps/d/edit?mid=1-_hDuzB7Z-72GhpoaJr4PxBoL2QD6GI&usp=sharing";
+      if (day.day === 2) {
+        day.estimate = 5273;
+        day.highlightLinkUrl = "https://www.google.com/maps/d/edit?mid=1-_hDuzB7Z-72GhpoaJr4PxBoL2QD6GI&usp=sharing";
+      }
+      if (day.day === 3) {
+        day.highlightLinkUrl = "https://www.google.com/maps/d/edit?mid=1ynWVIc8YaswYxsJogKpkqDtahGHH3rU&usp=sharing";
+      }
     });
   }
 })();
