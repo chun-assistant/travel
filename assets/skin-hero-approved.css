@@ -1,7 +1,7 @@
 /* Approved Moomin watercolor Hero photo — presentation only.
    Existing HTML text, stats, route, links and behavior remain live and unchanged. */
 .hero{
-  background-image:url("./skin/首頁.png?v=20260907-home1");
+  background-image:url("./skin/optimized/hero.webp?v=20260914-webp1");
   background-size:cover;
   background-position:center center;
   background-repeat:no-repeat;

@@ -109,11 +109,11 @@ body .bottom-nav .nav-btn::before{
   filter:drop-shadow(0 3px 7px rgba(47,83,93,.10))!important
 }
 body .bottom-nav .nav-btn::after{content:none!important}
-body .bottom-nav .nav-btn:nth-child(1)::before{background-image:url("./skin/CEAC510F-7333-464B-A71A-9A98324A0347.png?v=20260908-fullnav1")!important}
-body .bottom-nav .nav-btn:nth-child(2)::before{background-image:url("./skin/5CB28D8D-8530-43BD-A822-2122162B9225.png?v=20260908-fullnav1")!important}
-body .bottom-nav .nav-btn:nth-child(3)::before{background-image:url("./skin/9A402E72-D080-448D-B7E2-BA94C7BDCD87.png?v=20260908-fullnav1")!important}
-body .bottom-nav .nav-btn:nth-child(4)::before{background-image:url("./skin/4F81B1FA-E781-4604-B7FF-7387BB719789.png?v=20260908-fullnav1")!important}
-body .bottom-nav .nav-btn:nth-child(5)::before{background-image:url("./skin/E54BF95C-E31A-4067-B470-A61AFDBF7954.png?v=20260908-fullnav1")!important}
+body .bottom-nav .nav-btn:nth-child(1)::before{background-image:url("./skin/optimized/nav-daily.webp?v=20260914-webp1")!important}
+body .bottom-nav .nav-btn:nth-child(2)::before{background-image:url("./skin/optimized/nav-transport.webp?v=20260914-webp1")!important}
+body .bottom-nav .nav-btn:nth-child(3)::before{background-image:url("./skin/optimized/nav-stay.webp?v=20260914-webp1")!important}
+body .bottom-nav .nav-btn:nth-child(4)::before{background-image:url("./skin/optimized/nav-tools.webp?v=20260914-webp1")!important}
+body .bottom-nav .nav-btn:nth-child(5)::before{background-image:url("./skin/optimized/nav-budget.webp?v=20260914-webp1")!important}
 
 /* Lightweight selected state: background + inset outline only. */
 body .bottom-nav .nav-btn[aria-current="page"]{
@@ -122,4 +122,45 @@ body .bottom-nav .nav-btn[aria-current="page"]{
 }
 body .bottom-nav .nav-btn[aria-current="page"]::before{
   transform:none!important
+}
+
+/* Project override: daily itinerary timezone reference.
+   Keep this block after the canonical common.css rules so upstream syncs stay clean. */
+body[data-page="days"] .timezone-note{
+  display:grid;
+  grid-template-columns:34px minmax(0,1fr);
+  align-items:center;
+  gap:10px;
+  width:fit-content;
+  max-width:calc(100% - 8px);
+  box-sizing:border-box;
+  margin:-2px 4px 14px;
+  padding:10px 12px;
+  border:1px solid rgba(69,126,146,.17);
+  border-radius:15px;
+  color:#174c69;
+  background:linear-gradient(135deg,rgba(237,248,249,.96),rgba(255,250,241,.96));
+  box-shadow:0 6px 18px rgba(42,78,88,.055)
+}
+body[data-page="days"] .timezone-note-icon{
+  display:grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  border-radius:12px;
+  background:rgba(255,255,255,.82);
+  box-shadow:inset 0 0 0 1px rgba(82,137,151,.10);
+  font-size:17px
+}
+body[data-page="days"] .timezone-note strong{
+  display:block;
+  font-size:14px;
+  line-height:1.4;
+  letter-spacing:.01em
+}
+body[data-page="days"] .timezone-note p{
+  margin:2px 0 0;
+  color:#647d89;
+  font-size:13px;
+  line-height:1.45
 }

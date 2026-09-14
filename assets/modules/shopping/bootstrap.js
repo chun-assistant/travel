@@ -4,11 +4,12 @@
   // Shopping assets must load synchronously and in this order because the
   // budget page renderer reads the data immediately after this script.
   const sources = [
-    '../assets/shopping-data.js?v=20260910-shopping1',
-    '../assets/modules/shopping/finland-shopping-data.js?v=20260912-cloudberry2',
+    '../assets/shopping-data.js?v=20260914-shopthumb1',
+    '../assets/modules/shopping/finland-shopping-data.js?v=20260913-cloudberry3',
     '../assets/finland-shopping-extra.js?v=20260910-shopping1',
-    '../assets/finland-shopping-assets.js?v=20260912-cloudberry2',
-    '../assets/vienna-shopping-assets.js?v=20260910-shopping1'
+    '../assets/finland-shopping-assets.js?v=20260913-cloudberry3',
+    '../assets/vienna-shopping-assets.js?v=20260910-shopping1',
+    '../assets/modules/shopping/shopping-image-assets.js?v=20260914-shopthumb1'
   ];
 
   if (document.readyState !== 'loading') {

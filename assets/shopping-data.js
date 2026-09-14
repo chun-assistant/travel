@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded',function(){
   if(!supermarketList||!souvenirList)return;
   function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
   function countryName(label){return String(label||'其他').replace(/^..\s?/,'').trim()||'其他'}
-  function productImage(p){if(!p.image)return '<div class="shopping-product-placeholder" aria-label="商品圖待補"><span>📦</span><small>商品圖<br>待補</small></div>';return '<button class="shopping-product-image-button" type="button" data-product-image="'+esc(p.image)+'" data-product-name="'+esc(p.item)+'" aria-label="放大 '+esc(p.item)+' 商品圖"><img class="shopping-product-image" src="'+esc(p.image)+'" alt="'+esc(p.item)+'" loading="lazy" referrerpolicy="no-referrer"><span class="shopping-product-fallback" hidden>📦<small>圖片載入失敗</small></span></button>'}
+  function productImage(p){if(!p.image)return '<div class="shopping-product-placeholder" aria-label="商品圖待補"><span>📦</span><small>商品圖<br>待補</small></div>';var thumb=p.image,full=p.imageFull||p.fullImage||thumb;return '<button class="shopping-product-image-button" type="button" data-product-image="'+esc(full)+'" data-product-thumbnail="'+esc(thumb)+'" data-product-name="'+esc(p.item)+'" aria-label="放大 '+esc(p.item)+' 商品圖"><img class="shopping-product-image" src="'+esc(thumb)+'" alt="'+esc(p.item)+'" loading="lazy" decoding="async" referrerpolicy="no-referrer"><span class="shopping-product-fallback" hidden>📦<small>圖片載入失敗</small></span></button>'}
   function productRow(p,addButton,addCountry){return '<div class="shopping-product-row">'+productImage(p)+'<div class="shopping-product-copy"><b>'+esc(p.item)+'</b><small>'+esc(p.detail||p.reason||'')+'</small><div class="recommend-meta"><span class="recommend-pill">'+esc(p.priority||p.tag||'推薦')+'</span><span class="recommend-pill">'+esc(p.place||'')+'</span></div>'+(p.source?'<a class="shopping-product-source" href="'+esc(p.source)+'" target="_blank" rel="noopener">'+esc(p.sourceLabel||'官方商品頁')+' ↗</a>':'')+'</div>'+(addButton?'<button class="add-shopping" type="button" data-add-item="'+esc(p.item)+'" data-add-country="'+esc(addCountry||'其他')+'">加入我的清單</button>':'')+'</div>'}
   function renderProductGroups(groups,addButton,addCountry){if(!Array.isArray(groups)||!groups.length)return '';return groups.map(function(g){return '<section class="shopping-product-group"><h4>'+esc(g.label)+'</h4>'+(g.products||[]).map(function(p){return productRow(p,addButton,addCountry)}).join('')+'</section>'}).join('')}
   supermarketList.innerHTML=(data.supermarkets||[]).map(function(x){return '<article class="info-card recommend-card"><h3>'+esc(x.city)+'</h3><div class="recommend-meta"><span class="recommend-pill">📅 '+esc(x.date)+'</span><span class="recommend-pill">🛒 '+esc(x.use)+'</span>'+(x.stores?'<span class="recommend-pill">🏪 '+esc(x.stores)+'</span>':'')+'</div>'+renderProductGroups(x.groups,true,countryName(x.city))+(!x.groups?'<ul class="recommend-list">'+(x.items||[]).map(function(i){return '<li>'+esc(i)+'</li>'}).join('')+'</ul>':'')+'<p class="device-note">'+esc(x.note||'')+'</p></article>'}).join('');
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-/* Consistent product image preview: near-viewport preload and explicit loading state. */
+/* Product image preview: load full-size images on click; desktop hover may warm the selected image. */
 document.addEventListener('DOMContentLoaded',function(){
   var modal=document.getElementById('productImageModal');
   if(!modal)return;
@@ -254,19 +254,8 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 
   var buttons=Array.prototype.slice.call(document.querySelectorAll('[data-product-image]'));
-  if('IntersectionObserver' in window){
-    var observer=new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(!entry.isIntersecting)return;
-        warm(entry.target.dataset.productImage);
-        observer.unobserve(entry.target);
-      });
-    },{rootMargin:'700px 0px'});
-    buttons.forEach(function(button){observer.observe(button)});
-  }
   buttons.forEach(function(button){
-    button.addEventListener('pointerenter',function(){warm(button.dataset.productImage)},{passive:true});
-    button.addEventListener('touchstart',function(){warm(button.dataset.productImage)},{passive:true});
+    button.addEventListener('pointerenter',function(){warm(button.dataset.productImage)},{passive:true,once:true});
   });
 
   document.addEventListener('click',function(event){
