@@ -168,4 +168,20 @@
     event.cost = 0;
     event.navigable = true;
   }
+  
+  // Recalculate every Day 5 movement/stay duration from its displayed time range.
+  var minutesFromTime = function (value) {
+    var parts = String(value).split(":");
+    return Number(parts[0]) * 60 + Number(parts[1]);
+  };
+
+  APP_DATA.events.forEach(function (event) {
+    if (event.day !== 5 || !event.start || !event.end) return;
+
+    var durationMinutes = minutesFromTime(event.end) - minutesFromTime(event.start);
+    if (durationMinutes >= 0) {
+      event.duration = durationMinutes + "分鐘";
+    }
+  });
+
 })();
