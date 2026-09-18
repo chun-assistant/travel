@@ -33,6 +33,7 @@
       document.write('<script src="' + base + 'data/itinerary.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-day1-overrides.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-day2-overrides.js' + '"><\/script>');
+      document.write('<script src="' + base + 'modules/daily-day4-overrides.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-day5-overrides.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-day9-overrides.js' + '"><\/script>');
       document.write('<script src="' + base + 'modules/daily-day10-overrides.js' + '"><\/script>');
@@ -68,6 +69,7 @@
       base + "data/itinerary.js",
       base + "modules/daily-day1-overrides.js",
       base + "modules/daily-day2-overrides.js",
+      base + "modules/daily-day4-overrides.js",
       base + "modules/daily-day5-overrides.js",
       base + "modules/daily-day9-overrides.js",
       base + "modules/daily-day10-overrides.js",
