@@ -94,9 +94,15 @@
       var d = APP_DATA.overview.find(function (x) { return x.day === state.day; });
       if (!d) return;
       var highlightHtml = escapeHtml(d.highlight);
+      if (d.highlightLinkUrl && d.highlightLinkText) {
+        var linkedHighlight = escapeHtml(d.highlightLinkText);
+        var linkedHighlightHtml = '<a href="' + escapeHtml(d.highlightLinkUrl) + '" target="_blank" rel="noopener noreferrer">' + linkedHighlight + '</a>';
+        highlightHtml = highlightHtml.replace(linkedHighlight, linkedHighlightHtml);
+      }
       var routeMapHtml = "";
-      if (d.highlightLinkUrl) {
-        routeMapHtml = '<span>🗺️ <a href="' + escapeHtml(d.highlightLinkUrl) + '" target="_blank" rel="noopener noreferrer">路線圖</a></span>';
+      var routeMapUrl = d.routeMapLinkUrl || (!d.highlightLinkText ? d.highlightLinkUrl : "");
+      if (routeMapUrl) {
+        routeMapHtml = '<span>🗺️ <a href="' + escapeHtml(routeMapUrl) + '" target="_blank" rel="noopener noreferrer">路線圖</a></span>';
       }
       $("#daySummary").innerHTML = '<article class="day-summary"><div class="day-kicker">DAY ' + d.day + ' · ' + escapeHtml(dateLabel(d.date)) + '</div><h3>' + escapeHtml(d.city) + '</h3><p>' + highlightHtml + '</p><div class="day-summary-meta"><span>🚉 ' + escapeHtml(d.transport) + '</span><span>🛏️ ' + escapeHtml(d.hotel) + '</span><span>🚶 體力 ' + escapeHtml(d.effort) + '</span><span>💰 ' + fmtTwd(d.estimate) + '</span>' + routeMapHtml + '</div></article>';
       renderEventFilters(); renderEvents();
