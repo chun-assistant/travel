@@ -5,7 +5,17 @@
  * runtime so the Daily feature can change without growing common modules.
  */
 (function (root) {
-  if (typeof APP_DATA === "undefined" || !Array.isArray(APP_DATA.events)) return;
+  if (typeof APP_DATA === "undefined") return;
+
+  if (Array.isArray(APP_DATA.overview)) {
+    APP_DATA.overview.forEach(function (day) {
+      if (day.day === 9) {
+        day.routeMapLinkUrl = "https://www.google.com/maps/d/edit?mid=1ha-xv3m4NFmBbZ3iTs_FRCStPGNCIuA&usp=sharing";
+      }
+    });
+  }
+
+  if (!Array.isArray(APP_DATA.events)) return;
 
   APP_DATA.events.forEach(function (event) {
     if (event.day !== 9) return;
@@ -33,6 +43,16 @@
     if (event.start === "19:00" && event.end === "19:30" &&
         event.title === "返回飯店放東西、入住") {
       event.transport = "步行";
+    }
+
+    if (
+      (event.start === "15:30" && event.end === "16:00") ||
+      (event.start === "16:00" && event.end === "16:50") ||
+      (event.start === "17:30" && event.end === "19:00") ||
+      (event.start === "19:00" && event.end === "19:30") ||
+      (event.start === "19:30" && event.end === "20:15")
+    ) {
+      event.navigable = true;
     }
   });
 })(window);
