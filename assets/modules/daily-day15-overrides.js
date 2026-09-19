@@ -2,7 +2,17 @@
  * Day 15 itinerary corrections.
  */
 (function () {
-  if (typeof APP_DATA === "undefined" || !Array.isArray(APP_DATA.events)) return;
+  if (typeof APP_DATA === "undefined") return;
+
+  if (Array.isArray(APP_DATA.overview)) {
+    APP_DATA.overview.forEach(function (day) {
+      if (day.day === 15) {
+        day.routeMapLinkUrl = "https://www.google.com/maps/d/edit?mid=15PmzU98SsmzkReoLJkRW3qm9vAAPQNk&usp=sharing";
+      }
+    });
+  }
+
+  if (!Array.isArray(APP_DATA.events)) return;
 
   APP_DATA.events.forEach(function (event) {
     if (event.day !== 15) return;

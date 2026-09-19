@@ -2,7 +2,17 @@
  * Day 16 itinerary corrections and navigation controls.
  */
 (function () {
-  if (typeof APP_DATA === "undefined" || !Array.isArray(APP_DATA.events)) return;
+  if (typeof APP_DATA === "undefined") return;
+
+  if (Array.isArray(APP_DATA.overview)) {
+    APP_DATA.overview.forEach(function (day) {
+      if (day.day === 16) {
+        day.routeMapLinkUrl = "https://www.google.com/maps/d/edit?mid=1A6bqMjiz3N9w0de81u-f_0z2N48miTA&usp=sharing";
+      }
+    });
+  }
+
+  if (!Array.isArray(APP_DATA.events)) return;
 
   APP_DATA.events.forEach(function (event) {
     if (event.day !== 16) return;

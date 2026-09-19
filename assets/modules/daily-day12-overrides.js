@@ -5,7 +5,17 @@
  * runtime so the Daily feature can change without growing common modules.
  */
 (function () {
-  if (typeof APP_DATA === "undefined" || !Array.isArray(APP_DATA.events)) return;
+  if (typeof APP_DATA === "undefined") return;
+
+  if (Array.isArray(APP_DATA.overview)) {
+    APP_DATA.overview.forEach(function (day) {
+      if (day.day === 12) {
+        day.routeMapLinkUrl = "https://www.google.com/maps/d/edit?mid=1OGjfy-kwjcDH4k0c8n1l-WACAdEZyLI&usp=sharing";
+      }
+    });
+  }
+
+  if (!Array.isArray(APP_DATA.events)) return;
 
   APP_DATA.events.forEach(function (event) {
     if (event.day !== 12) return;
