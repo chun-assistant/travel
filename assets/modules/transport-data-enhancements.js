@@ -42,7 +42,7 @@
       d2.duration = '約37–43分鐘（依班次）';
       d2.currency = 'EUR';
       d2.cost = 4.4;
-      d2.status = '尚未購票';
+      d2.status = '現場購票';
       d2.note = '尚未購票；REX 7與IC擇一。8:16班次8:59抵達，8:34班次9:11抵達。';
     }
 
